@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Wohnmobil mieten - Mercedes, VW, Fiat, Ford. Moderne Camper-Vans mit Vollausstattung. Faire Preise, persönliche Beratung.">
+    <meta name="keywords"
+        content="Wohnmobil mieten, Mercedes Sprinter, VW California, Fiat Ducato, Ford Transit, Camper mieten">
+    <title>Wohnmobil Mieten - Mercedes, VW, Fiat & Ford | CamperLife</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Favicon: small transparent icon to avoid 404 in dev -->
+    <link rel="icon" href="data:image/x-icon;," />
+</head>
+
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="#" class="logo">CamperLife</a>
+            <ul class="nav-links" id="nav-links-left">
+                <li><a href="#vehicles">Fahrzeuge</a></li>
+                <li><a href="locations.html">Standorte</a></li>
+                <li><a href="#about">Über uns</a></li>
+                <li><a href="#contact">Kontakt</a></li>
+            </ul>
+            <div class="nav-actions">
+                <ul class="nav-links" id="nav-links-right">
+                    <li><a href="#" id="login-btn">Login</a></li>
+                    <li><a href="#" id="register-btn">Registrieren</a></li>
+                </ul>
+
+                <!-- Profile container (hidden when not logged in) -->
+                <div id="profile-container" class="profile-container" style="display:none;">
+                    <button id="profile-btn" class="profile-btn" aria-haspopup="true" aria-expanded="false">
+                        <span class="avatar" id="profile-avatar">A</span>
+                        <span class="profile-name" id="profile-name">User</span>
+                    </button>
+                    <div id="profile-menu" class="profile-menu" style="display:none;">
+                        <a href="#" id="profile-dashboard">Mein Profil</a>
+                        <a href="#" id="profile-logout">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="hero">
+            <div class="hero-content container">
+                <h1>Entdecke die Freiheit auf vier Rädern</h1>
+                <p>Premium Wohnmobile von führenden Herstellern - Für unvergessliche Reiseerlebnisse</p>
+                <a href="#vehicles" class="btn btn-primary">Jetzt Fahrzeug wählen</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="vehicles" class="section container">
+            <div class="section-header">
+                <h2>Unsere Fahrzeugflotte</h2>
+                <p>Hochwertige Wohnmobile von Mercedes-Benz, Volkswagen, Fiat und Ford</p>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label for="search-input">Suche</label>
+                        <input type="text" id="search-input" placeholder="Name, Ausstattung...">
+                    </div>
+                    <div class="filter-group">
+                        <label for="location-select">Abholort</label>
+                        <select id="location-select">
+                            <option value="">Alle Standorte</option>
+                            <option value="Berlin">Berlin</option>
+                            <option value="München">München</option>
+                            <option value="Hamburg">Hamburg</option>
+                            <option value="Köln">Köln</option>
+                            <option value="Frankfurt">Frankfurt</option>
+                            <option value="Stuttgart">Stuttgart</option>
+                            <option value="Leipzig">Leipzig</option>
+                            <option value="Düsseldorf">Düsseldorf</option>
+                            <option value="Hannover">Hannover</option>
+                            <option value="Nürnberg">Nürnberg</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="category-select">Kategorie</label>
+                        <select id="category-select">
+                            <option value="">Alle Kategorien</option>
+                            <option value="Alkoven">Alkoven</option>
+                            <option value="Kastenwagen">Kastenwagen</option>
+                            <option value="Teilintegriert">Teilintegriert</option>
+                            <option value="Vollintegriert">Vollintegriert</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="license-select">Führerschein</label>
+                        <select id="license-select">
+                            <option value="">Alle Klassen</option>
+                            <option value="Klasse B">Klasse B</option>
+                            <option value="Klasse C1">Klasse C1</option>
+                            <option value="Klasse C">Klasse C</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="brand-select">Marke</label>
+                        <select id="brand-select">
+                            <option value="">Alle Marken</option>
+                            <option value="Mercedes-Benz">Mercedes-Benz</option>
+                            <option value="Volkswagen">Volkswagen</option>
+                            <option value="Fiat">Fiat</option>
+                            <option value="Ford">Ford</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="emission-select">Umweltplakette</label>
+                        <select id="emission-select">
+                            <option value="">Alle Plaketten</option>
+                            <option value="Grün">Grün</option>
+                            <option value="Gelb">Gelb</option>
+                            <option value="Rot">Rot</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="color-select">Farbe</label>
+                        <select id="color-select">
+                            <option value="">Alle Farben</option>
+                            <option value="Weiß">Weiß</option>
+                            <option value="Beige">Beige</option>
+                            <option value="Grau">Grau</option>
+                            <option value="Silber">Silber</option>
+                            <option value="Blau Metallic">Blau Metallic</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="fuel-select">Kraftstoff</label>
+                        <select id="fuel-select">
+                            <option value="">Alle Kraftstoffe</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="Elektro">Elektro</option>
+                            <option value="Benzin">Benzin</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="price-range">Max. Preis / Tag: <span id="price-value">300</span>€</label>
+                        <input type="range" id="price-range" min="50" max="300" step="10" value="300">
+                    </div>
+                    <div class="filter-group">
+                        <label for="beds-range">Min. Betten: <span id="beds-value">2</span></label>
+                        <input type="range" id="beds-range" min="2" max="6" step="1" value="2">
+                    </div>
+                    <div class="filter-group">
+                        <label for="power-range">Min. PS: <span id="power-value">100</span></label>
+                        <input type="range" id="power-range" min="100" max="250" step="10" value="100">
+                    </div>
+                    <div class="filter-group checkbox-group">
+                        <label><input type="checkbox" id="filter-automatic"> Automatik</label>
+                        <label><input type="checkbox" id="filter-manual"> Manuell</label>
+                        <label><input type="checkbox" id="filter-hitch"> Anhängerkupplung</label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="vehicle-list" class="vehicle-grid">
+                <!-- Vehicles will be injected here by JS -->
+            </div>
+        </section>
+
+        <!-- Über uns Section -->
+        <section id="about" class="section container" style="background-color: #f8f9fa; padding: 4rem 2rem;">
+            <div class="section-header">
+                <h2>Über CamperLife</h2>
+                <p>Ihre Leidenschaft ist unsere Mission</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; max-width: 1200px; margin: 3rem auto; align-items: center;">
+                <!-- Linke Seite: Text -->
+                <div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--primary-color);">Wer wir sind</h3>
+                    <p style="line-height: 1.8; color: var(--text-light); margin-bottom: 1rem;">
+                        CamperLife ist Deutschlands moderne Wohnmobilvermietung mit über <strong>10 Jahren Erfahrung</strong> in der Branche. 
+                        Wir bieten premium Wohnmobile von führenden Herstellern wie Mercedes-Benz, Volkswagen, Fiat und Ford – alles, 
+                        um Ihren Traum vom mobilen Reisen zu verwirklichen.
+                    </p>
+                    <p style="line-height: 1.8; color: var(--text-light); margin-bottom: 1rem;">
+                        Mit Niederlassungen in <strong>10+ Städten</strong> deutschlandweit und einer Flotte von über <strong>200 Fahrzeugen</strong>, 
+                        sind wir Ihr zuverlässiger Partner für unvergessliche Abenteuer auf Deutschlands schönsten Routen.
+                    </p>
+                    <p style="line-height: 1.8; color: var(--text-light);">
+                        Unser Team von <strong>erfahrenen Beratern</strong> ist täglich für Sie erreichbar und hilft Ihnen, 
+                        das perfekte Fahrzeug für Ihre Reise zu finden.
+                    </p>
+                </div>
+
+                <!-- Rechte Seite: Highlights -->
+                <div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+                            <div style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 0.5rem;">10+</div>
+                            <p style="color: var(--text-light); font-weight: 600;">Jahre Erfahrung</p>
+                        </div>
+                        <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+                            <div style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 0.5rem;">200+</div>
+                            <p style="color: var(--text-light); font-weight: 600;">Fahrzeuge</p>
+                        </div>
+                        <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+                            <div style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 0.5rem;">10+</div>
+                            <p style="color: var(--text-light); font-weight: 600;">Standorte</p>
+                        </div>
+                        <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+                            <div style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 0.5rem;">🌟</div>
+                            <p style="color: var(--text-light); font-weight: 600;">5⭐ Bewertung</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Werte Section -->
+            <div style="margin-top: 4rem; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                <h3 style="font-size: 1.5rem; margin-bottom: 2rem; text-align: center; color: var(--primary-color);">Unsere Werte</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; max-width: 1000px; margin: 0 auto;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🛡️</div>
+                        <h4 style="margin-bottom: 0.5rem; color: var(--text-color);">Zuverlässigkeit</h4>
+                        <p style="color: var(--text-light); font-size: 0.95rem;">Gepflegte Fahrzeuge, transparente Preise, faire Konditionen.</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">💚</div>
+                        <h4 style="margin-bottom: 0.5rem; color: var(--text-color);">Nachhaltigkeit</h4>
+                        <p style="color: var(--text-light); font-size: 0.95rem;">Moderne, umweltfreundliche Fahrzeuge mit niedrigen Emissionen.</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🤝</div>
+                        <h4 style="margin-bottom: 0.5rem; color: var(--text-color);">Kundennähe</h4>
+                        <p style="color: var(--text-light); font-size: 0.95rem;">Persönliche Beratung und 24/7 Notfall-Support während Ihrer Reise.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team / Kontakt CTA -->
+            <div style="text-align: center; margin-top: 3rem;">
+                <p style="color: var(--text-light); margin-bottom: 1rem;">Haben Sie Fragen oder möchten Sie mit uns in Kontakt treten?</p>
+                <a href="#contact" class="btn btn-primary">Kontakt aufnehmen</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Profile Modal (Edit name / email and change password) -->
+    <div id="profile-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-modal profile-close">&times;</span>
+            <div class="modal-body">
+                <h2>Profil bearbeiten</h2>
+                <div id="profile-message" style="margin-bottom:1rem;"></div>
+
+                <form id="profile-form">
+                    <div class="form-group">
+                        <label for="profile-username">Benutzername</label>
+                        <input id="profile-username" name="username" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-email">E-Mail</label>
+                        <input id="profile-email" name="email" type="email" required />
+                        <div id="profile-email-error" class="field-error" style="display:none;">❗ Ungültige E-Mail-Adresse oder E-Mail bereits vergeben.</div>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Speichern</button>
+                </form>
+
+                <hr style="margin:1rem 0;" />
+
+                <h3>Passwort ändern</h3>
+                <form id="change-password-form">
+                    <div class="form-group">
+                        <label for="current-password">Aktuelles Passwort</label>
+                        <input id="current-password" name="currentPassword" type="password" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">Neues Passwort</label>
+                        <input id="new-password" name="newPassword" type="password" required />
+                        <div id="profile-password-error" class="field-error" style="display:none;">❗ Das Passwort erfüllt nicht die Mindestanforderungen (mind. 8 Zeichen, Groß- und Kleinbuchstabe, Zahl, Sonderzeichen).</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-new-password">Neues Passwort bestätigen</label>
+                        <input id="confirm-new-password" name="confirmNewPassword" type="password" required />
+                    </div>
+                    <button class="btn btn-primary" type="submit">Passwort ändern</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>Über CamperLife</h3>
+                    <p>Ihr zuverlässiger Partner für unvergessliche Wohnmobil-Reisen. Wir bieten Premium-Fahrzeuge von
+                        Top-Marken für Ihr nächstes Abenteuer.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Kontakt</h3>
+                    <ul class="contact-info footer-links">
+                        <li>
+                            <span>📍</span>
+                            <span>Musterstraße 123<br>10115 Berlin</span>
+                        </li>
+                        <li>
+                            <span>📞</span>
+                            <a href="tel:+493012345678">+49 (0) 30 12345678</a>
+                        </li>
+                        <li>
+                            <span>✉️</span>
+                            <a href="mailto:info@camperlife.de">info@camperlife.de</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Öffnungszeiten</h3>
+                    <ul class="footer-links">
+                        <li>Mo - Fr: 09:00 - 18:00 Uhr</li>
+                        <li>Sa: 10:00 - 14:00 Uhr</li>
+                        <li>So: Geschlossen</li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Rechtliches</h3>
+                    <ul class="footer-links">
+                        <li><a href="agb.html">AGB</a></li>
+                        <li><a href="datenschutz.html">Datenschutz</a></li>
+                        <li><a href="impressum.html">Impressum</a></li>
+                        <li><a href="mietbedingungen.html">Mietbedingungen</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 CamperLife GmbH. Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="modal-vehicle-name">Fahrzeug buchen</h2>
+            <div class="modal-body">
+                <div class="vehicle-summary">
+                    <img id="modal-vehicle-image" src="" alt="Fahrzeug">
+                    <div class="vehicle-specs-summary">
+                        <!-- Specs summary -->
+                    </div>
+                </div>
+                <form id="booking-form">
+                    <div class="form-group">
+                        <label for="start-date">Startdatum</label>
+                        <input type="date" id="start-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="end-date">Enddatum</label>
+                        <input type="date" id="end-date" required>
+                    </div>
+                    <div class="cost-calculation" id="cost-calculation">
+                        <p><strong>Grundpreis:</strong> <span id="daily-rate">0</span>€ / Tag</p>
+                        <p>Mietdauer: <span id="rental-days">0</span> Tage</p>
+                        <p class="total-price">Gesamtpreis für Zeitraum: <span id="total-price">0</span>€</p>
+                    </div>
+                    <button type="submit" class="btn btn-primary full-width">Jetzt Buchen</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal (Login / Register) -->
+    <div id="auth-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal auth-close">&times;</span>
+            <div class="modal-body">
+                <div style="display:flex; gap:1rem; align-items:center; margin-bottom:1rem;">
+                    <button id="auth-show-login" class="btn">Login</button>
+                    <button id="auth-show-register" class="btn">Registrieren</button>
+                </div>
+                <div id="auth-message" style="margin-bottom:1rem; color:var(--text-light);"></div>
+
+                <form id="login-form" style="display:none;">
+                    <div class="form-group">
+                        <label for="login-username">Benutzername</label>
+                        <input id="login-username" name="username" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Passwort</label>
+                        <input id="login-password" name="password" type="password" required />
+                    </div>
+                    <button class="btn btn-primary" type="submit">Login</button>
+                </form>
+
+                <form id="verify-2fa-form" style="display:none;">
+                    <div style="background: #dbeafe; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
+                        <p style="margin: 0; color: var(--text-color);">📧 Ein Code wurde an Ihre E-Mail gesendet</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="verify-code">6-stelliger Code</label>
+                        <input id="verify-code" name="code" type="text" placeholder="000000" maxlength="6" required style="font-size: 1.5rem; letter-spacing: 5px; text-align: center;" />
+                    </div>
+                    <button class="btn btn-primary" type="submit">Code bestätigen</button>
+                    <button class="btn" type="button" id="back-to-login" style="margin-top: 0.5rem; width: 100%;">Zurück zum Login</button>
+                </form>
+
+                <form id="register-form" style="display:none;">
+                    <div class="form-group">
+                        <label for="register-username">Benutzername</label>
+                        <input id="register-username" name="username" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">E-Mail</label>
+                        <input id="register-email" name="email" type="email" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Passwort</label>
+                        <input id="register-password" name="password" type="password" required />
+                        <div id="register-password-error" class="field-error" style="display:none;">❗ Mindestanforderungen: mindestens 8 Zeichen, Großbuchstabe, Kleinbuchstabe, Zahl und Sonderzeichen.</div>
+                    </div>
+                    <div class="form-group privacy-group">
+                        <label class="checkbox-label">
+                            <input id="register-consent" name="consent" type="checkbox" required />
+                            <span>Ich akzeptiere die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a> und stimme der Verarbeitung meiner Daten gemäß DSGVO zu.</span>
+                        </label>
+                        <div id="register-consent-error" class="consent-error" style="display:none;">❗ Bitte bestätigen Sie die Datenschutzerklärung.</div>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Registrieren</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Consent Banner - GDPR Compliant -->
+    <div id="cookie-banner" class="cookie-banner">
+        <div class="cookie-content">
+            <div>
+                <h3>🍪 Cookies</h3>
+                <p>Wir nutzen Cookies für dein Erlebnis und Analyse. <a href="cookie-policy.html" target="_blank">Mehr Info</a></p>
+            </div>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: flex-end;">
+                <button id="reject-all-cookies" class="btn" style="background-color: #e5e7eb; color: #374151; padding: 0.5rem 1rem; font-size: 0.75rem;">Ablehnen</button>
+                <button id="accept-all-cookies" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.75rem;">Akzeptieren</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load vehicle data (defines window.vehicles) -->
+    <script src="data.js"></script>
+
+    <!-- Main site script -->
+    <script src="script.js"></script>
+    <!-- Small toast for cookie actions -->
+    <div id="cookie-toast" class="cookie-toast" aria-live="polite" style="display:none;"></div>
+</body>
+
+</html>

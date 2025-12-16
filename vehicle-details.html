@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fahrzeugdetails | CamperLife</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .details-container {
+            padding-top: 120px;
+            padding-bottom: 4rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .vehicle-hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .vehicle-hero img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .vehicle-hero-content h1 {
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .price-tag {
+            font-size: 2rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .price-tag span {
+            font-size: 1rem;
+            color: var(--text-light);
+            font-weight: 400;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .detail-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .detail-card h3 {
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+            border-bottom: 2px solid var(--background-light);
+            padding-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .vehicle-hero {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header" style="height: auto; min-height: auto;">
+        <nav class="nav container">
+            <a href="index.html" class="logo">CamperLife</a>
+            <ul class="nav-links">
+                <li><a href="index.html#vehicles">Fahrzeuge</a></li>
+                <li><a href="index.html#about">Über uns</a></li>
+                <li><a href="index.html#contact">Kontakt</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container details-container">
+        <a href="index.html#vehicles" class="back-link">← Zurück zur Übersicht</a>
+
+        <div id="vehicle-details-content">
+            <!-- Details will be injected here -->
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 CamperLife GmbH. Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Booking Modal (Same as index.html) -->
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="modal-vehicle-name">Fahrzeug buchen</h2>
+            <div class="modal-body">
+                <div class="vehicle-summary">
+                    <img id="modal-vehicle-image" src="" alt="Fahrzeug">
+                    <div class="vehicle-specs-summary"></div>
+                </div>
+                <form id="booking-form">
+                    <div class="form-group">
+                        <label for="start-date">Startdatum</label>
+                        <input type="date" id="start-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="end-date">Enddatum</label>
+                        <input type="date" id="end-date" required>
+                    </div>
+                    <div class="cost-calculation" id="cost-calculation">
+                        <p><strong>Grundpreis:</strong> <span id="daily-rate">0</span>€ / Tag</p>
+                        <p>Mietdauer: <span id="rental-days">0</span> Tage</p>
+                        <p class="total-price">Gesamtpreis für Zeitraum: <span id="total-price">0</span>€</p>
+                    </div>
+                    <button type="submit" class="btn btn-primary full-width">Jetzt Buchen</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Consent Banner (shared) -->
+    <div id="cookie-banner" class="cookie-banner">
+        <div class="cookie-content">
+            <div>
+                <h3>🍪 Cookies</h3>
+                <p>Wir nutzen Cookies für dein Erlebnis und Analyse. <a href="cookie-policy.html" target="_blank">Mehr Info</a></p>
+            </div>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: flex-end;">
+                <button id="reject-all-cookies" class="btn" style="background-color: #e5e7eb; color: #374151; padding: 0.5rem 1rem; font-size: 0.75rem;">Ablehnen</button>
+                <button id="accept-all-cookies" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.75rem;">Akzeptieren</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <div id="cookie-toast" class="cookie-toast" aria-live="polite" style="display:none;"></div>
+
+    <script src="details.js"></script>
+</body>
+
+</html>

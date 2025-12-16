@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verleihstandorte | CamperLife</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/x-icon;," />
+    <style>
+        .locations-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem 0;
+            min-height: calc(100vh - 300px);
+        }
+
+        #map-container {
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            background: #f0f0f0;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+        }
+
+        .locations-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .location-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 220ms ease;
+        }
+
+        .location-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .location-card h3 {
+            margin: 0 0 0.5rem 0;
+            color: var(--primary-color);
+            font-size: 1.25rem;
+        }
+
+        .location-card p {
+            margin: 0.25rem 0;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .location-card .coords {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 0.75rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .location-card .vehicles-count {
+            background: #e0f2fe;
+            color: #0284c7;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-top: 0.75rem;
+        }
+
+        @media (max-width: 1024px) {
+            .locations-container {
+                grid-template-columns: 1fr;
+            }
+
+            #map {
+                min-height: 400px;
+            }
+        }
+
+        .map-note {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: #78350f;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="index.html" class="logo">CamperLife</a>
+            <ul class="nav-links">
+                <li><a href="index.html#vehicles">Fahrzeuge</a></li>
+                <li><a href="locations.html">Standorte</a></li>
+                <li><a href="index.html#about">Über uns</a></li>
+                <li><a href="index.html#contact">Kontakt</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="section" style="padding: 4rem 2rem;">
+            <div class="section-header">
+                <h1>🗺️ Unsere Verleihstandorte</h1>
+                <p>Finden Sie unsere Stationen in Deutschland</p>
+            </div>
+
+            <div class="map-note">
+                💡 <strong>Hinweis:</strong> Google Maps wird nur geladen, wenn Sie der Verwendung von Google-Diensten zugestimmt haben. 
+                Ohne Zustimmung sehen Sie eine Liste aller Standorte mit Adressinformationen.
+            </div>
+
+            <div class="locations-container">
+                <!-- Map Container -->
+                <div id="map-container">
+                    <div id="map" style="display: none;"></div>
+                    <div id="map-placeholder" style="display: flex; align-items: center; justify-content: center; height: 500px; background: #f0f0f0; border-radius: var(--border-radius);">
+                        <div style="text-align: center; color: var(--text-light);">
+                            <p style="margin: 0; font-size: 1.1rem;">📍 Karte wird geladen...</p>
+                            <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">oder scrollen Sie nach unten für die Standortliste</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Locations List -->
+                <div>
+                    <h3 style="margin-top: 0;">Alle Standorte</h3>
+                    <div class="locations-list" id="locations-list">
+                        <!-- Locations will be injected here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>Über CamperLife</h3>
+                    <p>Ihr zuverlässiger Partner für unvergessliche Wohnmobil-Reisen. Wir bieten Premium-Fahrzeuge von
+                        Top-Marken für Ihr nächstes Abenteuer.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Kontakt</h3>
+                    <ul class="contact-info footer-links">
+                        <li>
+                            <span>📞</span>
+                            <a href="tel:+493012345678">+49 (0) 30 12345678</a>
+                        </li>
+                        <li>
+                            <span>✉️</span>
+                            <a href="mailto:info@camperlife.de">info@camperlife.de</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Rechtliches</h3>
+                    <ul class="footer-links">
+                        <li><a href="agb.html">AGB</a></li>
+                        <li><a href="datenschutz.html">Datenschutz</a></li>
+                        <li><a href="impressum.html">Impressum</a></li>
+                        <li><a href="cookie-policy.html">Cookie-Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 CamperLife GmbH. Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cookie Consent Banner (shared) -->
+    <div id="cookie-banner" class="cookie-banner">
+        <div class="cookie-content">
+            <div>
+                <h3>🍪 Cookies</h3>
+                <p>Wir nutzen Cookies für dein Erlebnis und Analyse. <a href="cookie-policy.html" target="_blank">Mehr Info</a></p>
+            </div>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: flex-end;">
+                <button id="reject-all-cookies" class="btn" style="background-color: #e5e7eb; color: #374151; padding: 0.5rem 1rem; font-size: 0.75rem;">Ablehnen</button>
+                <button id="accept-all-cookies" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.75rem;">Akzeptieren</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <div id="cookie-toast" class="cookie-toast" aria-live="polite" style="display:none;"></div>
+
+    <script>
+        // Locations with coordinates (lat, lng)
+        const locations = [
+            { name: 'Berlin', address: 'Musterstraße 123, 10115 Berlin', lat: 52.5200, lng: 13.4050, vehicles: ['Mercedes Sprinter Camper', 'VW California Ocean', 'VW Crafter Camper'] },
+            { name: 'München', address: 'Bahnhofstraße 45, 80335 München', lat: 48.1351, lng: 11.5820, vehicles: ['Mercedes Sprinter 4x4', 'Fiat Ducato Camper', 'Ford Transit Camper'] },
+            { name: 'Hamburg', address: 'Hafenstraße 10, 20457 Hamburg', lat: 53.5511, lng: 9.9937, vehicles: ['VW California Ocean', 'VW Crafter Camper', 'Mercedes Sprinter Camper'] },
+            { name: 'Köln', address: 'Rheinufer 20, 50667 Köln', lat: 50.9365, lng: 6.9589, vehicles: ['Fiat Ducato Camper', 'Ford Transit Camper'] },
+            { name: 'Frankfurt', address: 'Mainzer Straße 85, 60311 Frankfurt', lat: 50.1109, lng: 8.6821, vehicles: ['Mercedes Sprinter 4x4', 'Fiat Ducato Camper'] },
+            { name: 'Stuttgart', address: 'Königstraße 55, 70173 Stuttgart', lat: 48.7758, lng: 9.1829, vehicles: ['Mercedes Sprinter 4x4'] },
+            { name: 'Leipzig', address: 'Markt 10, 04109 Leipzig', lat: 51.3397, lng: 12.3731, vehicles: ['VW California Ocean'] },
+            { name: 'Düsseldorf', address: 'Königsallee 60, 40212 Düsseldorf', lat: 51.1344, lng: 6.7752, vehicles: ['Fiat Ducato Camper'] },
+            { name: 'Hannover', address: 'Georgstraße 35, 30159 Hannover', lat: 52.3759, lng: 9.7320, vehicles: ['VW Crafter Camper'] },
+            { name: 'Nürnberg', address: 'Königstraße 77, 90402 Nürnberg', lat: 49.4521, lng: 11.0767, vehicles: ['Ford Transit Camper'] }
+        ];
+
+        let map;
+        let markers = [];
+
+        function initMap() {
+            // Check if Google Maps consent is given
+            const preferences = getCookiePreferences();
+            if (!preferences.analytics) {
+                console.log('ℹ️ Google Maps nicht geladen (keine Zustimmung für Analytics-Cookies)');
+                showMapPlaceholder();
+                return;
+            }
+
+            // Create map centered on Germany
+            const germanCenter = { lat: 51.1657, lng: 10.4515 };
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 6,
+                center: germanCenter,
+                mapTypeControl: true,
+                fullscreenControl: true,
+                streetViewControl: false
+            });
+
+            // Add markers for each location
+            locations.forEach((location, index) => {
+                const marker = new google.maps.Marker({
+                    position: { lat: location.lat, lng: location.lng },
+                    map: map,
+                    title: location.name,
+                    label: String(index + 1)
+                });
+
+                // Info window with location details
+                const infoContent = `
+                    <div style="font-family: Arial, sans-serif; font-size: 14px; max-width: 250px;">
+                        <h3 style="margin: 0 0 10px 0; color: #0284c7;">${location.name}</h3>
+                        <p style="margin: 5px 0;"><strong>📍</strong> ${location.address}</p>
+                        <p style="margin: 5px 0; font-size: 12px; color: #666;">
+                            <strong>Fahrzeuge:</strong> ${location.vehicles.length}
+                        </p>
+                        <ul style="margin: 5px 0; padding-left: 20px; font-size: 12px;">
+                            ${location.vehicles.map(v => `<li>${v}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+
+                const infoWindow = new google.maps.InfoWindow({ content: infoContent });
+                marker.addListener('click', () => {
+                    // Close all other info windows
+                    markers.forEach(m => {
+                        if (m.infoWindow) m.infoWindow.close();
+                    });
+                    infoWindow.open(map, marker);
+                });
+
+                marker.infoWindow = infoWindow;
+                markers.push(marker);
+            });
+
+            // Show the map, hide placeholder
+            document.getElementById('map').style.display = 'block';
+            document.getElementById('map-placeholder').style.display = 'none';
+        }
+
+        function showMapPlaceholder() {
+            document.getElementById('map-placeholder').innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <h3 style="margin: 0 0 1rem 0; color: var(--primary-color);">🔒 Karte nicht verfügbar</h3>
+                    <p style="margin: 0 0 1rem 0; color: var(--text-light);">
+                        Um Google Maps zu nutzen, aktualisieren Sie bitte Ihre Cookie-Einstellungen und erlauben Sie Analytics-Cookies.
+                    </p>
+                    <button class="btn btn-primary" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
+                        Zu Cookie-Einstellungen
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderLocationsList() {
+            const list = document.getElementById('locations-list');
+            list.innerHTML = locations.map((location, index) => `
+                <div class="location-card" onclick="scrollToLocation(${index})">
+                    <h3>${index + 1}. ${location.name}</h3>
+                    <p>📍 ${location.address}</p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">
+                        <strong>Öffnungszeiten:</strong><br>
+                        Mo-Fr: 09:00 - 18:00 Uhr<br>
+                        Sa: 10:00 - 14:00 Uhr
+                    </p>
+                    <div class="coords">Lat: ${location.lat}, Lng: ${location.lng}</div>
+                    <span class="vehicles-count">🚐 ${location.vehicles.length} Fahrzeuge</span>
+                </div>
+            `).join('');
+        }
+
+        function scrollToLocation(index) {
+            if (markers[index]) {
+                const location = locations[index];
+                if (map) {
+                    map.setCenter({ lat: location.lat, lng: location.lng });
+                    map.setZoom(12);
+                    markers[index].infoWindow.open(map, markers[index]);
+                }
+            }
+        }
+
+        // Helper function from script.js
+        function getCookiePreferences() {
+            const prefs = getCookie("cookie_preferences");
+            if (prefs) {
+                try {
+                    return JSON.parse(prefs);
+                } catch (e) {
+                    return { necessary: true, analytics: false, marketing: false };
+                }
+            }
+            return { necessary: true, analytics: false, marketing: false };
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLocationsList();
+            
+            // Check if we should load Google Maps
+            const preferences = getCookiePreferences();
+            if (preferences.analytics) {
+                // Load Google Maps API dynamically
+                const script = document.createElement('script');
+                script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDemoKey123456789&language=de&region=DE';
+                script.onload = initMap;
+                script.onerror = () => {
+                    console.error('❌ Google Maps API konnte nicht geladen werden. Bitte überprüfen Sie Ihren API-Key.');
+                    showMapPlaceholder();
+                };
+                document.head.appendChild(script);
+            } else {
+                showMapPlaceholder();
+            }
+        });
+
+        // Listen for cookie consent changes
+        window.addEventListener('cookie-consent-changed', (e) => {
+            if (e.detail.analytics && !map) {
+                // User just accepted analytics - reload maps
+                location.reload();
+            }
+        });
+    </script>
+</body>
+
+</html>
