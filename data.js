@@ -11,6 +11,7 @@ window.vehicles = [
         "transmission": "Automatik",
         "power": 163,
         "beds": 2,
+        "seats": 4,
         "fuel": {
             "type": "Diesel",
             "consumption": 8.9,
@@ -76,6 +77,7 @@ window.vehicles = [
         "transmission": "Automatik",
         "power": 190,
         "beds": 2,
+        "seats": 4,
         "fuel": {
             "type": "Diesel",
             "consumption": 9.8,
@@ -142,6 +144,7 @@ window.vehicles = [
         "transmission": "Automatik",
         "power": 150,
         "beds": 4,
+        "seats": 4,
         "fuel": {
             "type": "Diesel",
             "consumption": 7.8,
@@ -208,6 +211,7 @@ window.vehicles = [
         "transmission": "Automatik",
         "power": 177,
         "beds": 3,
+        "seats": 4,
         "fuel": {
             "type": "Diesel",
             "consumption": 8.5,
@@ -271,6 +275,7 @@ window.vehicles = [
         "transmission": "Manuell",
         "power": 140,
         "beds": 3,
+        "seats": 4,
         "fuel": {
             "type": "Diesel",
             "consumption": 8.2,
@@ -334,6 +339,7 @@ window.vehicles = [
         "transmission": "Automatik",
         "power": 170,
         "beds": 2,
+        "seats": 4,
         "fuel": {
             "type": "Diesel",
             "consumption": 8.7,
@@ -398,6 +404,7 @@ window.vehicles = [
         "transmission": "Automatik",
         "power": 204,
         "beds": 2,
+        "seats": 4,
         "fuel": {
             "type": "Elektro",
             "consumption": 21.0, // kWh/100km

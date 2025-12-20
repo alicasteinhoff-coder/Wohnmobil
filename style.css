@@ -1,3 +1,28 @@
+/* Bookmark Button Styles */
+.bookmark-btn {
+    border: 2px solid #222;
+    background: #fff;
+    color: #222;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+.bookmark-btn .bookmarked,
+.bookmark-btn.bookmarked {
+    background: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 16px 2px var(--accent-color);
+    animation: popBookmark 0.8s cubic-bezier(.68,-0.55,.27,1.55);
+}
+@keyframes popBookmark {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.15); }
+    60% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+}
 :root {
     --primary-color: #0066cc;
     --primary-dark: #004d99;

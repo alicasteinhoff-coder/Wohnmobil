@@ -12,7 +12,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="flatpickr-custom.css">
     <!-- Favicon: small transparent icon to avoid 404 in dev -->
     <link rel="icon" href="data:image/x-icon;," />
 </head>
@@ -33,8 +35,13 @@
                     <li><a href="#" id="register-btn">Registrieren</a></li>
                 </ul>
 
+                <!-- Bookmark Button (always visible) -->
+                <button id="bookmark-btn" onclick="showWishlistModal()" style="background:#fff; border:2px solid #222; color:#222; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; position:relative; transition:all 0.3s; margin-left:1rem;">
+                    <img src="bookmark_orange_border.svg" alt="Merkliste" style="width:16px; height:16px; display:block; vertical-align:middle; margin-top:0;" />
+                </button>
+
                 <!-- Profile container (hidden when not logged in) -->
-                <div id="profile-container" class="profile-container" style="display:none;">
+                <div id="profile-container" class="profile-container" style="display:none; margin-left:1rem;">
                     <button id="profile-btn" class="profile-btn" aria-haspopup="true" aria-expanded="false">
                         <span class="avatar" id="profile-avatar">A</span>
                         <span class="profile-name" id="profile-name">User</span>
@@ -42,6 +49,14 @@
                     <div id="profile-menu" class="profile-menu" style="display:none;">
                         <a href="#" id="profile-dashboard">Mein Profil</a>
                         <a href="#" id="profile-logout">Logout</a>
+                    </div>
+                </div>
+                <!-- Wishlist Modal -->
+                <div id="wishlist-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:9999;">
+                    <div style="background:#fff; max-width:500px; margin:5vh auto; border-radius:16px; box-shadow:0 4px 24px rgba(0,0,0,0.15); padding:2rem; position:relative; max-height:80vh; overflow-y:auto;">
+                        <button onclick="closeWishlistModal()" style="position:absolute; top:16px; right:16px; background:none; border:none; font-size:1.5rem; color:#222; cursor:pointer;">&times;</button>
+                        <h2 style="margin-bottom:1.5rem;">Merkliste</h2>
+                        <div id="wishlist-content"></div>
                     </div>
                 </div>
             </div>
@@ -144,8 +159,8 @@
                         </select>
                     </div>
                     <div class="filter-group">
-                        <label for="price-range">Max. Preis / Tag: <span id="price-value">300</span>€</label>
-                        <input type="range" id="price-range" min="50" max="300" step="10" value="300">
+                        <label for="price-range">Max. Preis / Tag: <span id="price-value">150</span>€</label>
+                        <input type="range" id="price-range" min="80" max="150" step="5" value="150">
                     </div>
                     <div class="filter-group">
                         <label for="beds-range">Min. Betten: <span id="beds-value">2</span></label>
@@ -345,6 +360,9 @@
         <div class="modal-content">
             <span class="close-modal">&times;</span>
             <h2 id="modal-vehicle-name">Fahrzeug buchen</h2>
+            <div style="background-color: #dbeafe; border-left: 4px solid #0284c7; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                <p style="margin: 0; color: #1e40af; font-size: 0.9rem;"><strong>ℹ️ Wichtig:</strong> Das Fahrzeug muss am selben Abholort zurückgegeben werden, wo Sie es abgeholt haben.</p>
+            </div>
             <div class="modal-body">
                 <div class="vehicle-summary">
                     <img id="modal-vehicle-image" src="" alt="Fahrzeug">
@@ -353,20 +371,139 @@
                     </div>
                 </div>
                 <form id="booking-form">
-                    <div class="form-group">
-                        <label for="start-date">Startdatum</label>
-                        <input type="date" id="start-date" required>
+                    <!-- Schritt 1: Zeitraum-Auswahl -->
+                    <div id="step-1-dates" style="display: block;">
+                        <h3 style="margin-bottom: 1rem;">Schritt 1: Zeitraum wählen</h3>
+                        <div class="form-group">
+                            <label for="start-date">Startdatum</label>
+                            <input type="date" id="start-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="end-date">Enddatum</label>
+                            <input type="date" id="end-date" required>
+                        </div>
+                        <div class="cost-calculation" id="cost-calculation">
+                            <p><strong>Grundpreis:</strong> <span id="daily-rate">0</span>€ / Tag</p>
+                            <p>Mietdauer: <span id="rental-days">0</span> Tage</p>
+                            <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">Kaution: <span id="deposit-amount">0</span>€</p>
+                            <p class="total-price">Gesamtpreis für Zeitraum: <span id="total-price">0</span>€</p>
+                        </div>
+                        <button type="button" class="btn btn-primary full-width" onclick="goToStep2()">Weiter zu Mieterdaten</button>
                     </div>
-                    <div class="form-group">
-                        <label for="end-date">Enddatum</label>
-                        <input type="date" id="end-date" required>
+
+                    <!-- Schritt 2: Mieterdaten -->
+                    <div id="step-2-renter" style="display: none;">
+                        <h3 style="margin-bottom: 1rem;">Schritt 2: Mieterdaten eingeben</h3>
+                        <button type="button" class="btn" style="margin-bottom: 1rem; background-color: #e5e5e5; color: #333; width: 100%; border: none; border-radius: 8px; padding: 0.5rem;" onclick="goToStep1()">← Zurück</button>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label for="first-name">Vorname</label>
+                                <input type="text" id="first-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="last-name">Nachname</label>
+                                <input type="text" id="last-name" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="birth-date">Geburtsdatum</label>
+                            <input type="date" id="birth-date" required>
+                            <div id="age-error" style="color: #ef4444; font-size: 0.9rem; display: none; margin-top: 0.25rem;">⚠️ Du musst mindestens 21 Jahre alt sein.</div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label for="street">Straße & Hausnummer</label>
+                                <input type="text" id="street" placeholder="z.B. Musterstraße 42" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="postal-code">PLZ</label>
+                                <input type="text" id="postal-code" placeholder="z.B. 10115" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="city">Ort</label>
+                            <input type="text" id="city" placeholder="z.B. Berlin" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Telefonnummer</label>
+                            <input type="tel" id="phone" placeholder="z.B. +49 30 12345678" required>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label for="license-class">Führerscheinklasse</label>
+                                <select id="license-class" required>
+                                    <option value="">-- Bitte wählen --</option>
+                                    <option value="Klasse B">Klasse B</option>
+                                    <option value="Klasse C1">Klasse C1</option>
+                                    <option value="Klasse C">Klasse C</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="license-valid-since">Führerschein gültig seit</label>
+                                <input type="date" id="license-valid-since" required>
+                            </div>
+                        </div>
+
+                        <!-- Versicherung Section -->
+                        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e5e7eb;">
+                            <h4 style="margin-bottom: 1rem; color: var(--text-color);">Versicherungsoptionen</h4>
+                            
+                            <div class="form-group">
+                                <label for="insurance-type">Versicherung (Vollkasko)</label>
+                                <select id="insurance-type" onchange="updateInsurancePrice()">
+                                    <option value="none">Keine Versicherung</option>
+                                    <option value="500">Vollkasko - 500€ Selbstbeteiligung (+15€/Tag)</option>
+                                    <option value="1000">Vollkasko - 1000€ Selbstbeteiligung (+10€/Tag)</option>
+                                    <option value="1500">Vollkasko - 1500€ Selbstbeteiligung (+5€/Tag)</option>
+                                </select>
+                            </div>
+
+                            <div id="insurance-cost-info" style="background-color: #f0fdf4; border-left: 4px solid #10b981; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; display: none;">
+                                <p style="margin: 0; color: #166534; font-size: 0.9rem;"><strong>💰 Versicherungspreis:</strong> <span id="insurance-price-display">0</span>€</p>
+                            </div>
+                        </div>
+
+                        <!-- Mehrere Fahrer Section -->
+                        <div style="margin-top: 1.5rem;">
+                            <h4 style="margin-bottom: 1rem; color: var(--text-color);">Zusätzliche Fahrer</h4>
+                            <label>
+                                <input type="checkbox" id="additional-driver-checkbox" onchange="toggleAdditionalDriver()">
+                                Zusätzlicher Fahrer hinzufügen (+25€/Tag)
+                            </label>
+                            
+                            <div id="additional-driver-form" style="display: none; margin-top: 1rem; padding: 1rem; background-color: #f8f9fa; border-radius: 8px;">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                    <div class="form-group">
+                                        <label for="driver2-first-name">Vorname</label>
+                                        <input type="text" id="driver2-first-name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="driver2-last-name">Nachname</label>
+                                        <input type="text" id="driver2-last-name">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="driver2-birth-date">Geburtsdatum</label>
+                                    <input type="date" id="driver2-birth-date">
+                                    <div id="driver2-age-error" style="color: #ef4444; font-size: 0.9rem; display: none; margin-top: 0.25rem;">⚠️ Fahrer muss zwischen 21 und 75 Jahre alt sein.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Endreinigung (verpflichtend) -->
+                        <div style="margin-top: 1.5rem; padding: 1rem; background-color: #f0fdf4; border-left: 4px solid #10b981; border-radius: 8px;">
+                            <p style="margin: 0; color: #166534; font-size: 0.9rem;"><strong>🧹 Endreinigung:</strong> Die Endreinigung (70€) ist in jedem Mietvertrag enthalten.</p>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary full-width" style="margin-top: 2rem;">Jetzt Buchen</button>
                     </div>
-                    <div class="cost-calculation" id="cost-calculation">
-                        <p><strong>Grundpreis:</strong> <span id="daily-rate">0</span>€ / Tag</p>
-                        <p>Mietdauer: <span id="rental-days">0</span> Tage</p>
-                        <p class="total-price">Gesamtpreis für Zeitraum: <span id="total-price">0</span>€</p>
-                    </div>
-                    <button type="submit" class="btn btn-primary full-width">Jetzt Buchen</button>
                 </form>
             </div>
         </div>
@@ -435,7 +572,7 @@
     </div>
 
     <!-- Cookie Consent Banner - GDPR Compliant -->
-    <div id="cookie-banner" class="cookie-banner">
+   <div id="cookie-banner" class="cookie-banner">
         <div class="cookie-content">
             <div>
                 <h3>🍪 Cookies</h3>
@@ -450,6 +587,8 @@
 
     <!-- Load vehicle data (defines window.vehicles) -->
     <script src="data.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/de.js"></script>
 
     <!-- Main site script -->
     <script src="script.js"></script>
