@@ -6,11 +6,20 @@
         "brand": "Mercedes-Benz",
         "color": "Weiß",
         "image": "images/mercedes_sprinter_camper.png",
+        "interiorImages": [
+            "images/mercedes_sprinter_interior_1.jpg",
+            "images/mercedes_sprinter_interior_2.jpg"
+        ],
         "pricePerDay": 120,
         "license": "Klasse B",
         "transmission": "Automatik",
         "power": 163,
         "beds": 2,
+        "bedDetails": {
+            "description": "1 Doppelbett (160x200 cm)",
+            "mattress": "Hochwertige Schaumstoffmatratze"
+        },
+        "bedding": "Für jede Buchung stellen wir Ihnen Bettwäsche in ausreichender Menge entsprechend der gebuchten Personenanzahl zur Verfügung.",
         "fuel": {
             "type": "Diesel",
             "consumption": 8.9,
@@ -31,16 +40,20 @@
             "maxLoad": 2000
         },
         "kitchen": {
+            "type": "Gas",
             "stove": "2-Flammen Gasherd",
             "fridge": "65L Kompressor-Kühlschrank",
+            "fridgeType": "Absorber-Kühlschrank 65L",
             "sink": "Edelstahl-Spüle",
             "oven": false,
             "microwave": false,
-            "dishwasher": false
+            "dishwasher": false,
+            "waterTank": "100L Frischwassertank"
         },
         "sanitary": {
             "toilet": true,
-            "shower": true
+            "shower": true,
+            "greyWater": "80L Abwassertank"
         },
         "assistanceSystems": [
             "Rückfahrkamera",
@@ -71,11 +84,20 @@
         "brand": "Mercedes-Benz",
         "color": "Weiß",
         "image": "images/mercedes_sprinter_4x4.png",
+        "interiorImages": [
+            "images/mercedes_sprinter_4x4_interior_1.jpg",
+            "images/mercedes_sprinter_4x4_interior_2.jpg"
+        ],
         "pricePerDay": 145,
         "license": "Klasse B",
         "transmission": "Automatik",
         "power": 190,
         "beds": 2,
+        "bedDetails": {
+            "description": "1 Doppelbett (160x200 cm)",
+            "mattress": "Hochwertige Schaumstoffmatratze"
+        },
+        "bedding": "Für jede Buchung stellen wir Ihnen Bettwäsche in ausreichender Menge entsprechend der gebuchten Personenanzahl zur Verfügung.",
         "fuel": {
             "type": "Diesel",
             "consumption": 9.8,
@@ -96,16 +118,20 @@
             "maxLoad": 2500
         },
         "kitchen": {
+            "type": "Gas",
             "stove": "2-Flammen Gasherd",
             "fridge": "70L Kompressor-Kühlschrank",
+            "fridgeType": "Absorber-Kühlschrank 70L",
             "sink": "Edelstahl-Spüle",
             "oven": false,
             "microwave": false,
-            "dishwasher": false
+            "dishwasher": false,
+            "waterTank": "110L Frischwassertank"
         },
         "sanitary": {
             "toilet": true,
-            "shower": true
+            "shower": true,
+            "greyWater": "90L Abwassertank"
         },
         "assistanceSystems": [
             "Rückfahrkamera",
@@ -137,11 +163,20 @@
         "brand": "Volkswagen",
         "color": "Grau Metallic",
         "image": "images/vw_california_ocean.png",
+        "interiorImages": [
+            "images/vw_california_interior_1.jpg",
+            "images/vw_california_interior_2.jpg"
+        ],
         "pricePerDay": 95,
         "license": "Klasse B",
         "transmission": "Automatik",
         "power": 150,
         "beds": 4,
+        "bedDetails": {
+            "description": "2 Doppelbetten (160x200 cm oben, 160x190 cm unten)",
+            "mattress": "Komfortmatratzen"
+        },
+        "bedding": "Für jede Buchung stellen wir Ihnen Bettwäsche in ausreichender Menge entsprechend der gebuchten Personenanzahl zur Verfügung.",
         "fuel": {
             "type": "Diesel",
             "consumption": 7.8,
@@ -162,16 +197,20 @@
             "maxLoad": 2000
         },
         "kitchen": {
+            "type": "Gas",
             "stove": "2-Flammen Gasherd",
             "fridge": "42L Kompressor-Kühlbox",
+            "fridgeType": "Absorber-Kühlbox 42L",
             "sink": "Kompakt-Spüle",
             "oven": false,
             "microwave": false,
-            "dishwasher": false
+            "dishwasher": false,
+            "waterTank": "80L Frischwassertank"
         },
         "sanitary": {
             "toilet": false,
-            "shower": true
+            "shower": true,
+            "greyWater": "60L Abwassertank"
         },
         "assistanceSystems": [
             "Rückfahrkamera",
@@ -203,11 +242,20 @@
         "brand": "Volkswagen",
         "color": "Weiß",
         "image": "images/vw_crafter_camper.png",
+        "interiorImages": [
+            "images/vw_crafter_interior_1.jpg",
+            "images/vw_crafter_interior_2.jpg"
+        ],
         "pricePerDay": 110,
         "license": "Klasse B",
         "transmission": "Automatik",
         "power": 177,
         "beds": 3,
+        "bedDetails": {
+            "description": "2 Einzelbetten (90x200 cm) + 1 Doppelbett (140x190 cm)",
+            "mattress": "Bequeme Schaumstoffmatratzen"
+        },
+        "bedding": "Für jede Buchung stellen wir Ihnen Bettwäsche in ausreichender Menge entsprechend der gebuchten Personenanzahl zur Verfügung.",
         "fuel": {
             "type": "Diesel",
             "consumption": 8.5,
@@ -228,16 +276,20 @@
             "maxLoad": 2000
         },
         "kitchen": {
+            "type": "Gas",
             "stove": "2-Flammen Gasherd",
             "fridge": "80L Kompressor-Kühlschrank",
+            "fridgeType": "Absorber-Kühlschrank 80L",
             "sink": "Edelstahl-Spüle",
             "oven": false,
             "microwave": false,
-            "dishwasher": false
+            "dishwasher": false,
+            "waterTank": "120L Frischwassertank"
         },
         "sanitary": {
             "toilet": true,
-            "shower": true
+            "shower": true,
+            "greyWater": "100L Abwassertank"
         },
         "assistanceSystems": [
             "Rückfahrkamera",
@@ -266,11 +318,20 @@
         "brand": "Fiat",
         "color": "Weiß",
         "image": "images/fiat_ducato_camper.png",
+        "interiorImages": [
+            "images/fiat_ducato_interior_1.jpg",
+            "images/fiat_ducato_interior_2.jpg"
+        ],
         "pricePerDay": 105,
         "license": "Klasse B",
         "transmission": "Manuell",
         "power": 140,
         "beds": 3,
+        "bedDetails": {
+            "description": "2 Einzelbetten (80x200 cm) + 1 Doppelbett (140x190 cm)",
+            "mattress": "Qualitätsmatratzen"
+        },
+        "bedding": "Für jede Buchung stellen wir Ihnen Bettwäsche in ausreichender Menge entsprechend der gebuchten Personenanzahl zur Verfügung.",
         "fuel": {
             "type": "Diesel",
             "consumption": 8.2,
@@ -291,16 +352,20 @@
             "maxLoad": 2000
         },
         "kitchen": {
+            "type": "Gas",
             "stove": "2-Flammen Gasherd",
             "fridge": "75L Kompressor-Kühlschrank",
+            "fridgeType": "Absorber-Kühlschrank 75L",
             "sink": "Edelstahl-Spüle",
             "oven": false,
             "microwave": false,
-            "dishwasher": false
+            "dishwasher": false,
+            "waterTank": "115L Frischwassertank"
         },
         "sanitary": {
             "toilet": true,
-            "shower": true
+            "shower": true,
+            "greyWater": "95L Abwassertank"
         },
         "assistanceSystems": [
             "Rückfahrkamera",
@@ -329,11 +394,20 @@
         "brand": "Ford",
         "color": "Weiß",
         "image": "images/ford_transit_camper.png",
+        "interiorImages": [
+            "images/ford_transit_interior_1.jpg",
+            "images/ford_transit_interior_2.jpg"
+        ],
         "pricePerDay": 115,
         "license": "Klasse B",
         "transmission": "Automatik",
         "power": 170,
         "beds": 2,
+        "bedDetails": {
+            "description": "1 Doppelbett (160x200 cm)",
+            "mattress": "Premium-Schaumstoffmatratze"
+        },
+        "bedding": "Für jede Buchung stellen wir Ihnen Bettwäsche in ausreichender Menge entsprechend der gebuchten Personenanzahl zur Verfügung.",
         "fuel": {
             "type": "Diesel",
             "consumption": 8.7,
@@ -354,16 +428,20 @@
             "maxLoad": 2200
         },
         "kitchen": {
+            "type": "Gas",
             "stove": "2-Flammen Gasherd",
             "fridge": "70L Kompressor-Kühlschrank",
+            "fridgeType": "Absorber-Kühlschrank 70L",
             "sink": "Edelstahl-Spüle",
             "oven": false,
             "microwave": false,
-            "dishwasher": false
+            "dishwasher": false,
+            "waterTank": "105L Frischwassertank"
         },
         "sanitary": {
             "toilet": false,
-            "shower": true
+            "shower": true,
+            "greyWater": "75L Abwassertank"
         },
         "assistanceSystems": [
             "Rückfahrkamera",
@@ -393,16 +471,40 @@
         "brand": "Volkswagen",
         "color": "Weiß/Gelb",
         "image": "images/vw_id_buzz_camper.png",
+        "interiorImages": [
+            "images/vw_id_buzz_interior_1.jpg",
+            "images/vw_id_buzz_interior_2.jpg"
+        ],
         "pricePerDay": 135,
         "license": "Klasse B",
         "transmission": "Automatik",
         "power": 204,
         "beds": 2,
+        "bedDetails": {
+            "description": "1 Doppelbett (150x190 cm)",
+            "mattress": "Ergonomische Schaumstoffmatratze"
+        },
+        "bedding": "Für jede Buchung stellen wir Ihnen Bettwäsche in ausreichender Menge entsprechend der gebuchten Personenanzahl zur Verfügung.",
         "fuel": {
             "type": "Elektro",
             "consumption": 21.0,
             "emissionClass": "Zero Emission",
             "emissionSticker": "Grün"
+        },
+        "ev": {
+            "batteryCapacity": 82,
+            "batteryCapacityUnit": "kWh",
+            "rangeCapacity": "82 kWh Pro",
+            "rangeSummer": 450,
+            "rangeWinter": 350,
+            "chargeConnectors": ["Type 2", "CCS (DC-Schnellladen)"],
+            "acCharging": "11 kW",
+            "dcCharging": "135 kW",
+            "chargeTime0to80": 35,
+            "chargeTime20to80": 23,
+            "chargeTime0to100": 40,
+            "consumption": 21.0,
+            "regeneration": true
         },
         "dimensions": {
             "length": 4.71,
@@ -418,16 +520,20 @@
             "maxLoad": 1000
         },
         "kitchen": {
+            "type": "Induktion",
             "stove": "Induktionskochfeld",
             "fridge": "30L Kühlbox",
+            "fridgeType": "Elektro-Kühlbox 30L",
             "sink": "Falt-Spüle",
             "oven": false,
             "microwave": false,
-            "dishwasher": false
+            "dishwasher": false,
+            "waterTank": "60L Frischwassertank"
         },
         "sanitary": {
             "toilet": false,
-            "shower": false
+            "shower": false,
+            "greyWater": "40L Abwassertank"
         },
         "assistanceSystems": [
             "Rückfahrkamera",
@@ -437,11 +543,12 @@
             "Travel Assist"
         ],
         "features": [
-            "Vollelektrisch",
+            "Vollelektrisch - Zero Emission",
             "Standklimatisierung",
             "LED-Matrix-Scheinwerfer",
             "Ambientebeleuchtung",
-            "Panoramadach"
+            "Panoramadach",
+            "Rekuperationssystem"
         ],
         "availableLocations": [
             "Berlin",
