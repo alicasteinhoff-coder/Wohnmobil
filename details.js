@@ -62,6 +62,15 @@ function renderVehicleDetails(vehicle) {
             </div>
         </div>
 
+        ${vehicle.interiorImages && vehicle.interiorImages.length > 0 ? `
+        <div style="margin: 4rem 0;">
+            <h2 style="margin-bottom: 2rem;">📸 Innenausstattung</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                ${vehicle.interiorImages.map(img => `<img src="${img}" alt="Innenansicht" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">`).join('')}
+            </div>
+        </div>
+        ` : ''}`
+
         <div class="details-grid">
             <div class="detail-card">
                 <h3>📋 Basisdaten</h3>
