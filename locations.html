@@ -24,6 +24,8 @@
             box-shadow: var(--shadow);
             overflow: hidden;
             background: #f0f0f0;
+            height: 600px;
+            position: relative;
         }
 
         #map {
@@ -222,10 +224,10 @@
             { name: 'Frankfurt', address: 'Börsenstraße 10, 60313 Frankfurt am Main', lat: 50.1095, lng: 8.6793, vehicles: ['Mercedes Sprinter 4x4', 'Fiat Ducato Camper'] },
             { name: 'Köln', address: 'Hohenzollenring 58, 50672 Köln', lat: 50.9386, lng: 6.9289, vehicles: ['Fiat Ducato Camper', 'Ford Transit Camper'] },
             { name: 'Leipzig', address: 'Karl-Liebknecht-Straße 37, 04107 Leipzig', lat: 51.3435, lng: 12.3754, vehicles: ['VW California Ocean'] },
-            { name: 'Stuttgart', address: 'Königdtraße 47, 70173 Stuttgart', lat: 48.7777, lng: 9.1829, vehicles: ['Mercedes Sprinter 4x4', 'Ford Transit Camper'] },
+            { name: 'Stuttgart', address: 'Königstraße 47, 70173 Stuttgart', lat: 48.7777, lng: 9.1829, vehicles: ['Mercedes Sprinter 4x4', 'Ford Transit Camper'] },
             { name: 'Hannover', address: 'Georgstraße 27, 30159 Hannover', lat: 52.3748, lng: 9.7322, vehicles: ['VW Crafter Camper'] },
             { name: 'Dresden', address: 'Prager Straße 10, 01069 Dresden', lat: 51.0505, lng: 13.4473, vehicles: ['VW California Ocean'] },
-            { name: 'Düsseldorf', address: 'Königsalle 14, 40212 Düsseldorf', lat: 51.1339, lng: 6.7761, vehicles: ['Fiat Ducato Camper'] },
+            { name: 'Düsseldorf', address: 'Königsallee 14, 40212 Düsseldorf', lat: 51.1339, lng: 6.7761, vehicles: ['Fiat Ducato Camper'] },
             { name: 'Nürnberg', address: 'Königstraße 89, 90402 Nürnberg', lat: 49.4528, lng: 11.0757, vehicles: ['Ford Transit Camper'] }
         ];
 
@@ -317,7 +319,12 @@
                     marker.addEventListener('click', function() {
                         this.openPopup();
                     });
+                    
+                    // Store marker for later access
+                    markers.push(marker);
                 });
+                
+                console.log('✅ Karte initialisiert mit', markers.length, 'Standorten');
             };
             document.head.appendChild(script);
         }

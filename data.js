@@ -7,8 +7,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/mercedes_sprinter_camper.png",
         "interiorImages": [
-            "images/mercedes_sprinter_interior_1.jpg",
-            "images/mercedes_sprinter_interior_2.jpg"
+            "images/interior/mercedes_sprinter_living_area.jpg",
+            "images/interior/mercedes_sprinter_kitchen.jpg"
         ],
         "pricePerDay": 120,
         "license": "Klasse B",
@@ -63,12 +63,17 @@ window.vehicles = [
             "Totwinkelassistent"
         ],
         "features": [
-            "Standheizung Webasto",
-            "Solaranlage 100W",
-            "Markise 3m",
-            "LED-Beleuchtung",
-            "Aufstelldach",
-            "Fahrradträger (2 Räder)"
+            "Standheizung Webasto 4kW",
+            "Solaranlage 100W mit Solarregler",
+            "Markise 3m (manuell)",
+            "LED-Beleuchtung (dimmbar)",
+            "Aufstelldach elektrisch betätigt",
+            "Fahrradträger (2 Räder)",
+            "Heckkamera mit Monitor",
+            "12V-Ladestation für Geräte",
+            "Innenausstattung mit Echtholzoberflächen",
+            "Verdunkelungsrollo an allen Fenstern",
+            "Moskitonetze an Türen und Fenstern"
         ],
         "availableLocations": [
             "Berlin",
@@ -85,8 +90,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/mercedes_sprinter_4x4.png",
         "interiorImages": [
-            "images/mercedes_sprinter_4x4_interior_1.jpg",
-            "images/mercedes_sprinter_4x4_interior_2.jpg"
+            "images/interior/mercedes_sprinter_4x4_living.jpg",
+            "images/interior/mercedes_sprinter_4x4_sleeping.jpg"
         ],
         "pricePerDay": 145,
         "license": "Klasse B",
@@ -142,12 +147,12 @@ window.vehicles = [
             "Müdigkeitswarner"
         ],
         "features": [
-            "Allradantrieb 4x4",
-            "Solaranlage 200W",
-            "Außendusche",
-            "Standheizung Webasto",
-            "Offroad-Bereifung",
-            "LED-Beleuchtung",
+            "Allradantrieb 4x4 Geländegängig",
+            "Solaranlage 200W mit Regler",
+            "Außendusche mit Warmwasser",
+            "Standheizung Webasto 5kW",
+            "Offroad-Bereifung Continental",
+            "LED-Beleuchtung (RGB-dimmbar)",
             "Aufstelldach"
         ],
         "availableLocations": [
@@ -164,8 +169,8 @@ window.vehicles = [
         "color": "Grau Metallic",
         "image": "images/vw_california_ocean.png",
         "interiorImages": [
-            "images/vw_california_interior_1.jpg",
-            "images/vw_california_interior_2.jpg"
+            "images/interior/vw_california_lounge_area.jpg",
+            "images/interior/vw_california_bedroom.jpg"
         ],
         "pricePerDay": 95,
         "license": "Klasse B",
@@ -219,12 +224,17 @@ window.vehicles = [
             "Abstandstempomat (ACC)"
         ],
         "features": [
-            "Aufstelldach elektrisch",
-            "Markise",
-            "Campingtisch & Stühle",
-            "Standheizung",
-            "LED-Beleuchtung",
-            "Fahrradträger (2 Räder)"
+            "Aufstelldach elektrisch betätigt",
+            "Markise 2,5m (manuell)",
+            "Campingtisch & 4 Aluminium-Stühle",
+            "Standheizung Diesel 2,2kW",
+            "LED-Beleuchtung warmweiß",
+            "Fahrradträger (2 Räder)",
+            "Schiebedach elektrisch",
+            "Trittbretter aus Edelstahl",
+            "Verdunkelungsrollo komplett",
+            "12V Batterie 100Ah LiFePO4",
+            "Ladebooster 50A"
         ],
         "availableLocations": [
             "Berlin",
@@ -243,8 +253,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/vw_crafter_camper.png",
         "interiorImages": [
-            "images/vw_crafter_interior_1.jpg",
-            "images/vw_crafter_interior_2.jpg"
+            "images/interior/vw_crafter_kitchen_dining.jpg",
+            "images/interior/vw_crafter_sleeping_area.jpg"
         ],
         "pricePerDay": 110,
         "license": "Klasse B",
@@ -298,12 +308,17 @@ window.vehicles = [
             "Müdigkeitswarner"
         ],
         "features": [
-            "Standheizung",
-            "Solaranlage 150W",
-            "Markise 4m",
-            "Heckgarage",
-            "LED-Beleuchtung",
-            "Fahrradträger (3 Räder)"
+            "Standheizung Webasto 5kW",
+            "Solaranlage 150W mit Controller",
+            "Markise 4m elektrisch betätigt",
+            "Heckgarage mit motorisiertem Schiebtor",
+            "LED-Beleuchtung mit Dimmer",
+            "Fahrradträger (3 Räder)",
+            "Panoramadach",
+            "Dachbelüftung automatisch",
+            "Komplette Isolierung & Wärmedämmung",
+            "Innenausstattung mit Designerküche",
+            "12V Batterie 200Ah LiFePO4"
         ],
         "availableLocations": [
             "Hamburg",
@@ -319,8 +334,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/fiat_ducato_camper.png",
         "interiorImages": [
-            "images/fiat_ducato_interior_1.jpg",
-            "images/fiat_ducato_interior_2.jpg"
+            "images/interior/fiat_ducato_main_cabin.jpg",
+            "images/interior/fiat_ducato_sleeping.jpg"
         ],
         "pricePerDay": 105,
         "license": "Klasse B",
@@ -369,16 +384,22 @@ window.vehicles = [
         },
         "assistanceSystems": [
             "Rückfahrkamera",
-            "Parkpilot hinten",
-            "Spurhalteassistent"
+            "Tempomat",
+            "Spurwechselassistent",
+            "Notbremsassistent"
         ],
         "features": [
-            "Standheizung Truma",
-            "Solaranlage 120W",
-            "Markise 3,5m",
-            "Heckgarage",
-            "LED-Beleuchtung",
-            "Fahrradträger (2 Räder)"
+            "Standheizung Diesel 3,5kW",
+            "Solaranlage 120W mit Laderegler",
+            "Markise 3,5m (manuell)",
+            "LED-Beleuchtung naturweiß",
+            "Heckkamera mit Parklinien",
+            "Fahrradträger (2 Räder)",
+            "Gasanlage für Heizung & Kochen",
+            "Komplett isolierte Außenwände",
+            "Verdunkelungsrollo überall",
+            "12V Batterie 100Ah Standard",
+            "Landstrom-Anschluss vorhanden"
         ],
         "availableLocations": [
             "Köln",
@@ -395,8 +416,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/ford_transit_camper.png",
         "interiorImages": [
-            "images/ford_transit_interior_1.jpg",
-            "images/ford_transit_interior_2.jpg"
+            "images/interior/ford_transit_cabin.jpg",
+            "images/interior/ford_transit_sleeping.jpg"
         ],
         "pricePerDay": 115,
         "license": "Klasse B",
@@ -451,12 +472,17 @@ window.vehicles = [
             "Müdigkeitswarner"
         ],
         "features": [
-            "Standheizung Webasto",
-            "Solaranlage 150W",
-            "Markise 4m",
-            "Aufstelldach",
-            "LED-Beleuchtung",
-            "Fahrradträger (3 Räder)"
+            "Standheizung Webasto 4kW",
+            "Solaranlage 150W mit Regler",
+            "Markise 4m elektrisch",
+            "Aufstelldach elektrisch",
+            "LED-Beleuchtung warm-weiß",
+            "Fahrradträger (3 Räder)",
+            "Heckansicht Kamera",
+            "Komplett verdunkelt",
+            "Trockner integriert",
+            "Steckeranlage 230V vorhanden",
+            "Außenheizung optional"
         ],
         "availableLocations": [
             "München",
@@ -472,8 +498,8 @@ window.vehicles = [
         "color": "Weiß/Gelb",
         "image": "images/vw_id_buzz_camper.png",
         "interiorImages": [
-            "images/vw_id_buzz_interior_1.jpg",
-            "images/vw_id_buzz_interior_2.jpg"
+            "images/interior/vw_id_buzz_living.jpg",
+            "images/interior/vw_id_buzz_cockpit.jpg"
         ],
         "pricePerDay": 135,
         "license": "Klasse B",
@@ -544,11 +570,16 @@ window.vehicles = [
         ],
         "features": [
             "Vollelektrisch - Zero Emission",
-            "Standklimatisierung",
-            "LED-Matrix-Scheinwerfer",
-            "Ambientebeleuchtung",
-            "Panoramadach",
-            "Rekuperationssystem"
+            "Standklimatisierung elektrisch",
+            "LED-Matrix-Scheinwerfer mit Animation",
+            "Ambientebeleuchtung 30 Farben",
+            "Panoramadach aus Glas",
+            "Rekuperationssystem (Bremsenergie)",
+            "Schnellladefunktion bis 135kW DC",
+            "Wärmepumpe für Effizienz",
+            "Induktionskochfeld nachhaltig",
+            "Induktionsladung vorbereitet",
+            "Premium Sound System Harman"
         ],
         "availableLocations": [
             "Berlin",
