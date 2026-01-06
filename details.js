@@ -62,14 +62,12 @@ function renderVehicleDetails(vehicle) {
             </div>
         </div>
 
-        ${vehicle.interiorImages && vehicle.interiorImages.length > 0 ? `
         <div style="margin: 4rem 0;">
             <h2 style="margin-bottom: 2rem;">📸 Innenausstattung</h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                ${vehicle.interiorImages.map(img => `<img src="${img}" alt="Innenansicht" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">`).join('')}
+                ${vehicle.interiorImages ? vehicle.interiorImages.map(img => `<img src="${img}" alt="Innenansicht" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22400%22%3E%3Crect fill=%22%23ddd%22 width=%22600%22 height=%22400%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22 font-family=%22Arial%22%3EBild lädt..%3C/text%3E%3C/svg%3E'">`).join('') : '<p>Keine Innenbilder verfügbar</p>'}
             </div>
         </div>
-        ` : ''}
 
         <div class="details-grid">
             <div class="detail-card">
