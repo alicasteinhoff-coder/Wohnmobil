@@ -232,80 +232,6 @@
         let map;
         let markers = [];
 
-        function initMap() {
-            // Check if Google Maps consent is given
-            const preferences = getCookiePreferences();
-            if (!preferences.analytics) {
-                console.log('ℹ️ Google Maps nicht geladen (keine Zustimmung für Analytics-Cookies)');
-                showMapPlaceholder();
-                return;
-            }
-
-            // Create map centered on Germany
-            const germanCenter = { lat: 51.1657, lng: 10.4515 };
-            map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 6,
-                center: germanCenter,
-                mapTypeControl: true,
-                fullscreenControl: true,
-                streetViewControl: false
-            });
-
-            // Add markers for each location
-            locations.forEach((location, index) => {
-                const marker = new google.maps.Marker({
-                    position: { lat: location.lat, lng: location.lng },
-                    map: map,
-                    title: location.name,
-                    label: String(index + 1)
-                });
-
-                // Info window with location details
-                const infoContent = `
-                    <div style="font-family: Arial, sans-serif; font-size: 14px; max-width: 250px;">
-                        <h3 style="margin: 0 0 10px 0; color: #0284c7;">${location.name}</h3>
-                        <p style="margin: 5px 0;"><strong>📍</strong> ${location.address}</p>
-                        <p style="margin: 5px 0; font-size: 12px; color: #666;">
-                            <strong>Fahrzeuge:</strong> ${location.vehicles.length}
-                        </p>
-                        <ul style="margin: 5px 0; padding-left: 20px; font-size: 12px;">
-                            ${location.vehicles.map(v => `<li>${v}</li>`).join('')}
-                        </ul>
-                    </div>
-                `;
-
-                const infoWindow = new google.maps.InfoWindow({ content: infoContent });
-                marker.addListener('click', () => {
-                    // Close all other info windows
-                    markers.forEach(m => {
-                        if (m.infoWindow) m.infoWindow.close();
-                    });
-                    infoWindow.open(map, marker);
-                });
-
-                marker.infoWindow = infoWindow;
-                markers.push(marker);
-            });
-
-            // Show the map, hide placeholder
-            document.getElementById('map').style.display = 'block';
-            document.getElementById('map-placeholder').style.display = 'none';
-        }
-
-        function showMapPlaceholder() {
-            document.getElementById('map-placeholder').innerHTML = `
-                <div style="text-align: center; padding: 2rem;">
-                    <h3 style="margin: 0 0 1rem 0; color: var(--primary-color);">🔒 Karte nicht verfügbar</h3>
-                    <p style="margin: 0 0 1rem 0; color: var(--text-light);">
-                        Um Google Maps zu nutzen, aktualisieren Sie bitte Ihre Cookie-Einstellungen und erlauben Sie Analytics-Cookies.
-                    </p>
-                    <button class="btn btn-primary" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
-                        Zu Cookie-Einstellungen
-                    </button>
-                </div>
-            `;
-        }
-
         function renderLocationsList() {
             const list = document.getElementById('locations-list');
             list.innerHTML = locations.map((location, index) => `
@@ -324,49 +250,77 @@
         }
 
         function scrollToLocation(index) {
-            if (markers[index]) {
+            if (map && markers[index]) {
                 const location = locations[index];
-                if (map) {
-                    map.setCenter({ lat: location.lat, lng: location.lng });
-                    map.setZoom(12);
-                    markers[index].infoWindow.open(map, markers[index]);
-                }
+                map.setView([location.lat, location.lng], 12);
+                markers[index].openPopup();
             }
-        }
-
-        // Helper function from script.js
-        function getCookiePreferences() {
-            const prefs = getCookie("cookie_preferences");
-            if (prefs) {
-                try {
-                    return JSON.parse(prefs);
-                } catch (e) {
-                    return { necessary: true, analytics: false, marketing: false };
-                }
-            }
-            return { necessary: true, analytics: false, marketing: false };
         }
 
         // Initialize on load
         document.addEventListener('DOMContentLoaded', () => {
             renderLocationsList();
             
-            // Check if we should load Google Maps
-            const preferences = getCookiePreferences();
-            if (preferences.analytics) {
-                // Load Google Maps API dynamically
-                const script = document.createElement('script');
-                script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDemoKey123456789&language=de&region=DE';
-                script.onload = initMap;
-                script.onerror = () => {
-                    console.error('❌ Google Maps API konnte nicht geladen werden. Bitte überprüfen Sie Ihren API-Key.');
-                    showMapPlaceholder();
-                };
-                document.head.appendChild(script);
-            } else {
-                showMapPlaceholder();
-            }
+            // Always show the map with Leaflet (open-source alternative)
+            initMapWithLeaflet();
         });
+
+        // Initialize map with Leaflet (no API key required)
+        function initMapWithLeaflet() {
+            // Load Leaflet CSS
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';
+            document.head.appendChild(link);
+
+            // Load Leaflet JS
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+            script.onload = () => {
+                const mapElement = document.getElementById('map');
+                mapElement.style.display = 'block';
+                document.getElementById('map-placeholder').style.display = 'none';
+
+                // Create map centered on Germany
+                const germanCenter = [51.1657, 10.4515];
+                map = L.map('map').setView(germanCenter, 6);
+
+                // Add OpenStreetMap tiles
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors',
+                    maxZoom: 19
+                }).addTo(map);
+
+                // Add markers for each location
+                locations.forEach((location, index) => {
+                    const marker = L.marker([location.lat, location.lng]).addTo(map);
+                    
+                    const popupContent = `
+                        <div style="font-family: Arial, sans-serif; min-width: 250px;">
+                            <h4 style="margin: 0 0 8px 0; color: #0284c7;">${index + 1}. ${location.name}</h4>
+                            <p style="margin: 5px 0;"><strong>📍</strong> ${location.address}</p>
+                            <p style="margin: 5px 0; font-size: 12px; color: #666;">
+                                <strong>Fahrzeuge verfügbar:</strong> ${location.vehicles.length}
+                            </p>
+                            <ul style="margin: 5px 0; padding-left: 20px; font-size: 12px;">
+                                ${location.vehicles.map(v => `<li>${v}</li>`).join('')}
+                            </ul>
+                            <p style="margin-top: 10px; font-size: 11px; color: #999;">
+                                <strong>Öffnungszeiten:</strong><br>
+                                Mo-Fr: 09:00 - 18:00 Uhr<br>
+                                Sa: 10:00 - 14:00 Uhr
+                            </p>
+                        </div>
+                    `;
+                    
+                    marker.bindPopup(popupContent);
+                    marker.addEventListener('click', function() {
+                        this.openPopup();
+                    });
+                });
+            };
+            document.head.appendChild(script);
+        }
 
         // Listen for cookie consent changes
         window.addEventListener('cookie-consent-changed', (e) => {
