@@ -7,8 +7,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/mercedes_sprinter_camper.png",
         "interiorImages": [
-            "https://images.unsplash.com/photo-1519452575417-564c1401ecc0?w=600&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=400&fit=crop"
+            "https://images.unsplash.com/photo-1593618998160-e34014e67546?w=600&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1595521624634-c0dbd1b4b1c1?w=600&h=400&fit=crop"
         ],
         "pricePerDay": 120,
         "license": "Klasse B",
@@ -90,8 +90,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/mercedes_sprinter_4x4.png",
         "interiorImages": [
-            "https://images.unsplash.com/photo-1469022563149-aa64dbd37dae?w=600&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=400&fit=crop"
+            "https://images.unsplash.com/photo-1595521624634-c0dbd1b4b1c1?w=600&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1570129477492-45c003cedd90?w=600&h=400&fit=crop"
         ],
         "pricePerDay": 145,
         "license": "Klasse B",
@@ -169,8 +169,8 @@ window.vehicles = [
         "color": "Grau Metallic",
         "image": "images/vw_california_ocean.png",
         "interiorImages": [
-            "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&h=400&fit=crop"
+            "https://images.unsplash.com/photo-1631049307038-da0ec836d73a?w=600&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1595521624634-c0dbd1b4b1c1?w=600&h=400&fit=crop"
         ],
         "pricePerDay": 95,
         "license": "Klasse B",
@@ -253,8 +253,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/vw_crafter_camper.png",
         "interiorImages": [
-            "https://images.unsplash.com/photo-1494145904049-0dca7b0589cb?w=600&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1540932239986-310128078ceb?w=600&h=400&fit=crop"
+            "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1595521624634-c0dbd1b4b1c1?w=600&h=400&fit=crop"
         ],
         "pricePerDay": 110,
         "license": "Klasse B",
@@ -334,8 +334,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/fiat_ducato_camper.png",
         "interiorImages": [
-            "https://images.unsplash.com/photo-1543269865-cbdf26effbad?w=600&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&h=400&fit=crop"
+            "https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=600&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1595521624634-c0dbd1b4b1c1?w=600&h=400&fit=crop"
         ],
         "pricePerDay": 105,
         "license": "Klasse B",
@@ -416,8 +416,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/ford_transit_camper.png",
         "interiorImages": [
-            "https://images.unsplash.com/photo-1519452575417-564c1401ecc0?w=600&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1467043237564-502187c147f7?w=600&h=400&fit=crop"
+            "https://images.unsplash.com/photo-1595521624634-c0dbd1b4b1c1?w=600&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1631049307038-da0ec836d73a?w=600&h=400&fit=crop"
         ],
         "pricePerDay": 115,
         "license": "Klasse B",
@@ -498,8 +498,8 @@ window.vehicles = [
         "color": "Weiß/Gelb",
         "image": "images/vw_id_buzz_camper.png",
         "interiorImages": [
-            "https://images.unsplash.com/photo-1494145904049-0dca7b0589cb?w=600&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=600&h=400&fit=crop"
+            "https://images.unsplash.com/photo-1631049307038-da0ec836d73a?w=600&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&h=400&fit=crop"
         ],
         "pricePerDay": 135,
         "license": "Klasse B",
