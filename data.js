@@ -7,8 +7,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/mercedes_sprinter_camper.png",
         "interiorImages": [
-            "https://images.unsplash.com/photo-1593618998160-e34014e67546?w=600&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1595521624634-c0dbd1b4b1c1?w=600&h=400&fit=crop"
+            "https://source.unsplash.com/600x400/?camper,interior",
+            "https://source.unsplash.com/600x400/?motorhome,kitchen"
         ],
         "pricePerDay": 120,
         "license": "Klasse B",
@@ -90,8 +90,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/mercedes_sprinter_4x4.png",
         "interiorImages": [
-            "https://images.unsplash.com/photo-1595521624634-c0dbd1b4b1c1?w=600&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1570129477492-45c003cedd90?w=600&h=400&fit=crop"
+            "https://source.unsplash.com/600x400/?van,interior",
+            "https://source.unsplash.com/600x400/?camper,bedroom"
         ],
         "pricePerDay": 145,
         "license": "Klasse B",
@@ -169,8 +169,8 @@ window.vehicles = [
         "color": "Grau Metallic",
         "image": "images/vw_california_ocean.png",
         "interiorImages": [
-            "https://images.unsplash.com/photo-1631049307038-da0ec836d73a?w=600&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1595521624634-c0dbd1b4b1c1?w=600&h=400&fit=crop"
+            "https://source.unsplash.com/600x400/?rv,interior",
+            "https://source.unsplash.com/600x400/?camper,living"
         ],
         "pricePerDay": 95,
         "license": "Klasse B",
@@ -253,8 +253,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/vw_crafter_camper.png",
         "interiorImages": [
-            "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1595521624634-c0dbd1b4b1c1?w=600&h=400&fit=crop"
+            "https://source.unsplash.com/600x400/?motorhome,living",
+            "https://source.unsplash.com/600x400/?camper,kitchen"
         ],
         "pricePerDay": 110,
         "license": "Klasse B",
@@ -334,8 +334,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/fiat_ducato_camper.png",
         "interiorImages": [
-            "https://images.unsplash.com/photo-1578500494198-246f612d03b3?w=600&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1595521624634-c0dbd1b4b1c1?w=600&h=400&fit=crop"
+            "https://source.unsplash.com/600x400/?caravan,interior",
+            "https://source.unsplash.com/600x400/?van,bedroom"
         ],
         "pricePerDay": 105,
         "license": "Klasse B",
@@ -416,8 +416,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/ford_transit_camper.png",
         "interiorImages": [
-            "https://images.unsplash.com/photo-1595521624634-c0dbd1b4b1c1?w=600&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1631049307038-da0ec836d73a?w=600&h=400&fit=crop"
+            "https://source.unsplash.com/600x400/?rv,kitchen",
+            "https://source.unsplash.com/600x400/?camper,cozy"
         ],
         "pricePerDay": 115,
         "license": "Klasse B",
@@ -498,8 +498,8 @@ window.vehicles = [
         "color": "Weiß/Gelb",
         "image": "images/vw_id_buzz_camper.png",
         "interiorImages": [
-            "https://images.unsplash.com/photo-1631049307038-da0ec836d73a?w=600&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&h=400&fit=crop"
+            "https://source.unsplash.com/600x400/?electric,camper",
+            "https://source.unsplash.com/600x400/?modern,interior"
         ],
         "pricePerDay": 135,
         "license": "Klasse B",
