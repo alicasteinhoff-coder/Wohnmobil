@@ -6,10 +6,7 @@ window.vehicles = [
         "brand": "Mercedes-Benz",
         "color": "Weiß",
         "image": "images/mercedes_sprinter_camper.png",
-        "interiorImages": [
-            "images/interior/mercedes_sprinter_living_area.jpg",
-            "images/interior/mercedes_sprinter_kitchen.jpg"
-        ],
+        "interiorImages": [],
         "pricePerDay": 120,
         "license": "Klasse B",
         "transmission": "Automatik",
@@ -89,10 +86,7 @@ window.vehicles = [
         "brand": "Mercedes-Benz",
         "color": "Weiß",
         "image": "images/mercedes_sprinter_4x4.png",
-        "interiorImages": [
-            "images/interior/mercedes_sprinter_4x4_living.jpg",
-            "images/interior/mercedes_sprinter_4x4_sleeping.jpg"
-        ],
+        "interiorImages": [],
         "pricePerDay": 145,
         "license": "Klasse B",
         "transmission": "Automatik",
@@ -168,10 +162,7 @@ window.vehicles = [
         "brand": "Volkswagen",
         "color": "Grau Metallic",
         "image": "images/vw_california_ocean.png",
-        "interiorImages": [
-            "images/interior/vw_california_lounge_area.jpg",
-            "images/interior/vw_california_bedroom.jpg"
-        ],
+        "interiorImages": [],
         "pricePerDay": 95,
         "license": "Klasse B",
         "transmission": "Automatik",
@@ -252,10 +243,7 @@ window.vehicles = [
         "brand": "Volkswagen",
         "color": "Weiß",
         "image": "images/vw_crafter_camper.png",
-        "interiorImages": [
-            "images/interior/vw_crafter_kitchen_dining.jpg",
-            "images/interior/vw_crafter_sleeping_area.jpg"
-        ],
+        "interiorImages": [],
         "pricePerDay": 110,
         "license": "Klasse B",
         "transmission": "Automatik",
@@ -333,10 +321,7 @@ window.vehicles = [
         "brand": "Fiat",
         "color": "Weiß",
         "image": "images/fiat_ducato_camper.png",
-        "interiorImages": [
-            "images/interior/fiat_ducato_main_cabin.jpg",
-            "images/interior/fiat_ducato_sleeping.jpg"
-        ],
+        "interiorImages": [],
         "pricePerDay": 105,
         "license": "Klasse B",
         "transmission": "Manuell",
@@ -415,10 +400,7 @@ window.vehicles = [
         "brand": "Ford",
         "color": "Weiß",
         "image": "images/ford_transit_camper.png",
-        "interiorImages": [
-            "images/interior/ford_transit_cabin.jpg",
-            "images/interior/ford_transit_sleeping.jpg"
-        ],
+        "interiorImages": [],
         "pricePerDay": 115,
         "license": "Klasse B",
         "transmission": "Automatik",
@@ -497,10 +479,7 @@ window.vehicles = [
         "brand": "Volkswagen",
         "color": "Weiß/Gelb",
         "image": "images/vw_id_buzz_camper.png",
-        "interiorImages": [
-            "images/interior/vw_id_buzz_living.jpg",
-            "images/interior/vw_id_buzz_cockpit.jpg"
-        ],
+        "interiorImages": [],
         "pricePerDay": 135,
         "license": "Klasse B",
         "transmission": "Automatik",
