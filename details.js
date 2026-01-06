@@ -69,7 +69,7 @@ function renderVehicleDetails(vehicle) {
                 ${vehicle.interiorImages.map(img => `<img src="${img}" alt="Innenansicht" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">`).join('')}
             </div>
         </div>
-        ` : ''}`
+        ` : ''}
 
         <div class="details-grid">
             <div class="detail-card">
