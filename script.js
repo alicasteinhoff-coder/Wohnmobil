@@ -417,9 +417,6 @@ function renderVehicles(vehiclesToRender) {
                 <button class="btn btn-primary full-width" style="margin-top: 1rem;" onclick="event.stopPropagation(); window.location.href='vehicle-details.html?id=' + ${vehicle.id};">
                     Details ansehen
                 </button>
-                <button class="btn" style="margin-top: 0.5rem; width: 100%; background-color: #ff6b35; border: none; border-radius: 8px; padding: 0.75rem; color: white; font-weight: 600; cursor: pointer; transition: background-color 0.2s;" onclick="event.stopPropagation(); window.openBookingModal(${vehicle.id});">
-                    Jetzt buchen
-                </button>
                 <button class="bookmark-btn" data-id="${vehicle.id}" style="margin-top: 0.5rem; border:none; background:transparent; display:flex; align-items:center; justify-content:center; width:32px; height:32px; padding:0;" onclick="event.stopPropagation(); toggleWishlist(${vehicle.id}, this);">
                     <img src="${getWishlist().includes(vehicle.id) ? 'bookmark_orange_border.svg' : 'bookmark_outline.svg'}" alt="Merken" style="width:24px; height:24px; display:inline-block;" />
                 </button>
@@ -429,7 +426,10 @@ function renderVehicles(vehiclesToRender) {
 }
 
 function filterVehicles() {
-    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+    const searchInputEl = document.getElementById('search-input');
+    if (!searchInputEl) return;
+
+    const searchTerm = searchInputEl.value.toLowerCase();
     const selectedCategory = document.getElementById('category-select').value;
     const selectedLicense = document.getElementById('license-select').value;
     const selectedBrand = document.getElementById('brand-select').value;
@@ -506,12 +506,14 @@ function setupEventListeners() {
         return;
     }
     window.__wohnmobil_events_bound = true;
-    closeModal.addEventListener('click', () => {
-        bookingModal.style.display = 'none';
-    });
+    if (closeModal) {
+        closeModal.addEventListener('click', () => {
+            if (bookingModal) bookingModal.style.display = 'none';
+        });
+    }
 
     window.addEventListener('click', (e) => {
-        if (e.target === bookingModal) {
+        if (bookingModal && e.target === bookingModal) {
             bookingModal.style.display = 'none';
         }
     });
@@ -899,15 +901,11 @@ async function submitRegisterForm(e) {
             showProfile(data.username || username);
             if (authModal) authModal.style.display = 'none';
 
-            // Inform user about email verification status but stay on the same page
+            // Inform user about successful registration
             if (authMessage) {
-                if (data.emailSent) {
-                    authMessage.innerHTML = '📧 <strong>Bitte überprüfen Sie Ihren E-Mail-Posteingang!</strong><br/>Ein Bestätigungslink wurde an <strong>' + (data.email || email) + '</strong> gesendet.';
-                } else {
-                    authMessage.innerHTML = '⚠️ Registrierung abgeschlossen, aber E-Mail konnte nicht versendet werden. Bitte prüfen Sie Ihre Angaben.';
-                }
-                authMessage.style.backgroundColor = '#dbeafe';
-                authMessage.style.border = '1px solid #0284c7';
+                authMessage.innerHTML = '✅ <strong>Registrierung erfolgreich!</strong><br/>Sie sind nun angemeldet.';
+                authMessage.style.backgroundColor = '#dcfce7';
+                authMessage.style.border = '1px solid #22c55e';
                 authMessage.style.padding = '1rem';
                 authMessage.style.borderRadius = '8px';
                 authMessage.style.marginBottom = '1rem';
@@ -937,13 +935,8 @@ async function submitLoginForm(e) {
         });
         const data = await res.json();
         
-        if (data.success && data.requiresCode) {
-            // 2FA erforderlich: zeige Code-Formular
-            if (authMessage) authMessage.innerHTML = data.message;
-            if (loginForm) loginForm.style.display = 'none';
-            if (verify2faForm) verify2faForm.style.display = 'block';
-        } else if (data.success) {
-            // Login erfolgreich ohne 2FA (fallback)
+        if (data.success) {
+            // Login erfolgreich
             localStorage.setItem('loggedInUser', username);
             showProfile(username);
             if (authModal) authModal.style.display = 'none';
@@ -1562,4 +1555,18 @@ window.goToStep1 = function() {
     // Hide step 2, show step 1
     document.getElementById('step-2-renter').style.display = 'none';
     document.getElementById('step-1-dates').style.display = 'block';
+};
+
+// FAQ Toggle Function
+window.toggleFAQ = function(element) {
+    const answer = element.nextElementSibling;
+    const arrow = element.querySelector('span:last-child');
+    
+    if (answer.style.display === 'none') {
+        answer.style.display = 'block';
+        arrow.textContent = '▲';
+    } else {
+        answer.style.display = 'none';
+        arrow.textContent = '▼';
+    }
 };

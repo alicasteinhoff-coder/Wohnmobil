@@ -10,6 +10,7 @@ function initDetailsWithVehicles() {
         return;
     }
 
+    window.currentVehicleId = vehicleId;
     renderVehicleDetails(vehicle);
     renderAvailability(vehicleId);
     setupBookingModal(vehicle);
@@ -409,15 +410,45 @@ function setupBookingModal(vehicle) {
                 to: b.endDate
             };
         });
+
+        // Function to validate date range against existing bookings
+        function validateDateRange() {
+            const startDateInput = document.getElementById('start-date');
+            const endDateInput = document.getElementById('end-date');
+            const errorContainer = document.getElementById('date-conflict-error');
+            
+            if (!startDateInput.value || !endDateInput.value) {
+                if (errorContainer) errorContainer.style.display = 'none';
+                return true;
+            }
+            
+            const selectedStart = new Date(startDateInput.value);
+            const selectedEnd = new Date(endDateInput.value);
+            
+            for (let booking of vehicleBookings) {
+                const bookedStart = new Date(booking.startDate);
+                const bookedEnd = new Date(booking.endDate);
+                
+                // Check if there's an overlap
+                if (selectedStart < bookedEnd && selectedEnd > bookedStart) {
+                    if (errorContainer) {
+                        errorContainer.style.display = 'block';
+                    }
+                    return false;
+                }
+            }
+            
+            if (errorContainer) {
+                errorContainer.style.display = 'none';
+            }
+            return true;
+        }
     
         const commonConfig = {
             locale: 'de',
             dateFormat: "Y-m-d",
             minDate: "today",
-            disable: disabledDates,
-            onChange: function(selectedDates, dateStr, instance) {
-                calculatePrice();
-            }
+            disable: disabledDates
         };
     
         flatpickr("#start-date", {
@@ -428,12 +459,17 @@ function setupBookingModal(vehicle) {
                 if (endDatePicker && selectedDates[0]) {
                     endDatePicker.set('minDate', selectedDates[0]);
                 }
+                validateDateRange();
                 calculatePrice();
             }
         });
     
         flatpickr("#end-date", {
-            ...commonConfig
+            ...commonConfig,
+            onChange: function(selectedDates, dateStr, instance) {
+                validateDateRange();
+                calculatePrice();
+            }
         });
     }
 
@@ -462,14 +498,150 @@ function setupBookingModal(vehicle) {
         }
     }
 
+    window.validateAge = function() {
+        const birthDateInput = document.getElementById('birth-date');
+        const ageErrorDiv = document.getElementById('age-error');
+        
+        if (!birthDateInput.value) {
+            ageErrorDiv.style.display = 'none';
+            return;
+        }
+        
+        const birthDate = new Date(birthDateInput.value);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        
+        if (age < 21) {
+            ageErrorDiv.textContent = '⚠️ Du darfst frühestens mit 21 Jahren mieten.';
+            ageErrorDiv.style.display = 'block';
+        } else if (age > 75) {
+            ageErrorDiv.textContent = '⚠️ Vermietung ist nur bis 75 Jahre möglich.';
+            ageErrorDiv.style.display = 'block';
+        } else {
+            ageErrorDiv.style.display = 'none';
+        }
+    };
+
+    window.validateLicense = function() {
+        const licenseValidSinceInput = document.getElementById('license-valid-since');
+        const licenseErrorDiv = document.getElementById('license-error');
+        
+        if (!licenseValidSinceInput.value) {
+            licenseErrorDiv.style.display = 'none';
+            return;
+        }
+        
+        const licenseDate = new Date(licenseValidSinceInput.value);
+        const today = new Date();
+        const oneYearAgo = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
+        
+        if (licenseDate > oneYearAgo) {
+            licenseErrorDiv.textContent = '⚠️ Der Führerschein muss seit mindestens 1 Jahr vorhanden sein.';
+            licenseErrorDiv.style.display = 'block';
+        } else {
+            licenseErrorDiv.style.display = 'none';
+        }
+    };
+
     startDateInput.addEventListener('change', calculatePrice);
     endDateInput.addEventListener('change', calculatePrice);
 
     bookingForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        alert('Vielen Dank für Ihre Buchungsanfrage! Wir werden uns in Kürze bei Ihnen melden.');
-        bookingModal.style.display = 'none';
+        
+        // Check if terms are accepted
+        const termsAccepted = document.getElementById('terms-accepted').checked;
+        if (!termsAccepted) {
+            alert('Bitte akzeptieren Sie die AGB.');
+            return;
+        }
+
+        // Get all form data
+        const firstName = document.getElementById('first-name').value.trim();
+        const lastName = document.getElementById('last-name').value.trim();
+        const birthDate = document.getElementById('birth-date').value;
+        const street = document.getElementById('street').value.trim();
+        const postalCode = document.getElementById('postal-code').value.trim();
+        const city = document.getElementById('city').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const licenseClass = document.getElementById('license-class').value;
+        const licenseValidSince = document.getElementById('license-valid-since').value;
+        const startDate = document.getElementById('start-date').value;
+        const endDate = document.getElementById('end-date').value;
+        const pickupLocation = document.getElementById('pickup-location').value;
+        const totalPrice = document.getElementById('total-price').textContent;
+
+        // Create booking object
+        const booking = {
+            id: Date.now(),
+            vehicleName: vehicle.name,
+            vehicleId: vehicle.id,
+            firstName: firstName,
+            lastName: lastName,
+            birthDate: birthDate,
+            address: `${street}, ${postalCode} ${city}`,
+            phone: phone,
+            licenseClass: licenseClass,
+            licenseValidSince: licenseValidSince,
+            startDate: startDate,
+            endDate: endDate,
+            pickupLocation: pickupLocation,
+            totalPrice: totalPrice,
+            bookingDate: new Date().toLocaleDateString('de-DE')
+        };
+
+        // Save to localStorage
+        let bookings = [];
+        try {
+            const saved = localStorage.getItem('bookings');
+            bookings = saved ? JSON.parse(saved) : [];
+        } catch (e) {
+            console.error('Error reading bookings:', e);
+        }
+        bookings.push(booking);
+        try {
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+        } catch (e) {
+            console.error('Error saving booking:', e);
+        }
+
+        // Show success message
+        const bookingContent = document.querySelector('.modal-content');
+        bookingContent.innerHTML = `
+            <div style="text-align: center; padding: 2rem;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+                <h2 style="color: var(--primary-color); margin-bottom: 1rem;">Buchung erfolgreich!</h2>
+                <p style="color: #666; margin-bottom: 1.5rem;">
+                    Vielen Dank, <strong>${firstName} ${lastName}</strong>! Ihre Buchung wurde erfolgreich registriert.
+                </p>
+                <div style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; text-align: left;">
+                    <p style="margin: 0.5rem 0; color: #166534; font-size: 0.9rem;"><strong>💰 Zahlungsart:</strong> Bezahlung vor Ort</p>
+                    <p style="margin: 0.5rem 0; color: #166534; font-size: 0.9rem;"><strong>📍 Abholort:</strong> ${pickupLocation}</p>
+                    <p style="margin: 0.5rem 0; color: #166534; font-size: 0.9rem;"><strong>📅 Mietdatum:</strong> ${new Date(startDate).toLocaleDateString('de-DE')} - ${new Date(endDate).toLocaleDateString('de-DE')}</p>
+                    <p style="margin: 0.5rem 0; color: #166534; font-size: 0.9rem;"><strong>💵 Gesamtpreis:</strong> ${totalPrice}€</p>
+                </div>
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">
+                    Eine Bestätigung wurde an <strong>${phone}</strong> gesendet.
+                </p>
+                <button onclick="closeBookingModal()" class="btn btn-primary" style="width: 100%;">Modal schließen</button>
+            </div>
+        `;
     });
+
+    window.closeBookingModal = function() {
+        bookingModal.style.display = 'none';
+        // Reset form
+        document.getElementById('step-1-dates').style.display = 'block';
+        document.getElementById('step-2-renter').style.display = 'none';
+        document.getElementById('step-3-location').style.display = 'none';
+        document.getElementById('step-4-terms').style.display = 'none';
+        bookingForm.reset();
+    };
 }
 
 function renderAvailability(vehicleId) {
@@ -572,4 +744,117 @@ function renderAvailability(vehicleId) {
 
     html += `</div>`;
     container.innerHTML = html;
+}
+
+// Step Navigation Functions
+function goToStep2() {
+    const startDateInput = document.getElementById('start-date');
+    const endDateInput = document.getElementById('end-date');
+    const errorContainer = document.getElementById('date-conflict-error');
+    
+    if (!startDateInput.value || !endDateInput.value) {
+        alert('Bitte wählen Sie Start- und Enddatum aus.');
+        return;
+    }
+    
+    const start = new Date(startDateInput.value);
+    const end = new Date(endDateInput.value);
+    
+    if (end <= start) {
+        alert('Das Enddatum muss nach dem Startdatum liegen.');
+        return;
+    }
+
+    // If there's a conflict error shown, don't proceed
+    if (errorContainer && errorContainer.style.display !== 'none') {
+        alert('Dieser Zeitraum ist leider nicht verfügbar. Bitte wählen Sie einen anderen Termin.');
+        return;
+    }
+    
+    document.getElementById('step-1-dates').style.display = 'none';
+    document.getElementById('step-2-renter').style.display = 'block';
+}
+
+function goToStep1() {
+    document.getElementById('step-1-dates').style.display = 'block';
+    document.getElementById('step-2-renter').style.display = 'none';
+}
+
+function goToStep3() {
+    // Check if age error is displayed
+    const ageErrorDiv = document.getElementById('age-error');
+    if (ageErrorDiv && ageErrorDiv.style.display !== 'none') {
+        alert('Bitte geben Sie ein gültiges Geburtsdatum ein (Alter: 21-75 Jahre).');
+        return;
+    }
+
+    // Check if license error is displayed
+    const licenseErrorDiv = document.getElementById('license-error');
+    if (licenseErrorDiv && licenseErrorDiv.style.display !== 'none') {
+        alert('Der Führerschein muss seit mindestens 1 Jahr vorhanden sein.');
+        return;
+    }
+
+    // Validate step 2 fields
+    const firstName = document.getElementById('first-name').value.trim();
+    const lastName = document.getElementById('last-name').value.trim();
+    const birthDate = document.getElementById('birth-date').value;
+    const street = document.getElementById('street').value.trim();
+    const postalCode = document.getElementById('postal-code').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const licenseClass = document.getElementById('license-class').value;
+    const licenseValidSince = document.getElementById('license-valid-since').value;
+
+    // Clear previous error indicators
+    document.querySelectorAll('.form-error-indicator').forEach(el => el.remove());
+    document.querySelectorAll('.form-group').forEach(el => el.classList.remove('has-error'));
+
+    // Check which fields are empty and mark them
+    let hasErrors = false;
+    const fieldsToCheck = [
+        { id: 'first-name', value: firstName },
+        { id: 'last-name', value: lastName },
+        { id: 'birth-date', value: birthDate },
+        { id: 'street', value: street },
+        { id: 'postal-code', value: postalCode },
+        { id: 'city', value: city },
+        { id: 'phone', value: phone },
+        { id: 'license-class', value: licenseClass },
+        { id: 'license-valid-since', value: licenseValidSince }
+    ];
+
+    fieldsToCheck.forEach(field => {
+        if (!field.value) {
+            hasErrors = true;
+            const input = document.getElementById(field.id);
+            const formGroup = input.closest('.form-group');
+            
+            if (formGroup) {
+                formGroup.classList.add('has-error');
+                const errorIndicator = document.createElement('span');
+                errorIndicator.className = 'form-error-indicator';
+                errorIndicator.textContent = '❗';
+                formGroup.appendChild(errorIndicator);
+            }
+        }
+    });
+
+    if (hasErrors) {
+        return;
+    }
+
+    document.getElementById('step-2-renter').style.display = 'none';
+    document.getElementById('step-3-location').style.display = 'block';
+}
+
+function goToStep4() {
+    const pickupLocation = document.getElementById('pickup-location').value;
+    if (!pickupLocation) {
+        alert('Bitte wählen Sie einen Abholstandort aus.');
+        return;
+    }
+
+    document.getElementById('step-3-location').style.display = 'none';
+    document.getElementById('step-4-terms').style.display = 'block';
 }

@@ -87,6 +87,19 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .form-group.has-error {
+            position: relative;
+        }
+
+        .form-error-indicator {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: #ef4444;
+        }
     </style>
 </head>
 
@@ -132,74 +145,186 @@
                     <div class="vehicle-specs-summary"></div>
                 </div>
                 <form id="booking-form">
-                    <div class="form-group">
-                        <label for="start-date">Startdatum</label>
-                        <input type="date" id="start-date" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="end-date">Enddatum</label>
-                        <input type="date" id="end-date" required>
-                    </div>
-                    <div class="cost-calculation" id="cost-calculation">
-                        <p><strong>Grundpreis:</strong> <span id="daily-rate">0</span>€ / Tag</p>
-                        <p>Mietdauer: <span id="rental-days">0</span> Tage</p>
-                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">Kaution: <span id="deposit-amount">0</span>€</p>
-                        <p class="total-price">Gesamtpreis für Zeitraum: <span id="total-price">0</span>€</p>
+                    <!-- Schritt 1: Zeitraum-Auswahl -->
+                    <div id="step-1-dates" style="display: block;">
+                        <h3 style="margin-bottom: 1rem;">Schritt 1: Zeitraum wählen</h3>
+                        <div class="form-group">
+                            <label for="start-date">Startdatum</label>
+                            <input type="date" id="start-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="end-date">Enddatum</label>
+                            <input type="date" id="end-date" required>
+                        </div>
+                        <div id="date-conflict-error" style="display: none; background-color: #fee2e2; border-left: 4px solid #ef4444; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; color: #991b1b;">
+                            <p style="margin: 0;"><strong>❌ Konflikt:</strong> Diese Daten sind leider nicht verfügbar. Bitte wählen Sie einen anderen Zeitraum.</p>
+                        </div>
+                        <div class="cost-calculation" id="cost-calculation">
+                            <p><strong>Grundpreis:</strong> <span id="daily-rate">0</span>€ / Tag</p>
+                            <p>Mietdauer: <span id="rental-days">0</span> Tage</p>
+                            <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">Kaution: <span id="deposit-amount">0</span>€</p>
+                            <p class="total-price">Gesamtpreis für Zeitraum: <span id="total-price">0</span>€</p>
+                        </div>
+                        <button type="button" class="btn btn-primary full-width" onclick="goToStep2()">Weiter zu Mieterdaten</button>
                     </div>
 
-                    <!-- Versicherung Section -->
-                    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e5e7eb;">
-                        <h4 style="margin-bottom: 1rem; color: var(--text-color);">Versicherungsoptionen</h4>
+                    <!-- Schritt 2: Mieterdaten -->
+                    <div id="step-2-renter" style="display: none;">
+                        <h3 style="margin-bottom: 1rem;">Schritt 2: Mieterdaten eingeben</h3>
+                        <button type="button" class="btn" style="margin-bottom: 1rem; background-color: #e5e5e5; color: #333; width: 100%; border: none; border-radius: 8px; padding: 0.5rem;" onclick="goToStep1()">← Zurück</button>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label for="first-name">Vorname</label>
+                                <input type="text" id="first-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="last-name">Nachname</label>
+                                <input type="text" id="last-name" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="birth-date">Geburtsdatum</label>
+                            <input type="date" id="birth-date" required onchange="validateAge()">
+                            <div id="age-error" style="color: #ef4444; font-size: 0.9rem; display: none; margin-top: 0.25rem;"></div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label for="street">Straße & Hausnummer</label>
+                                <input type="text" id="street" placeholder="z.B. Musterstraße 42" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="postal-code">PLZ</label>
+                                <input type="text" id="postal-code" placeholder="z.B. 10115" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="city">Ort</label>
+                            <input type="text" id="city" placeholder="z.B. Berlin" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Telefonnummer</label>
+                            <input type="tel" id="phone" placeholder="z.B. +49 30 12345678" required>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label for="license-class">Führerscheinklasse</label>
+                                <select id="license-class" required>
+                                    <option value="">-- Bitte wählen --</option>
+                                    <option value="Klasse B">Klasse B</option>
+                                    <option value="Klasse C1">Klasse C1</option>
+                                    <option value="Klasse C">Klasse C</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="license-valid-since">Führerschein gültig seit</label>
+                                <input type="date" id="license-valid-since" required onchange="validateLicense()">
+                                <div id="license-error" style="color: #ef4444; font-size: 0.9rem; display: none; margin-top: 0.25rem;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Versicherung Section -->
+                        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e5e7eb;">
+                            <h4 style="margin-bottom: 1rem; color: var(--text-color);">Versicherungsoptionen</h4>
+                            
+                            <div class="form-group">
+                                <label for="insurance-type">Versicherung (Vollkasko)</label>
+                                <select id="insurance-type" onchange="updateInsurancePrice()">
+                                    <option value="none">Keine Versicherung</option>
+                                    <option value="500">Vollkasko - 500€ Selbstbeteiligung (+15€/Tag)</option>
+                                    <option value="1000">Vollkasko - 1000€ Selbstbeteiligung (+10€/Tag)</option>
+                                    <option value="1500">Vollkasko - 1500€ Selbstbeteiligung (+5€/Tag)</option>
+                                </select>
+                            </div>
+
+                            <div id="insurance-cost-info" style="background-color: #f0fdf4; border-left: 4px solid #10b981; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; display: none;">
+                                <p style="margin: 0; color: #166534; font-size: 0.9rem;"><strong>💰 Versicherungspreis:</strong> <span id="insurance-price-display">0</span>€</p>
+                            </div>
+                        </div>
+
+                        <!-- Mehrere Fahrer Section -->
+                        <div style="margin-top: 1.5rem;">
+                            <h4 style="margin-bottom: 1rem; color: var(--text-color);">Zusätzliche Fahrer</h4>
+                            <label>
+                                <input type="checkbox" id="additional-driver-checkbox" onchange="toggleAdditionalDriver()">
+                                Zusätzlicher Fahrer hinzufügen (+25€/Tag)
+                            </label>
+                            
+                            <div id="additional-driver-form" style="display: none; margin-top: 1rem; padding: 1rem; background-color: #f8f9fa; border-radius: 8px;">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                    <div class="form-group">
+                                        <label for="driver2-first-name">Vorname</label>
+                                        <input type="text" id="driver2-first-name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="driver2-last-name">Nachname</label>
+                                        <input type="text" id="driver2-last-name">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="driver2-birth-date">Geburtsdatum</label>
+                                    <input type="date" id="driver2-birth-date">
+                                    <div id="driver2-age-error" style="color: #ef4444; font-size: 0.9rem; display: none; margin-top: 0.25rem;">⚠️ Fahrer muss zwischen 21 und 75 Jahre alt sein.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Endreinigung (verpflichtend) -->
+                        <div style="margin-top: 1.5rem; padding: 1rem; background-color: #f0fdf4; border-left: 4px solid #10b981; border-radius: 8px;">
+                            <p style="margin: 0; color: #166534; font-size: 0.9rem;"><strong>🧹 Endreinigung:</strong> Die Endreinigung (70€) ist in jedem Mietvertrag enthalten.</p>
+                        </div>
+
+                        <button type="button" class="btn btn-primary full-width" style="margin-top: 1.5rem;" onclick="goToStep3()">Weiter zu Abholstandort</button>
+                    </div>
+
+                    <!-- Schritt 3: Abholstandort -->
+                    <div id="step-3-location" style="display: none;">
+                        <h3 style="margin-bottom: 1rem;">Schritt 3: Abholstandort wählen</h3>
+                        <button type="button" class="btn" style="margin-bottom: 1rem; background-color: #e5e5e5; color: #333; width: 100%; border: none; border-radius: 8px; padding: 0.5rem;" onclick="goToStep2()">← Zurück</button>
                         
                         <div class="form-group">
-                            <label for="insurance-type">Versicherung (Vollkasko)</label>
-                            <select id="insurance-type" onchange="updateInsurancePrice()">
-                                <option value="none">Keine Versicherung</option>
-                                <option value="500">Vollkasko - 500€ Selbstbeteiligung (+15€/Tag)</option>
-                                <option value="1000">Vollkasko - 1000€ Selbstbeteiligung (+10€/Tag)</option>
-                                <option value="1500">Vollkasko - 1500€ Selbstbeteiligung (+5€/Tag)</option>
+                            <label for="pickup-location">Abholstandort</label>
+                            <select id="pickup-location" required>
+                                <option value="">-- Bitte wählen --</option>
+                                <option value="Berlin">Berlin</option>
+                                <option value="München">München</option>
+                                <option value="Hamburg">Hamburg</option>
+                                <option value="Köln">Köln</option>
                             </select>
                         </div>
 
-                        <div id="insurance-cost-info" style="background-color: #f0fdf4; border-left: 4px solid #10b981; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; display: none;">
-                            <p style="margin: 0; color: #166534; font-size: 0.9rem;"><strong>💰 Versicherungspreis:</strong> <span id="insurance-price-display">0</span>€</p>
-                        </div>
+                        <button type="button" class="btn btn-primary full-width" style="margin-top: 1.5rem;" onclick="goToStep4()">Weiter zu AGB Bestätigung</button>
                     </div>
 
-                    <!-- Mehrere Fahrer Section -->
-                    <div style="margin-top: 1.5rem;">
-                        <h4 style="margin-bottom: 1rem; color: var(--text-color);">Zusätzliche Fahrer</h4>
-                        <label>
-                            <input type="checkbox" id="additional-driver-checkbox" onchange="toggleAdditionalDriver()">
-                            Zusätzlicher Fahrer hinzufügen (+25€/Tag)
-                        </label>
+                    <!-- Schritt 4: AGB Bestätigung -->
+                    <div id="step-4-terms" style="display: none;">
+                        <h3 style="margin-bottom: 1rem;">Schritt 4: AGB</h3>
+                        <button type="button" class="btn" style="margin-bottom: 1rem; background-color: #e5e5e5; color: #333; width: 100%; border: none; border-radius: 8px; padding: 0.5rem;" onclick="goToStep3()">← Zurück</button>
                         
-                        <div id="additional-driver-form" style="display: none; margin-top: 1rem; padding: 1rem; background-color: #f8f9fa; border-radius: 8px;">
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                                <div class="form-group">
-                                    <label for="driver2-first-name">Vorname</label>
-                                    <input type="text" id="driver2-first-name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="driver2-last-name">Nachname</label>
-                                    <input type="text" id="driver2-last-name">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="driver2-birth-date">Geburtsdatum</label>
-                                <input type="date" id="driver2-birth-date">
-                                <div id="driver2-age-error" style="color: #ef4444; font-size: 0.9rem; display: none; margin-top: 0.25rem;">⚠️ Fahrer muss zwischen 21 und 75 Jahre alt sein.</div>
-                            </div>
+                        <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; max-height: 200px; overflow-y: auto;">
+                            <h4>Zusammenfassung der AGB:</h4>
+                            <p style="font-size: 0.9rem; line-height: 1.6; color: #555;">
+                                • Das Fahrzeug muss am selben Ort zurückgegeben werden, wo es abgeholt wurde<br>
+                                • Mindestalter: 21 Jahre, Höchstalter: 75 Jahre<br>
+                                • Gültiger Führerschein erforderlich (seit mindestens 1 Jahr)<br>
+                                • Kaution wird bei Übergabe hinterlegt und bei ordnungsgemäßer Rückgabe erstattet<br>
+                                • Vollständige AGB finden Sie <a href="agb.html" target="_blank" style="color: var(--primary-color);">hier</a>
+                            </p>
                         </div>
-                    </div>
 
-                    <!-- Endreinigung (verpflichtend) -->
-                    <div style="margin-top: 1.5rem; padding: 1rem; background-color: #f0fdf4; border-left: 4px solid #10b981; border-radius: 8px;">
-                        <p style="margin: 0; color: #166534; font-size: 0.9rem;"><strong>🧹 Endreinigung:</strong> Die Endreinigung (70€) ist in jedem Mietvertrag enthalten.</p>
-                    </div>
+                        <div style="display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 1.5rem;">
+                            <input type="checkbox" id="terms-accepted" style="margin-top: 0.25rem;">
+                            <label for="terms-accepted" style="margin: 0;">Ich akzeptiere die AGB</label>
+                        </div>
 
-                    <button type="submit" class="btn btn-primary full-width" style="margin-top: 1.5rem;">Jetzt Buchen</button>
+                        <button type="submit" class="btn btn-primary full-width">Buchung abschließen</button>
+                    </div>
                 </form>
             </div>
         </div>

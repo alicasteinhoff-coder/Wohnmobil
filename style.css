@@ -247,7 +247,7 @@ body {
 
 /* Cookie Banner */
 .cookie-banner {
-    display: block !important;
+    display: none; /* Default hidden, JS will show if needed */
     position: fixed;
     bottom: 0;
     left: 0;
