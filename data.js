@@ -7,8 +7,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/mercedes_sprinter_camper.png",
         "interiorImages": [
-            "https://images.pexels.com/photos/416978/pexels-photo-416978.jpeg?w=600&h=400&fit=crop",
-            "https://images.pexels.com/photos/3408356/pexels-photo-3408356.jpeg?w=600&h=400&fit=crop"
+            "images/interior/mercedes_sprinter_1.jpg",
+            "images/interior/mercedes_sprinter_2.jpg"
         ],
         "pricePerDay": 120,
         "license": "Klasse B",
@@ -20,6 +20,33 @@ window.vehicles = [
             "mattress": "Hochwertige Schaumstoffmatratze"
         },
         "bedding": "Für jede Buchung stellen wir Ihnen Bettwäsche in ausreichender Menge entsprechend der gebuchten Personenanzahl zur Verfügung.",
+        "battery": {
+            "capacity": "100Ah",
+            "type": "LiFePO4",
+            "voltage": "12V",
+            "chargeTime": "6-8 Stunden"
+        },
+        "interior": {
+            "insulation": "Hochwertige Wärmedämmung",
+            "flooring": "Vinylboden rutschfest",
+            "ceiling": "Aluminium mit Polsterung",
+            "windows": "3 Dachfenster mit Jalousien",
+            "doorType": "Doppelflügeltür hinten"
+        },
+        "safety": {
+            "airbags": "6 Airbags",
+            "abs": true,
+            "esc": true,
+            "fireExtinguisher": true,
+            "firstAidKit": true,
+            "warningTriangle": true
+        },
+        "connectivity": {
+            "radio": "DAB+ Digital Radio",
+            "usbPorts": "2x USB-C",
+            "wifi": "optional",
+            "gps": "integriertes Navigationssystem"
+        },
         "fuel": {
             "type": "Diesel",
             "consumption": 8.9,
@@ -40,19 +67,18 @@ window.vehicles = [
             "maxLoad": 2000
         },
         "kitchen": {
-            "type": "Gas",
-            "stove": "2-Flammen Gasherd",
-            "fridge": "65L Kompressor-Kühlschrank",
-            "fridgeType": "Absorber-Kühlschrank 65L",
-            "sink": "Edelstahl-Spüle",
+            "type": "Keine vollständige Küche",
+            "stove": "Tragbares Kochfeld (optional)",
+            "fridge": "Tragbare Kühlbox erforderlich",
+            "sink": "Keine Spüle vorhanden",
             "oven": false,
             "microwave": false,
             "dishwasher": false,
-            "waterTank": "100L Frischwassertank"
+            "waterTank": "Wasserkanister erforderlich"
         },
         "sanitary": {
-            "toilet": true,
-            "shower": true,
+            "toilet": false,
+            "shower": false,
             "greyWater": "80L Abwassertank"
         },
         "assistanceSystems": [
@@ -73,7 +99,9 @@ window.vehicles = [
             "12V-Ladestation für Geräte",
             "Innenausstattung mit Echtholzoberflächen",
             "Verdunkelungsrollo an allen Fenstern",
-            "Moskitonetze an Türen und Fenstern"
+            "Moskitonetze an Türen und Fenstern",
+            "Komfort Wohnbereich mit Stauraum",
+            "Kühlschrank & Gaskoch-Top"
         ],
         "availableLocations": [
             "Berlin",
@@ -90,8 +118,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/mercedes_sprinter_4x4.png",
         "interiorImages": [
-            "https://images.pexels.com/photos/3408356/pexels-photo-3408356.jpeg?w=600&h=400&fit=crop",
-            "https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?w=600&h=400&fit=crop"
+            "images/interior/mercedes_sprinter_1.jpg",
+            "images/interior/mercedes_sprinter_2.jpg"
         ],
         "pricePerDay": 145,
         "license": "Klasse B",
@@ -103,6 +131,33 @@ window.vehicles = [
             "mattress": "Hochwertige Schaumstoffmatratze"
         },
         "bedding": "Für jede Buchung stellen wir Ihnen Bettwäsche in ausreichender Menge entsprechend der gebuchten Personenanzahl zur Verfügung.",
+        "battery": {
+            "capacity": "120Ah",
+            "type": "Lifepo4 LiFePO4",
+            "voltage": "12V",
+            "chargeTime": "7-9 Stunden"
+        },
+        "interior": {
+            "insulation": "Premium Wärmedämmung",
+            "flooring": "rutschfester Vinylboden",
+            "ceiling": "Aluminium Struktur",
+            "windows": "4 Fenster mit Jalousien",
+            "doorType": "Doppelflügeltür hinten"
+        },
+        "safety": {
+            "airbags": "8 Airbags",
+            "abs": true,
+            "esc": true,
+            "fireExtinguisher": true,
+            "firstAidKit": true,
+            "warningTriangle": true
+        },
+        "connectivity": {
+            "radio": "DAB+ Digital Radio",
+            "usbPorts": "3x USB-C",
+            "wifi": "optional",
+            "gps": "integriertes Navigationssystem"
+        },
         "fuel": {
             "type": "Diesel",
             "consumption": 9.8,
@@ -134,8 +189,8 @@ window.vehicles = [
             "waterTank": "110L Frischwassertank"
         },
         "sanitary": {
-            "toilet": true,
-            "shower": true,
+            "toilet": false,
+            "shower": false,
             "greyWater": "90L Abwassertank"
         },
         "assistanceSystems": [
@@ -149,11 +204,15 @@ window.vehicles = [
         "features": [
             "Allradantrieb 4x4 Geländegängig",
             "Solaranlage 200W mit Regler",
-            "Außendusche mit Warmwasser",
+            "Außendusche mit Warmwasser-Schlauch",
             "Standheizung Webasto 5kW",
             "Offroad-Bereifung Continental",
             "LED-Beleuchtung (RGB-dimmbar)",
-            "Aufstelldach"
+            "Aufstelldach",
+            "Höhenverstellbare Sitze",
+            "Großzügiger Stauraum",
+            "12V Batterie-System",
+            "Externe Steckdose 230V"
         ],
         "availableLocations": [
             "München",
@@ -169,8 +228,8 @@ window.vehicles = [
         "color": "Grau Metallic",
         "image": "images/vw_california_ocean.png",
         "interiorImages": [
-            "https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?w=600&h=400&fit=crop",
-            "https://images.pexels.com/photos/416978/pexels-photo-416978.jpeg?w=600&h=400&fit=crop"
+            "images/interior/vw_california_ocean_1.jpg",
+            "images/interior/vw_california_ocean_2.jpg"
         ],
         "pricePerDay": 95,
         "license": "Klasse B",
@@ -182,6 +241,33 @@ window.vehicles = [
             "mattress": "Komfortmatratzen"
         },
         "bedding": "Für jede Buchung stellen wir Ihnen Bettwäsche in ausreichender Menge entsprechend der gebuchten Personenanzahl zur Verfügung.",
+        "battery": {
+            "capacity": "80Ah",
+            "type": "LiFePO4",
+            "voltage": "12V",
+            "chargeTime": "5-7 Stunden"
+        },
+        "interior": {
+            "insulation": "Standard Wärmedämmung",
+            "flooring": "Teppichbelag",
+            "ceiling": "Stoff bezogen",
+            "windows": "2 Seitenfenster",
+            "doorType": "Einzeltür hinten"
+        },
+        "safety": {
+            "airbags": "6 Airbags",
+            "abs": true,
+            "esc": true,
+            "fireExtinguisher": true,
+            "firstAidKit": true,
+            "warningTriangle": true
+        },
+        "connectivity": {
+            "radio": "DAB+ Digital Radio",
+            "usbPorts": "2x USB",
+            "wifi": "optional",
+            "gps": "Infotainment System"
+        },
         "fuel": {
             "type": "Diesel",
             "consumption": 7.8,
@@ -214,7 +300,7 @@ window.vehicles = [
         },
         "sanitary": {
             "toilet": false,
-            "shower": true,
+            "shower": false,
             "greyWater": "60L Abwassertank"
         },
         "assistanceSystems": [
@@ -233,8 +319,8 @@ window.vehicles = [
             "Schiebedach elektrisch",
             "Trittbretter aus Edelstahl",
             "Verdunkelungsrollo komplett",
-            "12V Batterie 100Ah LiFePO4",
-            "Ladebooster 50A"
+            "Kompakte Komplett-Küche",
+            "Integrierte Sitzgruppe"
         ],
         "availableLocations": [
             "Berlin",
@@ -253,8 +339,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/vw_crafter_camper.png",
         "interiorImages": [
-            "https://images.pexels.com/photos/279746/pexels-photo-279746.jpeg?w=600&h=400&fit=crop",
-            "https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?w=600&h=400&fit=crop"
+            "images/interior/vw_crafter_1.jpg",
+            "images/interior/vw_crafter_2.jpg"
         ],
         "pricePerDay": 110,
         "license": "Klasse B",
@@ -266,6 +352,33 @@ window.vehicles = [
             "mattress": "Bequeme Schaumstoffmatratzen"
         },
         "bedding": "Für jede Buchung stellen wir Ihnen Bettwäsche in ausreichender Menge entsprechend der gebuchten Personenanzahl zur Verfügung.",
+        "battery": {
+            "capacity": "100Ah",
+            "type": "LiFePO4",
+            "voltage": "12V",
+            "chargeTime": "6-8 Stunden"
+        },
+        "interior": {
+            "insulation": "Hochwertige Wärmedämmung",
+            "flooring": "Vinylboden",
+            "ceiling": "Aluminium mit Polsterung",
+            "windows": "3 Dachfenster",
+            "doorType": "Doppelflügeltür hinten"
+        },
+        "safety": {
+            "airbags": "6 Airbags",
+            "abs": true,
+            "esc": true,
+            "fireExtinguisher": true,
+            "firstAidKit": true,
+            "warningTriangle": true
+        },
+        "connectivity": {
+            "radio": "DAB+ Digital Radio",
+            "usbPorts": "2x USB-C",
+            "wifi": "optional",
+            "gps": "integriertes Navigationssystem"
+        },
         "fuel": {
             "type": "Diesel",
             "consumption": 8.5,
@@ -297,8 +410,8 @@ window.vehicles = [
             "waterTank": "120L Frischwassertank"
         },
         "sanitary": {
-            "toilet": true,
-            "shower": true,
+            "toilet": false,
+            "shower": false,
             "greyWater": "100L Abwassertank"
         },
         "assistanceSystems": [
@@ -317,8 +430,8 @@ window.vehicles = [
             "Panoramadach",
             "Dachbelüftung automatisch",
             "Komplette Isolierung & Wärmedämmung",
-            "Innenausstattung mit Designerküche",
-            "12V Batterie 200Ah LiFePO4"
+            "Designerküche mit Gasherd",
+            "Großzügiger Wohnbereich"
         ],
         "availableLocations": [
             "Hamburg",
@@ -334,8 +447,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/fiat_ducato_camper.png",
         "interiorImages": [
-            "https://images.pexels.com/photos/1884575/pexels-photo-1884575.jpeg?w=600&h=400&fit=crop",
-            "https://images.pexels.com/photos/279746/pexels-photo-279746.jpeg?w=600&h=400&fit=crop"
+            "images/interior/fiat_duacto_1.jpg",
+            "images/interior/fiat_ducato_2.jpg"
         ],
         "pricePerDay": 105,
         "license": "Klasse B",
@@ -347,6 +460,33 @@ window.vehicles = [
             "mattress": "Qualitätsmatratzen"
         },
         "bedding": "Für jede Buchung stellen wir Ihnen Bettwäsche in ausreichender Menge entsprechend der gebuchten Personenanzahl zur Verfügung.",
+        "battery": {
+            "capacity": "90Ah",
+            "type": "Standard Lead-Acid",
+            "voltage": "12V",
+            "chargeTime": "8-10 Stunden"
+        },
+        "interior": {
+            "insulation": "Basis Wärmedämmung",
+            "flooring": "Vinylboden",
+            "ceiling": "Kunstoffpaneele",
+            "windows": "2 Fenster mit Jalousien",
+            "doorType": "Einzeltür hinten"
+        },
+        "safety": {
+            "airbags": "4 Airbags",
+            "abs": true,
+            "esc": false,
+            "fireExtinguisher": true,
+            "firstAidKit": true,
+            "warningTriangle": true
+        },
+        "connectivity": {
+            "radio": "FM Radio",
+            "usbPorts": "1x USB",
+            "wifi": "nicht enthalten",
+            "gps": "optional"
+        },
         "fuel": {
             "type": "Diesel",
             "consumption": 8.2,
@@ -367,19 +507,18 @@ window.vehicles = [
             "maxLoad": 2000
         },
         "kitchen": {
-            "type": "Gas",
-            "stove": "2-Flammen Gasherd",
-            "fridge": "75L Kompressor-Kühlschrank",
-            "fridgeType": "Absorber-Kühlschrank 75L",
-            "sink": "Edelstahl-Spüle",
+            "type": "Keine Küche",
+            "stove": "Nicht vorhanden",
+            "fridge": "Tragbare Kühlbox",
+            "sink": "Nicht vorhanden",
             "oven": false,
             "microwave": false,
             "dishwasher": false,
-            "waterTank": "115L Frischwassertank"
+            "waterTank": "20L Kanister"
         },
         "sanitary": {
-            "toilet": true,
-            "shower": true,
+            "toilet": false,
+            "shower": false,
             "greyWater": "95L Abwassertank"
         },
         "assistanceSystems": [
@@ -398,8 +537,8 @@ window.vehicles = [
             "Gasanlage für Heizung & Kochen",
             "Komplett isolierte Außenwände",
             "Verdunkelungsrollo überall",
-            "12V Batterie 100Ah Standard",
-            "Landstrom-Anschluss vorhanden"
+            "Praktische Kompakt-Küche",
+            "Ausreichend Stauraum"
         ],
         "availableLocations": [
             "Köln",
@@ -416,8 +555,8 @@ window.vehicles = [
         "color": "Weiß",
         "image": "images/ford_transit_camper.png",
         "interiorImages": [
-            "https://images.pexels.com/photos/416978/pexels-photo-416978.jpeg?w=600&h=400&fit=crop",
-            "https://images.pexels.com/photos/3408356/pexels-photo-3408356.jpeg?w=600&h=400&fit=crop"
+            "images/interior/ford_transit_1.jpg",
+            "images/interior/ford_transit_2.jpg"
         ],
         "pricePerDay": 115,
         "license": "Klasse B",
@@ -429,6 +568,33 @@ window.vehicles = [
             "mattress": "Premium-Schaumstoffmatratze"
         },
         "bedding": "Für jede Buchung stellen wir Ihnen Bettwäsche in ausreichender Menge entsprechend der gebuchten Personenanzahl zur Verfügung.",
+        "battery": {
+            "capacity": "105Ah",
+            "type": "LiFePO4",
+            "voltage": "12V",
+            "chargeTime": "6-8 Stunden"
+        },
+        "interior": {
+            "insulation": "Hochwertige Wärmedämmung",
+            "flooring": "rutschfester Vinylboden",
+            "ceiling": "Aluminium mit Polsterung",
+            "windows": "3 Fenster mit Jalousien",
+            "doorType": "Doppelflügeltür hinten"
+        },
+        "safety": {
+            "airbags": "6 Airbags",
+            "abs": true,
+            "esc": true,
+            "fireExtinguisher": true,
+            "firstAidKit": true,
+            "warningTriangle": true
+        },
+        "connectivity": {
+            "radio": "DAB+ Digital Radio",
+            "usbPorts": "2x USB-C",
+            "wifi": "optional",
+            "gps": "integriertes Navigationssystem"
+        },
         "fuel": {
             "type": "Diesel",
             "consumption": 8.7,
@@ -461,7 +627,7 @@ window.vehicles = [
         },
         "sanitary": {
             "toilet": false,
-            "shower": true,
+            "shower": false,
             "greyWater": "75L Abwassertank"
         },
         "assistanceSystems": [
@@ -478,11 +644,11 @@ window.vehicles = [
             "Aufstelldach elektrisch",
             "LED-Beleuchtung warm-weiß",
             "Fahrradträger (3 Räder)",
-            "Heckansicht Kamera",
+            "Heckkamera mit Parklinien",
             "Komplett verdunkelt",
-            "Trockner integriert",
-            "Steckeranlage 230V vorhanden",
-            "Außenheizung optional"
+            "Belüftungssystem mit Lamellen",
+            "Moderne Galley-Küche",
+            "Komfort Schlafbereich"
         ],
         "availableLocations": [
             "München",
@@ -498,8 +664,8 @@ window.vehicles = [
         "color": "Weiß/Gelb",
         "image": "images/vw_id_buzz_camper.png",
         "interiorImages": [
-            "https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?w=600&h=400&fit=crop",
-            "https://images.pexels.com/photos/279746/pexels-photo-279746.jpeg?w=600&h=400&fit=crop"
+            "images/interior/vw_id_buzz_1.jpg",
+            "images/interior/vw_id_buzz_2.jpg"
         ],
         "pricePerDay": 135,
         "license": "Klasse B",
@@ -511,26 +677,67 @@ window.vehicles = [
             "mattress": "Ergonomische Schaumstoffmatratze"
         },
         "bedding": "Für jede Buchung stellen wir Ihnen Bettwäsche in ausreichender Menge entsprechend der gebuchten Personenanzahl zur Verfügung.",
+        "battery": {
+            "capacity": "82 kWh",
+            "type": "Lithium-Ionen (LFP)",
+            "voltage": "400V",
+            "chargeTime": "7.5 h (AC 11kW)"
+        },
+        "interior": {
+            "insulation": "Premium Wärmedämmung",
+            "flooring": "rutschfester Vinylboden",
+            "ceiling": "Aluminium mit Polsterung",
+            "windows": "2 Panorama-Fenster",
+            "doorType": "Einfach-Schiebetür hinten"
+        },
+        "safety": {
+            "airbags": "6 Airbags",
+            "abs": true,
+            "esc": true,
+            "fireExtinguisher": true,
+            "firstAidKit": true,
+            "warningTriangle": true
+        },
+        "connectivity": {
+            "radio": "DAB+ Digital Radio",
+            "usbPorts": "2x USB-C",
+            "wifi": "optional",
+            "gps": "integriertes Navigationssystem"
+        },
         "fuel": {
             "type": "Elektro",
-            "consumption": 21.0,
+            "consumption": 18.5,
+            "consumptionUnit": "kWh/100km",
             "emissionClass": "Zero Emission",
             "emissionSticker": "Grün"
         },
         "ev": {
             "batteryCapacity": 82,
             "batteryCapacityUnit": "kWh",
+            "batteryType": "Lithium-Ionen (LFP)",
             "rangeCapacity": "82 kWh Pro",
-            "rangeSummer": 450,
-            "rangeWinter": 350,
-            "chargeConnectors": ["Type 2", "CCS (DC-Schnellladen)"],
+            "rangeSummer": 460,
+            "rangeWinter": 340,
+            "rangeCity": 510,
+            "rangeAutobahn": 380,
+            "chargeConnectors": ["Type 2 (AC)", "CCS 2 (DC-Schnellladen)"],
             "acCharging": "11 kW",
+            "acChargeTime": "7.5 h (10%-80%)",
             "dcCharging": "135 kW",
+            "dcChargeTime": "35 min (10%-80%)",
             "chargeTime0to80": 35,
             "chargeTime20to80": 23,
-            "chargeTime0to100": 40,
-            "consumption": 21.0,
-            "regeneration": true
+            "chargeTime0to100": 55,
+            "consumption": 18.5,
+            "consumptionUnit": "kWh/100km",
+            "regeneration": true,
+            "regenerationPower": "150 kW",
+            "efficiency": "88%",
+            "climateControl": "Wärmepumpe mit Freon",
+            "preheating": true,
+            "fastchargeAvailable": true,
+            "wallboxCompatible": true,
+            "publicCharging": "Alle europäischen Standards"
         },
         "dimensions": {
             "length": 4.71,

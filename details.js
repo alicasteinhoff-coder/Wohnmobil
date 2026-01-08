@@ -114,10 +114,10 @@ function renderVehicleDetails(vehicle) {
             </div>
 
             <div class="detail-card">
-                <h3>⛽ Kraftstoff</h3>
+                <h3>${vehicle.fuel.type === 'Elektro' ? '⚡ Stromverbrauch' : '⛽ Kraftstoff'}</h3>
                 <div class="detail-grid" style="grid-template-columns: 1fr;">
                     <div class="detail-item">Typ: ${vehicle.fuel.type}</div>
-                    <div class="detail-item">Verbrauch: ${vehicle.fuel.consumption}l/100km</div>
+                    <div class="detail-item">Verbrauch: ${vehicle.fuel.consumption}${vehicle.fuel.consumptionUnit ? vehicle.fuel.consumptionUnit : 'l/100km'}</div>
                     <div class="detail-item">Emission: ${vehicle.fuel.emissionClass}</div>
                 </div>
             </div>
@@ -126,6 +126,80 @@ function renderVehicleDetails(vehicle) {
             <div class="detail-card">
                 <h3>🔗 Anhängerkupplung</h3>
                 <div class="detail-item">Max. Anhängelast: ${vehicle.towing.maxLoad}kg</div>
+            </div>
+            ` : ''}
+
+            ${vehicle.battery ? `
+            <div class="detail-card">
+                <h3>🔋 Batterie/Stromversorgung</h3>
+                <div class="detail-grid" style="grid-template-columns: 1fr;">
+                    <div class="detail-item">Kapazität: ${vehicle.battery.capacity}</div>
+                    <div class="detail-item">Typ: ${vehicle.battery.type}</div>
+                    <div class="detail-item">Spannung: ${vehicle.battery.voltage}</div>
+                    <div class="detail-item">Ladezeit: ${vehicle.battery.chargeTime}</div>
+                </div>
+            </div>
+            ` : ''}
+
+            ${vehicle.interior ? `
+            <div class="detail-card">
+                <h3>🏠 Innenausstattung</h3>
+                <div class="detail-grid" style="grid-template-columns: 1fr;">
+                    <div class="detail-item">Isolierung: ${vehicle.interior.insulation}</div>
+                    <div class="detail-item">Bodenbelag: ${vehicle.interior.flooring}</div>
+                    <div class="detail-item">Decke: ${vehicle.interior.ceiling}</div>
+                    <div class="detail-item">Fenster: ${vehicle.interior.windows}</div>
+                    <div class="detail-item">Tür: ${vehicle.interior.doorType}</div>
+                </div>
+            </div>
+            ` : ''}
+
+            ${vehicle.safety ? `
+            <div class="detail-card">
+                <h3>🛡️ Sicherheitsausstattung</h3>
+                <div class="detail-grid" style="grid-template-columns: 1fr;">
+                    <div class="detail-item">Airbags: ${vehicle.safety.airbags}</div>
+                    <div class="detail-item">${vehicle.safety.abs ? '✅' : '❌'} ABS</div>
+                    <div class="detail-item">${vehicle.safety.esc ? '✅' : '❌'} ESP</div>
+                    <div class="detail-item">${vehicle.safety.fireExtinguisher ? '✅' : '❌'} Feuerlöscher</div>
+                    <div class="detail-item">${vehicle.safety.firstAidKit ? '✅' : '❌'} Erste-Hilfe-Kit</div>
+                    <div class="detail-item">${vehicle.safety.warningTriangle ? '✅' : '❌'} Warndreieck</div>
+                </div>
+            </div>
+            ` : ''}
+
+            ${vehicle.connectivity ? `
+            <div class="detail-card">
+                <h3>📡 Konnektivität & Technik</h3>
+                <div class="detail-grid" style="grid-template-columns: 1fr;">
+                    <div class="detail-item">Radio: ${vehicle.connectivity.radio}</div>
+                    <div class="detail-item">USB-Anschlüsse: ${vehicle.connectivity.usbPorts}</div>
+                    <div class="detail-item">WiFi: ${vehicle.connectivity.wifi}</div>
+                    <div class="detail-item">GPS/Navigation: ${vehicle.connectivity.gps}</div>
+                </div>
+            </div>
+            ` : ''}
+
+            ${vehicle.ev ? `
+            <div class="detail-card" style="grid-column: 1/-1;">
+                <h3>⚡ Elektro-Spezifikationen</h3>
+                <div class="detail-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                    <div class="detail-item">Batterietyp: ${vehicle.ev.batteryType}</div>
+                    <div class="detail-item">Kapazität: ${vehicle.ev.batteryCapacity} ${vehicle.ev.batteryCapacityUnit}</div>
+                    <div class="detail-item">Reichweite Sommer: ${vehicle.ev.rangeSummer} km</div>
+                    <div class="detail-item">Reichweite Winter: ${vehicle.ev.rangeWinter} km</div>
+                    ${vehicle.ev.rangeCity ? `<div class="detail-item">Reichweite Stadt: ${vehicle.ev.rangeCity} km</div>` : ''}
+                    ${vehicle.ev.rangeAutobahn ? `<div class="detail-item">Reichweite Autobahn: ${vehicle.ev.rangeAutobahn} km</div>` : ''}
+                    <div class="detail-item">AC-Ladung: ${vehicle.ev.acCharging}</div>
+                    <div class="detail-item">AC-Ladezeit: ${vehicle.ev.acChargeTime}</div>
+                    <div class="detail-item">DC-Schnelllader: ${vehicle.ev.dcCharging}</div>
+                    <div class="detail-item">DC-Ladezeit: ${vehicle.ev.dcChargeTime}</div>
+                    <div class="detail-item">Effizienz: ${vehicle.ev.efficiency}</div>
+                    <div class="detail-item">${vehicle.ev.regeneration ? '✅' : '❌'} Rekuperation</div>
+                    ${vehicle.ev.regenerationPower ? `<div class="detail-item">Rekuperationsleistung: ${vehicle.ev.regenerationPower}</div>` : ''}
+                    <div class="detail-item">Stecker-Standards: ${Array.isArray(vehicle.ev.chargeConnectors) ? vehicle.ev.chargeConnectors.join(', ') : vehicle.ev.chargeConnectors}</div>
+                    <div class="detail-item">Öffentliches Laden: ${vehicle.ev.publicCharging}</div>
+                </div>
             </div>
             ` : ''}
 

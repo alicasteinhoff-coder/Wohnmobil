@@ -7,8 +7,8 @@
         "color": "Weiß",
         "image": "images/mercedes_sprinter_camper.png",
         "interiorImages": [
-            "https://images.pexels.com/photos/416978/pexels-photo-416978.jpeg?w=600&h=400&fit=crop",
-            "https://images.pexels.com/photos/3408356/pexels-photo-3408356.jpeg?w=600&h=400&fit=crop"
+            "images/interior/mercedes_sprinter_1.jpg",
+            "images/interior/mercedes_sprinter_2.jpg"
         ],
         "pricePerDay": 120,
         "license": "Klasse B",
@@ -40,15 +40,14 @@
             "maxLoad": 2000
         },
         "kitchen": {
-            "type": "Gas",
-            "stove": "2-Flammen Gasherd",
-            "fridge": "65L Kompressor-Kühlschrank",
-            "fridgeType": "Absorber-Kühlschrank 65L",
-            "sink": "Edelstahl-Spüle",
+            "type": "Keine vollständige Küche",
+            "stove": "Tragbares Kochfeld (optional)",
+            "fridge": "Tragbare Kühlbox erforderlich",
+            "sink": "Keine Spüle vorhanden",
             "oven": false,
             "microwave": false,
             "dishwasher": false,
-            "waterTank": "100L Frischwassertank"
+            "waterTank": "Wasserkanister erforderlich"
         },
         "sanitary": {
             "toilet": true,
@@ -85,8 +84,8 @@
         "color": "Weiß",
         "image": "images/mercedes_sprinter_4x4.png",
         "interiorImages": [
-            "https://images.pexels.com/photos/3408356/pexels-photo-3408356.jpeg?w=600&h=400&fit=crop",
-            "https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?w=600&h=400&fit=crop"
+            "images/interior/mercedes_sprinter_1.jpg",
+            "images/interior/mercedes_sprinter_2.jpg"
         ],
         "pricePerDay": 145,
         "license": "Klasse B",
@@ -167,8 +166,8 @@
         "color": "Grau Metallic",
         "image": "images/vw_california_ocean.png",
         "interiorImages": [
-            "https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?w=600&h=400&fit=crop",
-            "https://images.pexels.com/photos/416978/pexels-photo-416978.jpeg?w=600&h=400&fit=crop"
+            "images/interior/vw_california_ocean_1.jpg",
+            "images/interior/vw_california_ocean_2.jpg"
         ],
         "pricePerDay": 95,
         "license": "Klasse B",
@@ -249,8 +248,8 @@
         "color": "Weiß",
         "image": "images/vw_crafter_camper.png",
         "interiorImages": [
-            "https://images.pexels.com/photos/279746/pexels-photo-279746.jpeg?w=600&h=400&fit=crop",
-            "https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?w=600&h=400&fit=crop"
+            "images/interior/vw_crafter_1.jpg",
+            "images/interior/vw_crafter_2.jpg"
         ],
         "pricePerDay": 110,
         "license": "Klasse B",
@@ -328,8 +327,8 @@
         "color": "Weiß",
         "image": "images/fiat_ducato_camper.png",
         "interiorImages": [
-            "https://images.pexels.com/photos/1884575/pexels-photo-1884575.jpeg?w=600&h=400&fit=crop",
-            "https://images.pexels.com/photos/279746/pexels-photo-279746.jpeg?w=600&h=400&fit=crop"
+            "images/interior/fiat_duacto_1.jpg",
+            "images/interior/fiat_ducato_2.jpg"
         ],
         "pricePerDay": 105,
         "license": "Klasse B",
@@ -361,15 +360,14 @@
             "maxLoad": 2000
         },
         "kitchen": {
-            "type": "Gas",
-            "stove": "2-Flammen Gasherd",
-            "fridge": "75L Kompressor-Kühlschrank",
-            "fridgeType": "Absorber-Kühlschrank 75L",
-            "sink": "Edelstahl-Spüle",
+            "type": "Keine Küche",
+            "stove": "Nicht vorhanden",
+            "fridge": "Tragbare Kühlbox",
+            "sink": "Nicht vorhanden",
             "oven": false,
             "microwave": false,
             "dishwasher": false,
-            "waterTank": "115L Frischwassertank"
+            "waterTank": "20L Kanister"
         },
         "sanitary": {
             "toilet": true,
@@ -407,8 +405,8 @@
         "color": "Weiß",
         "image": "images/ford_transit_camper.png",
         "interiorImages": [
-            "https://images.pexels.com/photos/416978/pexels-photo-416978.jpeg?w=600&h=400&fit=crop",
-            "https://images.pexels.com/photos/3408356/pexels-photo-3408356.jpeg?w=600&h=400&fit=crop"
+            "images/interior/ford_transit_1.jpg",
+            "images/interior/ford_transit_2.jpg"
         ],
         "pricePerDay": 115,
         "license": "Klasse B",
@@ -487,9 +485,12 @@
             "https://images.unsplash.com/photo-1631049307038-da0ec836d73a?w=600&h=400&fit=crop",
             "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&h=400&fit=crop"
         n",
-        "color": "Weiß/Gelb",
+        "color": "Weiß",
         "image": "images/vw_id_buzz_camper.png",
-        "interiorImages": [],
+        "interiorImages": [
+            "images/interior/vw_id_buzz_1.jpg",
+            "images/interior/vw_id_buzz_2.jpg"
+        ],
         "pricePerDay": 135,
         "license": "Klasse B",
         "transmission": "Automatik",
@@ -502,24 +503,38 @@
         "bedding": "Für jede Buchung stellen wir Ihnen Bettwäsche in ausreichender Menge entsprechend der gebuchten Personenanzahl zur Verfügung.",
         "fuel": {
             "type": "Elektro",
-            "consumption": 21.0,
+            "consumption": 18.5,
+            "consumptionUnit": "kWh/100km",
             "emissionClass": "Zero Emission",
             "emissionSticker": "Grün"
         },
         "ev": {
             "batteryCapacity": 82,
             "batteryCapacityUnit": "kWh",
+            "batteryType": "Lithium-Ionen (LFP)",
             "rangeCapacity": "82 kWh Pro",
-            "rangeSummer": 450,
-            "rangeWinter": 350,
-            "chargeConnectors": ["Type 2", "CCS (DC-Schnellladen)"],
+            "rangeSummer": 460,
+            "rangeWinter": 340,
+            "rangeCity": 510,
+            "rangeAutobahn": 380,
+            "chargeConnectors": ["Type 2 (AC)", "CCS 2 (DC-Schnellladen)"],
             "acCharging": "11 kW",
+            "acChargeTime": "7.5 h (10%-80%)",
             "dcCharging": "135 kW",
+            "dcChargeTime": "35 min (10%-80%)",
             "chargeTime0to80": 35,
             "chargeTime20to80": 23,
-            "chargeTime0to100": 40,
-            "consumption": 21.0,
-            "regeneration": true
+            "chargeTime0to100": 55,
+            "consumption": 18.5,
+            "consumptionUnit": "kWh/100km",
+            "regeneration": true,
+            "regenerationPower": "150 kW",
+            "efficiency": "88%",
+            "climateControl": "Wärmepumpe mit Freon",
+            "preheating": true,
+            "fastchargeAvailable": true,
+            "wallboxCompatible": true,
+            "publicCharging": "Alle europäischen Standards"
         },
         "dimensions": {
             "length": 4.71,
