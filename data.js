@@ -1,4 +1,4 @@
-window.vehicles = [
+﻿window.vehicles = [
     {
         "id": 1,
         "name": "Mercedes Sprinter Camper",
@@ -15,7 +15,6 @@ window.vehicles = [
         "transmission": "Automatik",
         "power": 163,
         "beds": 2,
-<<<<<<< HEAD
         "bedDetails": {
             "description": "1 Doppelbett (160x200 cm)",
             "mattress": "Hochwertige Schaumstoffmatratze"
@@ -48,9 +47,6 @@ window.vehicles = [
             "wifi": "optional",
             "gps": "integriertes Navigationssystem"
         },
-=======
-        "seats": 4,
->>>>>>> 1270631083e1dc461185edc2f5fef10afccbb346
         "fuel": {
             "type": "Diesel",
             "consumption": 8.9,
@@ -130,7 +126,6 @@ window.vehicles = [
         "transmission": "Automatik",
         "power": 190,
         "beds": 2,
-<<<<<<< HEAD
         "bedDetails": {
             "description": "1 Doppelbett (160x200 cm)",
             "mattress": "Hochwertige Schaumstoffmatratze"
@@ -163,9 +158,6 @@ window.vehicles = [
             "wifi": "optional",
             "gps": "integriertes Navigationssystem"
         },
-=======
-        "seats": 4,
->>>>>>> 1270631083e1dc461185edc2f5fef10afccbb346
         "fuel": {
             "type": "Diesel",
             "consumption": 9.8,
@@ -244,7 +236,6 @@ window.vehicles = [
         "transmission": "Automatik",
         "power": 150,
         "beds": 4,
-<<<<<<< HEAD
         "bedDetails": {
             "description": "2 Doppelbetten (160x200 cm oben, 160x190 cm unten)",
             "mattress": "Komfortmatratzen"
@@ -277,9 +268,6 @@ window.vehicles = [
             "wifi": "optional",
             "gps": "Infotainment System"
         },
-=======
-        "seats": 4,
->>>>>>> 1270631083e1dc461185edc2f5fef10afccbb346
         "fuel": {
             "type": "Diesel",
             "consumption": 7.8,
@@ -359,7 +347,6 @@ window.vehicles = [
         "transmission": "Automatik",
         "power": 177,
         "beds": 3,
-<<<<<<< HEAD
         "bedDetails": {
             "description": "2 Einzelbetten (90x200 cm) + 1 Doppelbett (140x190 cm)",
             "mattress": "Bequeme Schaumstoffmatratzen"
@@ -392,9 +379,6 @@ window.vehicles = [
             "wifi": "optional",
             "gps": "integriertes Navigationssystem"
         },
-=======
-        "seats": 4,
->>>>>>> 1270631083e1dc461185edc2f5fef10afccbb346
         "fuel": {
             "type": "Diesel",
             "consumption": 8.5,
@@ -471,7 +455,6 @@ window.vehicles = [
         "transmission": "Manuell",
         "power": 140,
         "beds": 3,
-<<<<<<< HEAD
         "bedDetails": {
             "description": "2 Einzelbetten (80x200 cm) + 1 Doppelbett (140x190 cm)",
             "mattress": "Qualitätsmatratzen"
@@ -504,9 +487,6 @@ window.vehicles = [
             "wifi": "nicht enthalten",
             "gps": "optional"
         },
-=======
-        "seats": 4,
->>>>>>> 1270631083e1dc461185edc2f5fef10afccbb346
         "fuel": {
             "type": "Diesel",
             "consumption": 8.2,
@@ -583,7 +563,6 @@ window.vehicles = [
         "transmission": "Automatik",
         "power": 170,
         "beds": 2,
-<<<<<<< HEAD
         "bedDetails": {
             "description": "1 Doppelbett (160x200 cm)",
             "mattress": "Premium-Schaumstoffmatratze"
@@ -616,9 +595,6 @@ window.vehicles = [
             "wifi": "optional",
             "gps": "integriertes Navigationssystem"
         },
-=======
-        "seats": 4,
->>>>>>> 1270631083e1dc461185edc2f5fef10afccbb346
         "fuel": {
             "type": "Diesel",
             "consumption": 8.7,
@@ -696,7 +672,6 @@ window.vehicles = [
         "transmission": "Automatik",
         "power": 204,
         "beds": 2,
-<<<<<<< HEAD
         "bedDetails": {
             "description": "1 Doppelbett (150x190 cm)",
             "mattress": "Ergonomische Schaumstoffmatratze"
@@ -729,9 +704,6 @@ window.vehicles = [
             "wifi": "optional",
             "gps": "integriertes Navigationssystem"
         },
-=======
-        "seats": 4,
->>>>>>> 1270631083e1dc461185edc2f5fef10afccbb346
         "fuel": {
             "type": "Elektro",
             "consumption": 18.5,
