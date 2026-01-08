@@ -178,15 +178,14 @@
             "maxLoad": 2500
         },
         "kitchen": {
-            "type": "Gas",
-            "stove": "2-Flammen Gasherd",
-            "fridge": "70L Kompressor-Kühlschrank",
-            "fridgeType": "Absorber-Kühlschrank 70L",
-            "sink": "Edelstahl-Spüle",
+            "type": "Keine Küche",
+            "stove": "Nicht vorhanden",
+            "fridge": "Tragbare Kühlbox erforderlich",
+            "sink": "Nicht vorhanden",
             "oven": false,
             "microwave": false,
             "dishwasher": false,
-            "waterTank": "110L Frischwassertank"
+            "waterTank": "Wasserkanister erforderlich"
         },
         "sanitary": {
             "toilet": false,
@@ -399,15 +398,14 @@
             "maxLoad": 2000
         },
         "kitchen": {
-            "type": "Gas",
-            "stove": "2-Flammen Gasherd",
-            "fridge": "80L Kompressor-Kühlschrank",
-            "fridgeType": "Absorber-Kühlschrank 80L",
-            "sink": "Edelstahl-Spüle",
+            "type": "Keine Küche",
+            "stove": "Nicht vorhanden",
+            "fridge": "Tragbare Kühlbox erforderlich",
+            "sink": "Nicht vorhanden",
             "oven": false,
             "microwave": false,
             "dishwasher": false,
-            "waterTank": "120L Frischwassertank"
+            "waterTank": "Wasserkanister erforderlich"
         },
         "sanitary": {
             "toilet": false,
