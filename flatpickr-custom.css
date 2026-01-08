@@ -1,0 +1,72 @@
+/* Flatpickr Customization */
+.flatpickr-calendar {
+    font-family: var(--font-family) !important;
+    border-radius: var(--radius) !important;
+    box-shadow: var(--shadow-lg) !important;
+    border: none !important;
+}
+
+.flatpickr-day.selected, 
+.flatpickr-day.startRange, 
+.flatpickr-day.endRange, 
+.flatpickr-day.selected.inRange, 
+.flatpickr-day.startRange.inRange, 
+.flatpickr-day.endRange.inRange, 
+.flatpickr-day.selected:focus, 
+.flatpickr-day.startRange:focus, 
+.flatpickr-day.endRange:focus, 
+.flatpickr-day.selected:hover, 
+.flatpickr-day.startRange:hover, 
+.flatpickr-day.endRange:hover, 
+.flatpickr-day.selected.prevMonthDay, 
+.flatpickr-day.startRange.prevMonthDay, 
+.flatpickr-day.endRange.prevMonthDay, 
+.flatpickr-day.selected.nextMonthDay, 
+.flatpickr-day.startRange.nextMonthDay, 
+.flatpickr-day.endRange.nextMonthDay {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+/* Available days (Pastel Green) */
+.flatpickr-day:not(.flatpickr-disabled):not(.prevMonthDay):not(.nextMonthDay) {
+    background-color: #dcfce7;
+    border-color: #dcfce7;
+    color: #166534;
+    margin-top: 1px; /* Fix for border overlap */
+}
+
+/* Booked days (Pastel Red) - targeted via disabled class */
+.flatpickr-day.flatpickr-disabled:not(.prevMonthDay):not(.nextMonthDay) {
+    background-color: #fee2e2 !important;
+    border-color: #fee2e2 !important;
+    color: #991b1b !important;
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+/* Hover effects */
+.flatpickr-day:not(.flatpickr-disabled):not(.prevMonthDay):not(.nextMonthDay):hover {
+    background-color: #bbf7d0 !important;
+    border-color: #bbf7d0 !important;
+}
+
+.flatpickr-months .flatpickr-month {
+    background: var(--primary-color) !important;
+    color: white !important;
+    fill: white !important;
+    border-top-left-radius: var(--radius) !important;
+    border-top-right-radius: var(--radius) !important;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month {
+    background-color: var(--primary-color) !important;
+}
+
+.flatpickr-weekdays {
+    background: var(--primary-color) !important;
+}
+
+span.flatpickr-weekday {
+    color: white !important;
+}

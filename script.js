@@ -1,7 +1,7 @@
 // DOM Elements
 const vehicleList = document.getElementById('vehicle-list');
 const bookingModal = document.getElementById('booking-modal');
-const closeModal = document.querySelector('.close-modal');
+const closeModal = document.querySelector('#booking-modal .close-modal');
 const bookingForm = document.getElementById('booking-form');
 const startDateInput = document.getElementById('start-date');
 const endDateInput = document.getElementById('end-date');
@@ -38,6 +38,157 @@ const cookieBanner = document.getElementById('cookie-banner');
 const acceptCookiesBtn = document.getElementById('accept-cookies');
 
 // State
+// Wishlist State
+// Globale Toggle-Funktion für Bookmark-Button
+window.toggleWishlist = function(vehicleId, btn) {
+    let wishlist = getWishlist();
+    const idx = wishlist.indexOf(vehicleId);
+    if (idx === -1) {
+        wishlist.push(vehicleId);
+        setWishlist(wishlist);
+        if (btn && btn.querySelector('img')) btn.querySelector('img').src = 'bookmark_orange_border.svg';
+    } else {
+        wishlist.splice(idx, 1);
+        setWishlist(wishlist);
+        if (btn && btn.querySelector('img')) btn.querySelector('img').src = 'bookmark_outline.svg';
+    }
+    updateBookmarkCount();
+    // Fahrzeugliste neu rendern, damit alle Icons synchron sind
+    filterVehicles();
+};
+function getWishlist() {
+    const user = localStorage.getItem('loggedInUser') || 'guest';
+    const list = localStorage.getItem('wishlist_' + user);
+    try {
+        return list ? JSON.parse(list) : [];
+    } catch { return []; }
+}
+
+function setWishlist(list) {
+    const user = localStorage.getItem('loggedInUser') || 'guest';
+    localStorage.setItem('wishlist_' + user, JSON.stringify(list));
+}
+
+function addToWishlist(vehicleId) {
+    let wishlist = getWishlist();
+    if (!wishlist.includes(vehicleId)) {
+        wishlist.push(vehicleId);
+        setWishlist(wishlist);
+        animateBookmark(vehicleId);
+        updateBookmarkCount();
+    }
+}
+
+function removeFromWishlist(vehicleId) {
+    let wishlist = getWishlist();
+    wishlist = wishlist.filter(id => id !== vehicleId);
+    setWishlist(wishlist);
+    updateBookmarkCount();
+    // Aktualisiere das Icon auf der Hauptseite
+    const btn = document.querySelector(`.bookmark-btn[data-id='${vehicleId}']`);
+    if (btn && btn.querySelector('img')) {
+        btn.querySelector('img').src = 'bookmark_outline.svg';
+    }
+    // Rendere die Fahrzeugliste neu, um alle Icons zu synchronisieren
+    filterVehicles();
+}
+
+function updateBookmarkCount() {
+    const count = getWishlist().length;
+    const badge = document.getElementById('bookmark-badge');
+    if (badge) badge.textContent = count > 0 ? count : '';
+}
+
+function showWishlistModal() {
+    const wishlist = getWishlist();
+    const modal = document.getElementById('wishlist-modal');
+    const content = document.getElementById('wishlist-content');
+    if (!modal || !content) return;
+    
+    if (wishlist.length === 0) {
+        content.innerHTML = `
+            <div style="text-align: center; padding: 3rem;">
+                <img src="bookmark_outline.svg" alt="Merkliste leer" style="width:64px; height:64px; margin-bottom:1rem; opacity:0.5;" />
+                <h3 style="color: var(--text-color); margin-bottom:0.5rem;">Merkliste ist leer</h3>
+                <p style="color: var(--text-light);">Fügen Sie Fahrzeuge zur Merkliste hinzu, um diese hier zu sehen.</p>
+            </div>
+        `;
+    } else {
+        content.innerHTML = `<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+            ${wishlist.map(id => {
+                const v = vehicles.find(v => v.id === id);
+                if (!v) return '';
+                return `
+                    <div class="vehicle-card">
+                        <img src="${v.image}" alt="${v.name}" class="vehicle-image">
+                        <div class="vehicle-content">
+                            <div class="vehicle-header">
+                                <div class="vehicle-title">
+                                    <h3>${v.name}</h3>
+                                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.25rem;">
+                                        <span class="tag">${v.category}</span>
+                                        <span class="emission-badge emission-${v.fuel.emissionSticker.toLowerCase()}">${v.fuel.emissionSticker}</span>
+                                    </div>
+                                </div>
+                                <div class="vehicle-price">
+                                    ${v.pricePerDay}€ <span>/ Tag</span>
+                                </div>
+                            </div>
+                            <div class="vehicle-specs">
+                                <div class="spec-item" title="Schlafplätze">
+                                    🛏️ ${v.beds} Betten
+                                </div>
+                                <div class="spec-item" title="Führerschein">
+                                    🪪 ${v.license}
+                                </div>
+                                <div class="spec-item" title="Getriebe">
+                                    ⚙️ ${v.transmission}
+                                </div>
+                                <div class="spec-item" title="Leistung">
+                                    🐎 ${v.power} PS
+                                </div>
+                                <div class="spec-item" title="Marke">
+                                    🏭 ${v.brand}
+                                </div>
+                                <div class="spec-item" title="Farbe">
+                                    🎨 ${v.color}
+                                </div>
+                            </div>
+                            <div class="vehicle-features">
+                                <div class="vehicle-locations" style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.5rem;">
+                                    📍 Verfügbar in: ${v.availableLocations ? v.availableLocations.join(', ') : 'Auf Anfrage'}
+                                </div>
+                            </div>
+                            <button class="btn btn-primary full-width" style="margin-top: 1rem;" onclick="event.stopPropagation(); window.location.href='vehicle-details.html?id=${v.id}';">
+                                Verfügbarkeit prüfen
+                            </button>
+                            <button class="btn" style="margin-top: 0.5rem; width: 100%; background-color: #ff6b35; border: none; border-radius: 8px; padding: 0.75rem; color: white; font-weight: 600; cursor: pointer; transition: background-color 0.2s;" onclick="event.stopPropagation(); window.openBookingModal(${v.id}); closeWishlistModal();">
+                                Jetzt buchen
+                            </button>
+                            <button class="btn" style="margin-top: 0.5rem; width: 100%; background-color: #e5e5e5; border: none; border-radius: 8px; padding: 0.75rem; color: #333; cursor: pointer; transition: background-color 0.2s;" onclick="event.stopPropagation(); removeFromWishlist(${v.id}); showWishlistModal();">
+                                Aus Merkliste entfernen
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('')}
+        </div>`;
+    }
+    modal.style.display = 'block';
+}
+
+function closeWishlistModal() {
+    const modal = document.getElementById('wishlist-modal');
+    if (modal) modal.style.display = 'none';
+}
+
+function animateBookmark(vehicleId) {
+    const btn = document.querySelector(`.bookmark-btn[data-id='${vehicleId}']`);
+    if (btn) {
+        btn.classList.add('bookmarked');
+        setTimeout(() => btn.classList.remove('bookmarked'), 800);
+    }
+}
 // Vehicle Data (Embedded to fix CORS/file:// issues)
 // Vehicle Data
 // --- Data Loading ---
@@ -63,6 +214,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (savedUser) {
         showProfile(savedUser);
     }
+    
+    // Initialize profile handlers
+    setupProfileHandlers();
 });
 
 // --- AJAX Data Loading ---
@@ -188,8 +342,8 @@ function loadFilterPreferences() {
             brandSelect.value = prefs.brand || "";
             emissionSelect.value = prefs.emission || "";
             colorSelect.value = prefs.color || "";
-            priceRange.value = prefs.price || 300;
-            priceValue.textContent = prefs.price || 300;
+            priceRange.value = prefs.price || 150;
+            priceValue.textContent = prefs.price || 150;
             bedsRange.value = prefs.beds || 2;
             bedsValue.textContent = prefs.beds || 2;
             powerRange.value = prefs.power || 100;
@@ -207,7 +361,14 @@ function loadFilterPreferences() {
 
 function renderVehicles(vehiclesToRender) {
     if (vehiclesToRender.length === 0) {
-        vehicleList.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem;"><h3>Keine Fahrzeuge gefunden</h3><p>Bitte passen Sie Ihre Filter an.</p></div>';
+        // Zeige Outline-Lesezeichen, wenn keine Fahrzeuge ausgewählt sind
+        vehicleList.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                <img src="bookmark_outline.svg" alt="Merkliste leer" style="width:48px; height:48px; margin-bottom:1rem;" />
+                <h3>Keine Fahrzeuge gefunden</h3>
+                <p>Bitte passen Sie Ihre Filter an.</p>
+            </div>
+        `;
         return;
     }
 
@@ -227,7 +388,6 @@ function renderVehicles(vehiclesToRender) {
                         ${vehicle.pricePerDay}€ <span>/ Tag</span>
                     </div>
                 </div>
-                
                 <!-- Essential Specs Only -->
                 <div class="vehicle-specs">
                     <div class="spec-item" title="Schlafplätze">
@@ -249,15 +409,16 @@ function renderVehicles(vehiclesToRender) {
                         🎨 ${vehicle.color}
                     </div>
                 </div>
-
                 <div class="vehicle-features">
                     <div class="vehicle-locations" style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.5rem;">
                         📍 Verfügbar in: ${vehicle.availableLocations ? vehicle.availableLocations.join(', ') : 'Auf Anfrage'}
                     </div>
                 </div>
-
-                <button class="btn btn-primary full-width" style="margin-top: 1rem;">
+                <button class="btn btn-primary full-width" style="margin-top: 1rem;" onclick="event.stopPropagation(); window.location.href='vehicle-details.html?id=' + ${vehicle.id};">
                     Details ansehen
+                </button>
+                <button class="bookmark-btn" data-id="${vehicle.id}" style="margin-top: 0.5rem; border:none; background:transparent; display:flex; align-items:center; justify-content:center; width:32px; height:32px; padding:0;" onclick="event.stopPropagation(); toggleWishlist(${vehicle.id}, this);">
+                    <img src="${getWishlist().includes(vehicle.id) ? 'bookmark_orange_border.svg' : 'bookmark_outline.svg'}" alt="Merken" style="width:24px; height:24px; display:inline-block;" />
                 </button>
             </div>
         </div>
@@ -265,7 +426,10 @@ function renderVehicles(vehiclesToRender) {
 }
 
 function filterVehicles() {
-    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+    const searchInputEl = document.getElementById('search-input');
+    if (!searchInputEl) return;
+
+    const searchTerm = searchInputEl.value.toLowerCase();
     const selectedCategory = document.getElementById('category-select').value;
     const selectedLicense = document.getElementById('license-select').value;
     const selectedBrand = document.getElementById('brand-select').value;
@@ -342,12 +506,14 @@ function setupEventListeners() {
         return;
     }
     window.__wohnmobil_events_bound = true;
-    closeModal.addEventListener('click', () => {
-        bookingModal.style.display = 'none';
-    });
+    if (closeModal) {
+        closeModal.addEventListener('click', () => {
+            if (bookingModal) bookingModal.style.display = 'none';
+        });
+    }
 
     window.addEventListener('click', (e) => {
-        if (e.target === bookingModal) {
+        if (bookingModal && e.target === bookingModal) {
             bookingModal.style.display = 'none';
         }
     });
@@ -507,6 +673,93 @@ function setupEventListeners() {
     startDateInput.addEventListener('change', calculateCost);
     endDateInput.addEventListener('change', calculateCost);
 
+    // Versicherungs- und Fahrer-Listener
+    const insuranceSelect = document.getElementById('insurance-type');
+    if (insuranceSelect) {
+        insuranceSelect.addEventListener('change', updateInsurancePrice);
+    }
+
+    const driver2BirthDate = document.getElementById('driver2-birth-date');
+    if (driver2BirthDate) {
+        driver2BirthDate.addEventListener('change', () => {
+            const birthDate = driver2BirthDate.value;
+            if (!birthDate) return;
+            
+            const birth = new Date(birthDate);
+            const today = new Date();
+            let age = today.getFullYear() - birth.getFullYear();
+            const monthDiff = today.getMonth() - birth.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                age--;
+            }
+            
+            const driver2AgeError = document.getElementById('driver2-age-error');
+            if (age < 21 || age > 75) {
+                if (driver2AgeError) driver2AgeError.style.display = 'block';
+            } else {
+                if (driver2AgeError) driver2AgeError.style.display = 'none';
+            }
+        });
+    }
+
+    // Schritt-Navigation im Booking-Formular
+    const nextToRenterBtn = document.getElementById('next-to-renter-data');
+    const backToDatesBtn = document.getElementById('back-to-dates');
+    
+    if (nextToRenterBtn) {
+        nextToRenterBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (!startDateInput.value || !endDateInput.value) {
+                alert('Bitte geben Sie Start- und Enddatum ein.');
+                return;
+            }
+            // Zu Schritt 2 wechseln
+            document.getElementById('step-1-dates').style.display = 'none';
+            document.getElementById('step-2-renter').style.display = 'block';
+        });
+    }
+    
+    if (backToDatesBtn) {
+        backToDatesBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Zurück zu Schritt 1
+            document.getElementById('step-1-dates').style.display = 'block';
+            document.getElementById('step-2-renter').style.display = 'none';
+        });
+    }
+
+    // Alter-Validierung beim Geburtsdatum
+    const birthDateInput = document.getElementById('birth-date');
+    if (birthDateInput) {
+        birthDateInput.addEventListener('change', () => {
+            const birthDate = birthDateInput.value;
+            if (!birthDate) return;
+            
+            const birth = new Date(birthDate);
+            const today = new Date();
+            let age = today.getFullYear() - birth.getFullYear();
+            const monthDiff = today.getMonth() - birth.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                age--;
+            }
+            
+            const ageError = document.getElementById('age-error');
+            if (age < 21) {
+                if (ageError) {
+                    ageError.textContent = '⚠️ Du musst mindestens 21 Jahre alt sein.';
+                    ageError.style.display = 'block';
+                }
+            } else if (age > 75) {
+                if (ageError) {
+                    ageError.textContent = '⚠️ Ab 75 Jahren können Sie kein Fahrzeug mieten.';
+                    ageError.style.display = 'block';
+                }
+            } else {
+                if (ageError) ageError.style.display = 'none';
+            }
+        });
+    }
+
     bookingForm.addEventListener('submit', handleBookingSubmit);
 
     if (loginForm) loginForm.addEventListener('submit', submitLoginForm);
@@ -648,15 +901,11 @@ async function submitRegisterForm(e) {
             showProfile(data.username || username);
             if (authModal) authModal.style.display = 'none';
 
-            // Inform user about email verification status but stay on the same page
+            // Inform user about successful registration
             if (authMessage) {
-                if (data.emailSent) {
-                    authMessage.innerHTML = '📧 <strong>Bitte überprüfen Sie Ihren E-Mail-Posteingang!</strong><br/>Ein Bestätigungslink wurde an <strong>' + (data.email || email) + '</strong> gesendet.';
-                } else {
-                    authMessage.innerHTML = '⚠️ Registrierung abgeschlossen, aber E-Mail konnte nicht versendet werden. Bitte prüfen Sie Ihre Angaben.';
-                }
-                authMessage.style.backgroundColor = '#dbeafe';
-                authMessage.style.border = '1px solid #0284c7';
+                authMessage.innerHTML = '✅ <strong>Registrierung erfolgreich!</strong><br/>Sie sind nun angemeldet.';
+                authMessage.style.backgroundColor = '#dcfce7';
+                authMessage.style.border = '1px solid #22c55e';
                 authMessage.style.padding = '1rem';
                 authMessage.style.borderRadius = '8px';
                 authMessage.style.marginBottom = '1rem';
@@ -686,13 +935,8 @@ async function submitLoginForm(e) {
         });
         const data = await res.json();
         
-        if (data.success && data.requiresCode) {
-            // 2FA erforderlich: zeige Code-Formular
-            if (authMessage) authMessage.innerHTML = data.message;
-            if (loginForm) loginForm.style.display = 'none';
-            if (verify2faForm) verify2faForm.style.display = 'block';
-        } else if (data.success) {
-            // Login erfolgreich ohne 2FA (fallback)
+        if (data.success) {
+            // Login erfolgreich
             localStorage.setItem('loggedInUser', username);
             showProfile(username);
             if (authModal) authModal.style.display = 'none';
@@ -944,6 +1188,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 window.openBookingModal = function (vehicleId) {
+    // Prüfe, ob Benutzer angemeldet ist
+    const loggedInUser = localStorage.getItem('loggedInUser');
+    if (!loggedInUser) {
+        showToast('⚠️ Bitte melden Sie sich an, um zu buchen');
+        // Öffne das Auth-Modal und zeige Login-Form
+        const authModal = document.getElementById('auth-modal');
+        if (authModal) {
+            authModal.style.display = 'block';
+            showLoginForm();
+        }
+        return;
+    }
+
     currentVehicle = vehicles.find(v => v.id === vehicleId);
     if (!currentVehicle) return;
 
@@ -970,13 +1227,75 @@ window.openBookingModal = function (vehicleId) {
     bookingForm.reset();
     document.getElementById('rental-days').textContent = '0';
     document.getElementById('total-price').textContent = '0';
+    
+    // Reset insurance and additional driver
+    const insuranceSelect = document.getElementById('insurance-type');
+    if (insuranceSelect) insuranceSelect.value = 'none';
+    const insuranceCostInfo = document.getElementById('insurance-cost-info');
+    if (insuranceCostInfo) insuranceCostInfo.style.display = 'none';
+    
+    const additionalDriverCheckbox = document.getElementById('additional-driver-checkbox');
+    if (additionalDriverCheckbox) additionalDriverCheckbox.checked = false;
+    const additionalDriverForm = document.getElementById('additional-driver-form');
+    if (additionalDriverForm) additionalDriverForm.style.display = 'none';
+    
+    // Zurücksetzen zu Schritt 1
+    document.getElementById('step-1-dates').style.display = 'block';
+    document.getElementById('step-2-renter').style.display = 'none';
+    if (document.getElementById('age-error')) {
+        document.getElementById('age-error').style.display = 'none';
+    }
+    if (document.getElementById('driver2-age-error')) {
+        document.getElementById('driver2-age-error').style.display = 'none';
+    }
 
     // Set min dates
     const today = new Date().toISOString().split('T')[0];
-    startDateInput.min = today;
-    endDateInput.min = today;
+    // startDateInput.min = today; // Removed native min date
+    // endDateInput.min = today;   // Removed native min date
+
+    // Initialize Flatpickr
+    initFlatpickr(vehicleId);
 
     bookingModal.style.display = 'block';
+}
+
+function initFlatpickr(vehicleId) {
+    const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+    const vehicleBookings = bookings.filter(b => b.vehicleId === vehicleId);
+    
+    const disabledDates = vehicleBookings.map(b => {
+        return {
+            from: b.startDate,
+            to: b.endDate
+        };
+    });
+
+    const commonConfig = {
+        locale: 'de',
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        disable: disabledDates,
+        onChange: function(selectedDates, dateStr, instance) {
+            calculateCost();
+        }
+    };
+
+    flatpickr("#start-date", {
+        ...commonConfig,
+        onChange: function(selectedDates, dateStr, instance) {
+            // Update minDate of end-date picker
+            const endDatePicker = document.querySelector("#end-date")._flatpickr;
+            if (endDatePicker && selectedDates[0]) {
+                endDatePicker.set('minDate', selectedDates[0]);
+            }
+            calculateCost();
+        }
+    });
+
+    flatpickr("#end-date", {
+        ...commonConfig
+    });
 }
 
 function calculateCost() {
@@ -989,27 +1308,265 @@ function calculateCost() {
         // Invalid range
         document.getElementById('rental-days').textContent = '0';
         document.getElementById('total-price').textContent = '0';
+        document.getElementById('deposit-amount').textContent = '0';
         return;
     }
 
     const diffTime = Math.abs(end - start);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    const totalCost = diffDays * currentVehicle.pricePerDay;
+    let totalCost = diffDays * currentVehicle.pricePerDay;
+
+    // Kaution berechnen basierend auf Mietdauer
+    let deposit = 0;
+    if (diffDays <= 3) {
+        deposit = 1000;
+    } else if (diffDays <= 7) {
+        deposit = 1200;
+    } else if (diffDays <= 14) {
+        deposit = 1400;
+    } else {
+        deposit = 1500;
+    }
+    totalCost += deposit;
+
+    // Versicherung hinzufügen
+    const insuranceType = document.getElementById('insurance-type').value;
+    let insurancePrice = 0;
+    if (insuranceType !== 'none') {
+        const insurancePrices = { '500': 15, '1000': 10, '1500': 5 };
+        insurancePrice = (insurancePrices[insuranceType] || 0) * diffDays;
+        totalCost += insurancePrice;
+    }
+
+    // Zusätzlicher Fahrer hinzufügen
+    const hasAdditionalDriver = document.getElementById('additional-driver-checkbox').checked;
+    if (hasAdditionalDriver) {
+        totalCost += 25 * diffDays;
+    }
+
+    // Endreinigung (verpflichtend)
+    totalCost += 70;
 
     document.getElementById('rental-days').textContent = diffDays;
+    document.getElementById('deposit-amount').textContent = deposit;
     document.getElementById('total-price').textContent = totalCost;
 }
 
+window.updateInsurancePrice = function() {
+    calculateCost();
+    const insuranceType = document.getElementById('insurance-type').value;
+    const insuranceCostInfo = document.getElementById('insurance-cost-info');
+    
+    if (insuranceType !== 'none') {
+        const rentalDays = parseInt(document.getElementById('rental-days').textContent) || 0;
+        const insurancePrices = { '500': 15, '1000': 10, '1500': 5 };
+        const pricePerDay = insurancePrices[insuranceType] || 0;
+        const totalInsurancePrice = pricePerDay * rentalDays;
+        document.getElementById('insurance-price-display').textContent = totalInsurancePrice;
+        insuranceCostInfo.style.display = 'block';
+    } else {
+        insuranceCostInfo.style.display = 'none';
+    }
+};
+
+window.toggleAdditionalDriver = function() {
+    const checkbox = document.getElementById('additional-driver-checkbox');
+    const form = document.getElementById('additional-driver-form');
+    if (checkbox.checked) {
+        form.style.display = 'block';
+    } else {
+        form.style.display = 'none';
+    }
+    calculateCost();
+};
+
+
 function handleBookingSubmit(e) {
     e.preventDefault();
+
+    // Prüfe, ob wir in Schritt 2 sind
+    const step2 = document.getElementById('step-2-renter');
+    if (!step2 || step2.style.display === 'none') {
+        return; // Nicht in Schritt 2, nicht absenden
+    }
+
+    // Mieterdaten sammeln
+    const firstName = document.getElementById('first-name').value.trim();
+    const lastName = document.getElementById('last-name').value.trim();
+    const birthDate = document.getElementById('birth-date').value;
+    const street = document.getElementById('street').value.trim();
+    const postalCode = document.getElementById('postal-code').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const licenseClass = document.getElementById('license-class').value;
+    const licenseValidSince = document.getElementById('license-valid-since').value;
+
+    // Validierung: Alle Felder müssen ausgefüllt sein
+    if (!firstName || !lastName || !birthDate || !street || !postalCode || !city || !phone || !licenseClass || !licenseValidSince) {
+        alert('Bitte füllen Sie alle Felder aus.');
+        return;
+    }
+
+    // Validierung: Mindestens 21 Jahre alt und maximal 75 Jahre
+    const birth = new Date(birthDate);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+        age--;
+    }
+
+    const ageError = document.getElementById('age-error');
+    if (age < 21) {
+        if (ageError) ageError.style.display = 'block';
+        alert('Du musst mindestens 21 Jahre alt sein, um ein Fahrzeug zu mieten.');
+        return;
+    }
+    if (age > 75) {
+        if (ageError) ageError.style.display = 'block';
+        ageError.textContent = '⚠️ Ab 75 Jahren können Sie kein Fahrzeug mieten.';
+        alert('Ab 75 Jahren können Sie kein Fahrzeug mieten.');
+        return;
+    }
+    if (ageError) {
+        ageError.style.display = 'none';
+        ageError.textContent = '⚠️ Du musst mindestens 21 Jahre alt sein.';
+    }
+
+    // Validierung: Führerschein muss älter als 0 Jahre sein
+    const licenseDate = new Date(licenseValidSince);
+    if (licenseDate > today) {
+        alert('Das Gültig-seit-Datum des Führerscheins kann nicht in der Zukunft liegen.');
+        return;
+    }
+
+    // Validierung: Zusätzlicher Fahrer (wenn angegeben)
+    const hasAdditionalDriver = document.getElementById('additional-driver-checkbox').checked;
+    if (hasAdditionalDriver) {
+        const driver2FirstName = document.getElementById('driver2-first-name').value.trim();
+        const driver2LastName = document.getElementById('driver2-last-name').value.trim();
+        const driver2BirthDate = document.getElementById('driver2-birth-date').value;
+
+        if (!driver2FirstName || !driver2LastName || !driver2BirthDate) {
+            alert('Bitte füllen Sie alle Felder für den zusätzlichen Fahrer aus.');
+            return;
+        }
+
+        // Validierung: Alter zwischen 21 und 75
+        const driver2Birth = new Date(driver2BirthDate);
+        let driver2Age = today.getFullYear() - driver2Birth.getFullYear();
+        const driver2MonthDiff = today.getMonth() - driver2Birth.getMonth();
+        if (driver2MonthDiff < 0 || (driver2MonthDiff === 0 && today.getDate() < driver2Birth.getDate())) {
+            driver2Age--;
+        }
+
+        const driver2AgeError = document.getElementById('driver2-age-error');
+        if (driver2Age < 21 || driver2Age > 75) {
+            if (driver2AgeError) driver2AgeError.style.display = 'block';
+            alert('Der zusätzliche Fahrer muss zwischen 21 und 75 Jahre alt sein.');
+            return;
+        }
+        if (driver2AgeError) driver2AgeError.style.display = 'none';
+    }
 
     const start = startDateInput.value;
     const end = endDateInput.value;
     const days = document.getElementById('rental-days').textContent;
     const total = document.getElementById('total-price').textContent;
 
-    alert(`Buchung erfolgreich!\n\nFahrzeug: ${currentVehicle.name}\nZeitraum: ${start} bis ${end} (${days} Tage)\nGesamtpreis: ${total}€`);
+    // Versicherungs- und Fahrerdaten sammeln
+    const insuranceType = document.getElementById('insurance-type').value;
+    const additionalDriver = hasAdditionalDriver ? {
+        firstName: document.getElementById('driver2-first-name').value.trim(),
+        lastName: document.getElementById('driver2-last-name').value.trim(),
+        birthDate: document.getElementById('driver2-birth-date').value
+    } : null;
 
-    bookingModal.style.display = 'none';
+    // Kaution berechnen
+    const depositAmount = parseInt(document.getElementById('deposit-amount').textContent);
+
+    // Buchung speichern
+    const booking = {
+        id: Date.now(),
+        vehicleName: currentVehicle.name,
+        vehicleId: currentVehicle.id,
+        firstName: firstName,
+        lastName: lastName,
+        birthDate: birthDate,
+        address: `${street}, ${postalCode} ${city}`,
+        phone: phone,
+        licenseClass: licenseClass,
+        licenseValidSince: licenseValidSince,
+        startDate: start,
+        endDate: end,
+        days: days,
+        totalPrice: total,
+        deposit: depositAmount,
+        insurance: insuranceType,
+        endCleaning: true,
+        additionalDriver: additionalDriver,
+        bookingDate: new Date().toLocaleDateString('de-DE')
+    };
+
+    let bookings = [];
+    try {
+        const existing = localStorage.getItem('bookings');
+        bookings = existing ? JSON.parse(existing) : [];
+    } catch (e) {
+        bookings = [];
+    }
+    bookings.push(booking);
+    localStorage.setItem('bookings', JSON.stringify(bookings));
+
+    // Bestätigung mit Toast statt Alert (unauffällig)
+    showToast('✅ Buchung gespeichert');
+    
+    // Formular zurücksetzen aber Modal bleibt offen
+    document.getElementById('booking-form').reset();
+    document.getElementById('age-error').style.display = 'none';
+    // Zurück zu Schritt 1
+    document.getElementById('step-1-dates').style.display = 'block';
+    document.getElementById('step-2-renter').style.display = 'none';
 }
+
+// Schritt-Navigation
+window.goToStep2 = function() {
+    // Validate dates first
+    const startDate = document.getElementById('start-date').value;
+    const endDate = document.getElementById('end-date').value;
+    
+    if (!startDate || !endDate) {
+        showToast('⚠️ Bitte wählen Sie Start- und Enddatum');
+        return;
+    }
+    
+    if (new Date(startDate) >= new Date(endDate)) {
+        showToast('⚠️ Enddatum muss nach Startdatum liegen');
+        return;
+    }
+    
+    // Hide step 1, show step 2
+    document.getElementById('step-1-dates').style.display = 'none';
+    document.getElementById('step-2-renter').style.display = 'block';
+};
+
+window.goToStep1 = function() {
+    // Hide step 2, show step 1
+    document.getElementById('step-2-renter').style.display = 'none';
+    document.getElementById('step-1-dates').style.display = 'block';
+};
+
+// FAQ Toggle Function
+window.toggleFAQ = function(element) {
+    const answer = element.nextElementSibling;
+    const arrow = element.querySelector('span:last-child');
+    
+    if (answer.style.display === 'none') {
+        answer.style.display = 'block';
+        arrow.textContent = '▲';
+    } else {
+        answer.style.display = 'none';
+        arrow.textContent = '▼';
+    }
+};
