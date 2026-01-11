@@ -470,19 +470,33 @@ function getSeasonMultiplier(date) {
     return 1.00;
 }
 
-    // Calculate deposit based on daily rate
-    function getDepositAmount(dailyRate) {
-        // Staffelung basierend auf Tagespreis
-        if (dailyRate <= 100) {
-            return 800;   // VW California Ocean (95€)
-        } else if (dailyRate <= 120) {
-            return 1000;  // VW Crafter (110€), Fiat (105€), Mercedes Sprinter (120€)
-        } else if (dailyRate <= 140) {
-            return 1200;  // Ford Transit (115€), VW ID.Buzz (135€)
-        } else {
-            return 1500;  // Mercedes Sprinter 4x4 (145€)
-        }
+// Calculate deposit based on daily rate
+function getDepositAmount(dailyRate) {
+    // Staffelung basierend auf Tagespreis
+    if (dailyRate <= 100) {
+        return 800;   // VW California Ocean (95€)
+    } else if (dailyRate <= 120) {
+        return 1000;  // VW Crafter (110€), Fiat (105€), Mercedes Sprinter (120€)
+    } else if (dailyRate <= 140) {
+        return 1200;  // Ford Transit (115€), VW ID.Buzz (135€)
+    } else {
+        return 1500;  // Mercedes Sprinter 4x4 (145€)
     }
+}
+
+function setupBookingModal(vehicle) {
+    // Get fresh reference to bookingForm - it might not exist yet on initial page load
+    bookingForm = document.getElementById('booking-form');
+    const startDateInput = document.getElementById('start-date');
+    const endDateInput = document.getElementById('end-date');
+    
+    if (!bookingForm) {
+        console.error('Booking form not found!');
+        return;
+    }
+    
+    console.log('setupBookingModal called, bookingForm exists:', !!bookingForm);
+    // Store vehicle globally for submit handler
     window.currentBookingVehicle = vehicle;
     
     window.openBookingModal = function () {
