@@ -210,8 +210,11 @@ document.addEventListener('keydown', (e) => {
             document.cookie.split(";").forEach((c) => {
                 document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
             });
-            alert('✅ Alle Cookies und LocalStorage gelöscht! Seite wird neu geladen...');
-            location.reload();
+            console.log('✅ Cookies und LocalStorage gelöscht! Seite wird neu geladen...');
+            // Sofort neu laden, NICHT auf Alert warten
+            setTimeout(() => {
+                location.reload();
+            }, 100);
             resetCounter = 0;
         } else {
             console.log(`⏳ Noch ${3 - resetCounter}x drücken`);
