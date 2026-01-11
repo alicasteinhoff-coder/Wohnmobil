@@ -579,13 +579,13 @@ function setupBookingModal(vehicle) {
     // Season Calculation (Helper Function)
     function getSeasonMultiplier(date) {
         const month = date.getMonth() + 1; // 1-12
-        // Hochsaison: Juni-August (6-8) = +30%
+        // Hochsaison: Juni-August (6-8) = +20%
         if (month >= 6 && month <= 8) {
-            return 1.30;
+            return 1.20;
         }
-        // Nebensaison: Dezember-Februar (12, 1, 2) = -20%
+        // Nebensaison: Dezember-Februar (12, 1, 2) = -10%
         if (month === 12 || month === 1 || month === 2) {
-            return 0.80;
+            return 0.90;
         }
         // Normalsaison: Rest = 0%
         return 1.00;
