@@ -1348,7 +1348,7 @@ window.submitBooking = function() {
             startDate: startDate,
             endDate: endDate,
             pickupLocation: pickupLocation,
-            totalPrice: totalPrice,
+            totalPrice: grandTotal,
             additionalDriver: additionalDriver,
             bookingDate: new Date().toLocaleDateString('de-DE'),
             // Cost breakdown
