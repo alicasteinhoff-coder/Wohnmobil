@@ -100,6 +100,15 @@
             font-size: 1.2rem;
             color: #ef4444;
         }
+
+        /* Inline display für Select-Elemente im Grid */
+        .form-group:has(select).has-error .form-error-indicator {
+            position: static;
+            transform: none;
+            display: inline-block;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
     </style>
 </head>
 
@@ -233,12 +242,13 @@
                             <h4 style="margin-bottom: 1rem; color: var(--text-color);">Versicherungsoptionen</h4>
                             
                             <div class="form-group">
-                                <label for="insurance-type">Versicherung (Vollkasko)</label>
-                                <select id="insurance-type" onchange="updateInsurancePrice()">
-                                    <option value="none">Keine Versicherung</option>
-                                    <option value="500">Vollkasko - 500€ Selbstbeteiligung (+15€/Tag)</option>
-                                    <option value="1000">Vollkasko - 1000€ Selbstbeteiligung (+10€/Tag)</option>
-                                    <option value="1500">Vollkasko - 1500€ Selbstbeteiligung (+5€/Tag)</option>
+                                <label for="insurance-type">Versicherung</label>
+                                <select id="insurance-type" onchange="updateInsurancePrice()" required>
+                                    <option value="">-- Bitte wählen --</option>
+                                    <option value="vollkasko-500">Vollkasko - 500€ Selbstbeteiligung (+15€/Tag)</option>
+                                    <option value="vollkasko-1000">Vollkasko - 1000€ Selbstbeteiligung (+10€/Tag)</option>
+                                    <option value="teilkasko-500">Teilkasko - 500€ Selbstbeteiligung (+8€/Tag)</option>
+                                    <option value="teilkasko-1000">Teilkasko - 1000€ Selbstbeteiligung (+5€/Tag)</option>
                                 </select>
                             </div>
 
@@ -256,6 +266,8 @@
                             </label>
                             
                             <div id="additional-driver-form" style="display: none; margin-top: 1rem; padding: 1rem; background-color: #f8f9fa; border-radius: 8px;">
+                                <h5 style="margin-bottom: 1rem; color: var(--text-color);">Daten des zusätzlichen Fahrers</h5>
+                                
                                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                                     <div class="form-group">
                                         <label for="driver2-first-name">Vorname</label>
@@ -271,6 +283,45 @@
                                     <label for="driver2-birth-date">Geburtsdatum</label>
                                     <input type="date" id="driver2-birth-date">
                                     <div id="driver2-age-error" style="color: #ef4444; font-size: 0.9rem; display: none; margin-top: 0.25rem;">⚠️ Fahrer muss zwischen 21 und 75 Jahre alt sein.</div>
+                                </div>
+
+                                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                                    <div class="form-group">
+                                        <label for="driver2-street">Straße und Hausnummer</label>
+                                        <input type="text" id="driver2-street">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="driver2-postal-code">Postleitzahl</label>
+                                        <input type="text" id="driver2-postal-code">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="driver2-city">Stadt</label>
+                                    <input type="text" id="driver2-city">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="driver2-phone">Telefonnummer</label>
+                                    <input type="tel" id="driver2-phone">
+                                </div>
+
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                    <div class="form-group">
+                                        <label for="driver2-license-class">Führerscheinklasse</label>
+                                        <select id="driver2-license-class">
+                                            <option value="">-- Bitte wählen --</option>
+                                            <option value="B">B (PKW bis 3.500 kg)</option>
+                                            <option value="BE">BE (PKW + Anhänger)</option>
+                                            <option value="C">C (Lkw über 3.500 kg)</option>
+                                            <option value="C1">C1 (Lkw 3.500-7.500 kg)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="driver2-license-valid-since">Führerschein gültig seit</label>
+                                        <input type="date" id="driver2-license-valid-since">
+                                        <div id="driver2-license-error" style="color: #ef4444; font-size: 0.9rem; display: none; margin-top: 0.25rem;">⚠️ Führerschein muss mindestens 1 Jahr vorhanden sein.</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -323,7 +374,7 @@
                             <label for="terms-accepted" style="margin: 0;">Ich akzeptiere die AGB</label>
                         </div>
 
-                        <button type="submit" class="btn btn-primary full-width">Buchung abschließen</button>
+                        <button type="button" class="btn btn-primary full-width" onclick="submitBooking()">Buchung abschließen</button>
                     </div>
                 </form>
             </div>

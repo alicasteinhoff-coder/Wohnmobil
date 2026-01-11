@@ -285,6 +285,71 @@ app.post('/login', async (req, res) => {
     }
 });
 
+// Get current user profile
+app.get('/api/me', async (req, res) => {
+    if (!req.session.userId) {
+        return res.json({ loggedIn: false });
+    }
+    try {
+        const user = await dbGet('SELECT id, username, email FROM users WHERE id = ?', [req.session.userId]);
+        if (user) {
+            res.json({ loggedIn: true, username: user.username, email: user.email });
+        } else {
+            res.json({ loggedIn: false });
+        }
+    } catch (error) {
+        console.error('Error fetching user profile:', error);
+        res.json({ loggedIn: false, error: 'Fehler beim Laden des Profils.' });
+    }
+});
+
+// Update profile (username and email)
+app.post('/api/update-profile', async (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).json({ success: false, message: 'Nicht authentifiziert.' });
+    }
+    const { username, email } = req.body;
+    if (!username || !email) {
+        return res.json({ success: false, message: 'Benutzername und E-Mail erforderlich.' });
+    }
+    try {
+        const existingUser = await dbGet('SELECT id FROM users WHERE (username = ? OR email = ?) AND id != ?', 
+            [username, email, req.session.userId]);
+        if (existingUser) {
+            return res.status(409).json({ success: false, message: 'Benutzername oder E-Mail bereits vergeben.' });
+        }
+        await dbRun('UPDATE users SET username = ?, email = ? WHERE id = ?', 
+            [username, email, req.session.userId]);
+        res.json({ success: true, message: 'Profil aktualisiert.' });
+    } catch (error) {
+        console.error('Profile update error:', error);
+        res.json({ success: false, message: 'Fehler beim Aktualisieren des Profils.' });
+    }
+});
+
+// Change password
+app.post('/api/change-password', async (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).json({ success: false, message: 'Nicht authentifiziert.' });
+    }
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword) {
+        return res.json({ success: false, message: 'Passwort erforderlich.' });
+    }
+    try {
+        const user = await dbGet('SELECT passwordHash FROM users WHERE id = ?', [req.session.userId]);
+        if (!user || !await bcrypt.compare(currentPassword, user.passwordHash)) {
+            return res.json({ success: false, message: 'Aktuelles Passwort ist falsch.' });
+        }
+        const newHash = await bcrypt.hash(newPassword, 10);
+        await dbRun('UPDATE users SET passwordHash = ? WHERE id = ?', [newHash, req.session.userId]);
+        res.json({ success: true, message: 'Passwort erfolgreich geändert.' });
+    } catch (error) {
+        console.error('Password change error:', error);
+        res.json({ success: false, message: 'Fehler beim Ändern des Passworts.' });
+    }
+});
+
 // Logout
 app.get('/logout', (req, res) => {
     req.session.destroy(() => {

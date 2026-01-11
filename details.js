@@ -453,11 +453,23 @@ function renderVehicleDetails(vehicle) {
 // Booking Modal Logic (Simplified version of script.js logic)
 const bookingModal = document.getElementById('booking-modal');
 const closeModal = document.querySelector('.close-modal');
-const bookingForm = document.getElementById('booking-form');
-const startDateInput = document.getElementById('start-date');
-const endDateInput = document.getElementById('end-date');
+let bookingForm = document.getElementById('booking-form');
 
 function setupBookingModal(vehicle) {
+    // Get fresh reference to bookingForm - it might not exist yet on initial page load
+    bookingForm = document.getElementById('booking-form');
+    const startDateInput = document.getElementById('start-date');
+    const endDateInput = document.getElementById('end-date');
+    
+    if (!bookingForm) {
+        console.error('Booking form not found!');
+        return;
+    }
+    
+    console.log('setupBookingModal called, bookingForm exists:', !!bookingForm);
+    // Store vehicle globally for submit handler
+    window.currentBookingVehicle = vehicle;
+    
     window.openBookingModal = function () {
         // Prüfe, ob Benutzer angemeldet ist
         const loggedInUser = localStorage.getItem('loggedInUser');
@@ -629,90 +641,15 @@ function setupBookingModal(vehicle) {
         }
     };
 
-    startDateInput.addEventListener('change', calculatePrice);
-    endDateInput.addEventListener('change', calculatePrice);
-
-    bookingForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        
-        // Check if terms are accepted
-        const termsAccepted = document.getElementById('terms-accepted').checked;
-        if (!termsAccepted) {
-            alert('Bitte akzeptieren Sie die AGB.');
-            return;
-        }
-
-        // Get all form data
-        const firstName = document.getElementById('first-name').value.trim();
-        const lastName = document.getElementById('last-name').value.trim();
-        const birthDate = document.getElementById('birth-date').value;
-        const street = document.getElementById('street').value.trim();
-        const postalCode = document.getElementById('postal-code').value.trim();
-        const city = document.getElementById('city').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        const licenseClass = document.getElementById('license-class').value;
-        const licenseValidSince = document.getElementById('license-valid-since').value;
-        const startDate = document.getElementById('start-date').value;
-        const endDate = document.getElementById('end-date').value;
-        const pickupLocation = document.getElementById('pickup-location').value;
-        const totalPrice = document.getElementById('total-price').textContent;
-
-        // Create booking object
-        const booking = {
-            id: Date.now(),
-            vehicleName: vehicle.name,
-            vehicleId: vehicle.id,
-            firstName: firstName,
-            lastName: lastName,
-            birthDate: birthDate,
-            address: `${street}, ${postalCode} ${city}`,
-            phone: phone,
-            licenseClass: licenseClass,
-            licenseValidSince: licenseValidSince,
-            startDate: startDate,
-            endDate: endDate,
-            pickupLocation: pickupLocation,
-            totalPrice: totalPrice,
-            bookingDate: new Date().toLocaleDateString('de-DE')
-        };
-
-        // Save to localStorage
-        let bookings = [];
-        try {
-            const saved = localStorage.getItem('bookings');
-            bookings = saved ? JSON.parse(saved) : [];
-        } catch (e) {
-            console.error('Error reading bookings:', e);
-        }
-        bookings.push(booking);
-        try {
-            localStorage.setItem('bookings', JSON.stringify(bookings));
-        } catch (e) {
-            console.error('Error saving booking:', e);
-        }
-
-        // Show success message
-        const bookingContent = document.querySelector('.modal-content');
-        bookingContent.innerHTML = `
-            <div style="text-align: center; padding: 2rem;">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
-                <h2 style="color: var(--primary-color); margin-bottom: 1rem;">Buchung erfolgreich!</h2>
-                <p style="color: #666; margin-bottom: 1.5rem;">
-                    Vielen Dank, <strong>${firstName} ${lastName}</strong>! Ihre Buchung wurde erfolgreich registriert.
-                </p>
-                <div style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; text-align: left;">
-                    <p style="margin: 0.5rem 0; color: #166534; font-size: 0.9rem;"><strong>💰 Zahlungsart:</strong> Bezahlung vor Ort</p>
-                    <p style="margin: 0.5rem 0; color: #166534; font-size: 0.9rem;"><strong>📍 Abholort:</strong> ${pickupLocation}</p>
-                    <p style="margin: 0.5rem 0; color: #166534; font-size: 0.9rem;"><strong>📅 Mietdatum:</strong> ${new Date(startDate).toLocaleDateString('de-DE')} - ${new Date(endDate).toLocaleDateString('de-DE')}</p>
-                    <p style="margin: 0.5rem 0; color: #166534; font-size: 0.9rem;"><strong>💵 Gesamtpreis:</strong> ${totalPrice}€</p>
-                </div>
-                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">
-                    Eine Bestätigung wurde an <strong>${phone}</strong> gesendet.
-                </p>
-                <button onclick="closeBookingModal()" class="btn btn-primary" style="width: 100%;">Modal schließen</button>
-            </div>
-        `;
-    });
+    // Remove old event listeners before adding new ones
+    if (startDateInput) {
+        startDateInput.removeEventListener('change', calculatePrice);
+        startDateInput.addEventListener('change', calculatePrice);
+    }
+    if (endDateInput) {
+        endDateInput.removeEventListener('change', calculatePrice);
+        endDateInput.addEventListener('change', calculatePrice);
+    }
 
     window.closeBookingModal = function() {
         bookingModal.style.display = 'none';
@@ -921,7 +858,71 @@ function goToStep3() {
         }
     });
 
+    // Check additional driver fields only if enabled
+    const additionalDriverCheckbox = document.getElementById('additional-driver-checkbox');
+    const hasAdditionalDriver = additionalDriverCheckbox && additionalDriverCheckbox.checked;
+    
+    console.log('goToStep3 - hasAdditionalDriver:', hasAdditionalDriver, 'checkbox:', additionalDriverCheckbox);
+    
+    if (hasAdditionalDriver === true) {
+        const driver2FirstName = document.getElementById('driver2-first-name').value.trim();
+        const driver2LastName = document.getElementById('driver2-last-name').value.trim();
+        const driver2BirthDate = document.getElementById('driver2-birth-date').value;
+        const driver2Street = document.getElementById('driver2-street').value.trim();
+        const driver2PostalCode = document.getElementById('driver2-postal-code').value.trim();
+        const driver2City = document.getElementById('driver2-city').value.trim();
+        const driver2Phone = document.getElementById('driver2-phone').value.trim();
+        const driver2LicenseClass = document.getElementById('driver2-license-class').value;
+        const driver2LicenseValidSince = document.getElementById('driver2-license-valid-since').value;
+
+        // Check driver 2 age error
+        const driver2AgeError = document.getElementById('driver2-age-error');
+        if (driver2AgeError && driver2AgeError.style.display !== 'none') {
+            alert('Zusätzlicher Fahrer: Bitte geben Sie ein gültiges Geburtsdatum ein (Alter: 21-75 Jahre).');
+            return;
+        }
+
+        // Check driver 2 license error
+        const driver2LicenseError = document.getElementById('driver2-license-error');
+        if (driver2LicenseError && driver2LicenseError.style.display !== 'none') {
+            alert('Zusätzlicher Fahrer: Der Führerschein muss seit mindestens 1 Jahr vorhanden sein.');
+            return;
+        }
+
+        const driver2FieldsToCheck = [
+            { id: 'driver2-first-name', value: driver2FirstName },
+            { id: 'driver2-last-name', value: driver2LastName },
+            { id: 'driver2-birth-date', value: driver2BirthDate },
+            { id: 'driver2-street', value: driver2Street },
+            { id: 'driver2-postal-code', value: driver2PostalCode },
+            { id: 'driver2-city', value: driver2City },
+            { id: 'driver2-phone', value: driver2Phone },
+            { id: 'driver2-license-class', value: driver2LicenseClass },
+            { id: 'driver2-license-valid-since', value: driver2LicenseValidSince }
+        ];
+
+        driver2FieldsToCheck.forEach(field => {
+            if (!field.value) {
+                hasErrors = true;
+                const input = document.getElementById(field.id);
+                if (input) {
+                    const formGroup = input.closest('.form-group');
+                    if (formGroup) {
+                        formGroup.classList.add('has-error');
+                        if (!formGroup.querySelector('.form-error-indicator')) {
+                            const errorIndicator = document.createElement('span');
+                            errorIndicator.className = 'form-error-indicator';
+                            errorIndicator.textContent = '❗';
+                            formGroup.appendChild(errorIndicator);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     if (hasErrors) {
+        alert('Bitte füllen Sie alle erforderlichen Felder aus.');
         return;
     }
 
@@ -938,4 +939,470 @@ function goToStep4() {
 
     document.getElementById('step-3-location').style.display = 'none';
     document.getElementById('step-4-terms').style.display = 'block';
+    
+    // Display cost summary in step 4
+    displayCostSummaryInStep4();
+}
+
+function displayCostSummaryInStep4() {
+    // Calculate all costs for preview
+    const startDate = document.getElementById('start-date').value;
+    const endDate = document.getElementById('end-date').value;
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = Math.abs(end - start);
+    const rentDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    const vehicle = window.currentBookingVehicle;
+    const dailyRate = parseInt(vehicle.pricePerDay) || 0;
+    const baseRentalCost = dailyRate * rentDays;
+    
+    // Check additional driver
+    const hasAdditionalDriver = document.getElementById('additional-driver-checkbox')?.checked;
+    let additionalDriverCost = 0;
+    if (hasAdditionalDriver) {
+        additionalDriverCost = 25 * rentDays;
+    }
+    
+    // Insurance costs
+    const insuranceType = document.getElementById('insurance-type').value;
+    let insuranceCost = 0;
+    let insuranceLabel = '';
+    
+    if (insuranceType === 'vollkasko-500') {
+        insuranceCost = 15 * rentDays;
+        insuranceLabel = 'Vollkasko - 500€ Selbstbeteiligung';
+    } else if (insuranceType === 'vollkasko-1000') {
+        insuranceCost = 10 * rentDays;
+        insuranceLabel = 'Vollkasko - 1000€ Selbstbeteiligung';
+    } else if (insuranceType === 'teilkasko-500') {
+        insuranceCost = 8 * rentDays;
+        insuranceLabel = 'Teilkasko - 500€ Selbstbeteiligung';
+    } else if (insuranceType === 'teilkasko-1000') {
+        insuranceCost = 5 * rentDays;
+        insuranceLabel = 'Teilkasko - 1000€ Selbstbeteiligung';
+    }
+    
+    // Fixed costs
+    const cleaningCost = 70;
+    const depositAmount = 1000;
+    
+    const subtotal = baseRentalCost + additionalDriverCost + insuranceCost;
+    const totalWithCleaning = subtotal + cleaningCost;
+    const grandTotal = totalWithCleaning + depositAmount;
+    
+    const pickupLocation = document.getElementById('pickup-location').value;
+    
+    // Insert cost summary at the beginning of step-4-terms
+    const step4Container = document.getElementById('step-4-terms');
+    const costSummaryElement = document.createElement('div');
+    costSummaryElement.id = 'step4-cost-summary';
+    costSummaryElement.style.cssText = 'background: #f8f9fa; border-left: 4px solid var(--primary-color); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;';
+    
+    costSummaryElement.innerHTML = `
+        <h4 style="margin-top: 0; color: var(--primary-color);">📋 Kostenübersicht</h4>
+        
+        <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1rem;">
+            <p style="margin: 0.5rem 0;"><strong>Fahrzeug:</strong> ${vehicle.name}</p>
+            <p style="margin: 0.5rem 0; color: #666; font-size: 0.9rem;">
+                ${rentDays} ${rentDays === 1 ? 'Tag' : 'Tage'} × ${dailyRate}€/Tag = <strong>${baseRentalCost}€</strong>
+            </p>
+        </div>
+        
+        ${additionalDriverCost > 0 ? `
+        <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1rem;">
+            <p style="margin: 0.5rem 0;"><strong>Zusätzlicher Fahrer:</strong></p>
+            <p style="margin: 0.5rem 0; color: #666; font-size: 0.9rem;">
+                ${rentDays} ${rentDays === 1 ? 'Tag' : 'Tage'} × 25€/Tag = <strong>${additionalDriverCost}€</strong>
+            </p>
+        </div>
+        ` : ''}
+        
+        ${insuranceCost > 0 ? `
+        <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1rem;">
+            <p style="margin: 0.5rem 0;"><strong>Versicherung:</strong> ${insuranceLabel}</p>
+            <p style="margin: 0.5rem 0; color: #666; font-size: 0.9rem;">
+                ${rentDays} ${rentDays === 1 ? 'Tag' : 'Tage'} × ${insuranceCost / rentDays}€/Tag = <strong>${insuranceCost}€</strong>
+            </p>
+        </div>
+        ` : ''}
+        
+        <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1rem;">
+            <p style="margin: 0.5rem 0;"><strong>🧹 Endreinigung:</strong> <strong>${cleaningCost}€</strong></p>
+        </div>
+        
+        <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1rem;">
+            <p style="margin: 0.5rem 0;"><strong>🏦 Kaution:</strong> <strong style="color: #d97706;">1.000€</strong></p>
+            <p style="margin: 0.25rem 0; color: #999; font-size: 0.8rem;">Wird nach der Rückgabe des Fahrzeugs in ordnungsgemäßem Zustand vollständig erstattet.</p>
+        </div>
+        
+        <div style="background: #fff3cd; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+            <p style="margin: 0.5rem 0;"><strong>💳 Zahlbar vor Ort:</strong></p>
+            <p style="margin: 0.25rem 0; color: #666; font-size: 0.9rem;">Bargeld oder Kartenzahlung möglich</p>
+        </div>
+        
+        <div style="background: #e8f3ff; padding: 1rem; border-radius: 6px;">
+            <p style="margin: 0.25rem 0; font-size: 0.95rem;"><strong>Mietgebühr (ohne Kaution):</strong> <span style="float: right;"><strong>${totalWithCleaning}€</strong></span></p>
+            <p style="margin: 0.5rem 0; border-top: 1px solid #d1e3f5; padding-top: 0.5rem; font-size: 1rem;"><strong>Kaution (wird erstattet):</strong> <span style="float: right;"><strong style="color: #d97706;">1.000€</strong></span></p>
+            <p style="margin: 0.5rem 0; border-top: 2px solid var(--primary-color); padding-top: 0.5rem; font-size: 1.1rem;"><strong>💰 Gesamtbetrag:</strong> <span style="color: var(--primary-color); font-size: 1.2rem; float: right;"><strong>${grandTotal}€</strong></span></p>
+        </div>
+    `;
+    
+    // Remove old summary if it exists
+    const oldSummary = document.getElementById('step4-cost-summary');
+    if (oldSummary) {
+        oldSummary.remove();
+    }
+    
+    // Insert at the beginning of step 4, after the "Zurück" button
+    const backButton = step4Container.querySelector('.btn');
+    if (backButton) {
+        backButton.parentNode.insertBefore(costSummaryElement, backButton.nextSibling);
+    }
+}
+
+// Main booking submission function - called directly from button onclick
+window.submitBooking = function() {
+    console.log('=== SUBMIT BOOKING CALLED ===');
+    
+    // Check if terms are accepted
+    const termsAccepted = document.getElementById('terms-accepted').checked;
+    console.log('Terms accepted:', termsAccepted);
+    if (!termsAccepted) {
+        alert('Bitte akzeptieren Sie die AGB.');
+        return;
+    }
+
+    try {
+        console.log('Starting booking creation...');
+        
+        // Get all form data
+        const firstName = document.getElementById('first-name').value.trim();
+        const lastName = document.getElementById('last-name').value.trim();
+        const birthDate = document.getElementById('birth-date').value;
+        const street = document.getElementById('street').value.trim();
+        const postalCode = document.getElementById('postal-code').value.trim();
+        const city = document.getElementById('city').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const licenseClass = document.getElementById('license-class').value;
+        const licenseValidSince = document.getElementById('license-valid-since').value;
+        const startDate = document.getElementById('start-date').value;
+        const endDate = document.getElementById('end-date').value;
+        const pickupLocation = document.getElementById('pickup-location').value;
+        const totalPrice = document.getElementById('total-price').textContent;
+        
+        console.log('Form data retrieved:', { firstName, lastName, pickupLocation, startDate, endDate });
+
+        // Calculate costs
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const diffTime = Math.abs(end - start);
+        const rentDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        const vehicle = window.currentBookingVehicle;
+        const dailyRate = parseInt(vehicle.pricePerDay) || 0;
+        const baseRentalCost = dailyRate * rentDays;
+        
+        // Check additional driver if enabled
+        const hasAdditionalDriver = document.getElementById('additional-driver-checkbox')?.checked;
+        let additionalDriver = null;
+        let additionalDriverCost = 0;
+        
+        if (hasAdditionalDriver) {
+            const driver2FirstName = document.getElementById('driver2-first-name').value.trim();
+            const driver2LastName = document.getElementById('driver2-last-name').value.trim();
+            const driver2BirthDate = document.getElementById('driver2-birth-date').value;
+            const driver2Street = document.getElementById('driver2-street').value.trim();
+            const driver2PostalCode = document.getElementById('driver2-postal-code').value.trim();
+            const driver2City = document.getElementById('driver2-city').value.trim();
+            const driver2Phone = document.getElementById('driver2-phone').value.trim();
+            const driver2LicenseClass = document.getElementById('driver2-license-class').value;
+            const driver2LicenseValidSince = document.getElementById('driver2-license-valid-since').value;
+            
+            additionalDriver = {
+                firstName: driver2FirstName,
+                lastName: driver2LastName,
+                birthDate: driver2BirthDate,
+                address: `${driver2Street}, ${driver2PostalCode} ${driver2City}`,
+                phone: driver2Phone,
+                licenseClass: driver2LicenseClass,
+                licenseValidSince: driver2LicenseValidSince
+            };
+            
+            additionalDriverCost = 25 * rentDays;
+        }
+        
+        // Insurance costs
+        const insuranceType = document.getElementById('insurance-type').value;
+        let insuranceCost = 0;
+        let insuranceDeductible = 0;
+        let insuranceLabel = '';
+        
+        if (insuranceType === 'vollkasko-500') {
+            insuranceCost = 15 * rentDays;
+            insuranceDeductible = 500;
+            insuranceLabel = 'Vollkasko - 500€ Selbstbeteiligung';
+        } else if (insuranceType === 'vollkasko-1000') {
+            insuranceCost = 10 * rentDays;
+            insuranceDeductible = 1000;
+            insuranceLabel = 'Vollkasko - 1000€ Selbstbeteiligung';
+        } else if (insuranceType === 'teilkasko-500') {
+            insuranceCost = 8 * rentDays;
+            insuranceDeductible = 500;
+            insuranceLabel = 'Teilkasko - 500€ Selbstbeteiligung';
+        } else if (insuranceType === 'teilkasko-1000') {
+            insuranceCost = 5 * rentDays;
+            insuranceDeductible = 1000;
+            insuranceLabel = 'Teilkasko - 1000€ Selbstbeteiligung';
+        }
+        
+        // Fixed costs
+        const cleaningCost = 70;
+        const depositAmount = 1000; // Kaution ist immer 1000€
+        
+        // Calculate totals
+        const subtotal = baseRentalCost + additionalDriverCost + insuranceCost;
+        const totalWithCleaning = subtotal + cleaningCost;
+        const grandTotal = totalWithCleaning + depositAmount; // Mietgebühr + Kaution
+
+        // Create booking object
+        console.log('Vehicle from window:', vehicle);
+        
+        if (!vehicle || !vehicle.name || !vehicle.id) {
+            throw new Error('Vehicle data missing! ' + JSON.stringify(vehicle));
+        }
+        
+        const booking = {
+            id: Date.now(),
+            vehicleName: vehicle.name,
+            vehicleId: vehicle.id,
+            firstName: firstName,
+            lastName: lastName,
+            birthDate: birthDate,
+            address: `${street}, ${postalCode} ${city}`,
+            phone: phone,
+            licenseClass: licenseClass,
+            licenseValidSince: licenseValidSince,
+            startDate: startDate,
+            endDate: endDate,
+            pickupLocation: pickupLocation,
+            totalPrice: totalPrice,
+            additionalDriver: additionalDriver,
+            bookingDate: new Date().toLocaleDateString('de-DE'),
+            // Cost breakdown
+            rentDays: rentDays,
+            dailyRate: dailyRate,
+            baseRentalCost: baseRentalCost,
+            additionalDriverCost: additionalDriverCost,
+            insuranceType: insuranceType,
+            insuranceCost: insuranceCost,
+            insuranceDeductible: insuranceDeductible,
+            cleaningCost: cleaningCost,
+            depositAmount: depositAmount,
+            subtotal: subtotal,
+            totalWithCleaning: totalWithCleaning,
+            grandTotal: grandTotal
+        };
+        
+        console.log('Booking object created:', booking);
+
+        // Save to localStorage
+        let bookings = [];
+        const saved = localStorage.getItem('bookings') || '[]';
+        console.log('Saved bookings string:', saved);
+        
+        try {
+            bookings = JSON.parse(saved);
+        } catch (e) {
+            console.error('Error parsing bookings:', e);
+            bookings = [];
+        }
+        
+        bookings.push(booking);
+        
+        try {
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+            console.log('Booking saved to localStorage successfully. Total bookings:', bookings.length);
+        } catch (e) {
+            console.error('Error saving booking to localStorage:', e);
+            throw e;
+        }
+
+        // Show success message with detailed invoice
+        console.log('Showing success message...');
+        const bookingContent = document.querySelector('.modal-content');
+        bookingContent.innerHTML = `
+            <div style="text-align: center; padding: 2rem;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+                <h2 style="color: var(--primary-color); margin-bottom: 1rem;">Buchung erfolgreich!</h2>
+                <p style="color: #666; margin-bottom: 1.5rem;">
+                    Vielen Dank, <strong>${firstName} ${lastName}</strong>! Ihre Buchung wurde erfolgreich registriert.
+                </p>
+                <p style="color: #10b981; background: #f0fdf4; padding: 0.75rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.95rem;">
+                    ✉️ <strong>Alle relevanten Informationen werden Ihnen per E-Mail zugesandt.</strong>
+                </p>
+                
+                <!-- Kostenübersicht -->
+                <div style="background: #f8f9fa; border-left: 4px solid var(--primary-color); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; text-align: left;">
+                    <h4 style="margin-top: 0; color: var(--primary-color);">📋 Kostenübersicht</h4>
+                    
+                    <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1rem;">
+                        <p style="margin: 0.5rem 0;"><strong>Fahrzeug:</strong> ${vehicle.name}</p>
+                        <p style="margin: 0.5rem 0; color: #666; font-size: 0.9rem;">
+                            ${rentDays} ${rentDays === 1 ? 'Tag' : 'Tage'} × ${dailyRate}€/Tag = <strong>${baseRentalCost}€</strong>
+                        </p>
+                    </div>
+                    
+                    ${additionalDriverCost > 0 ? `
+                    <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1rem;">
+                        <p style="margin: 0.5rem 0;"><strong>Zusätzlicher Fahrer:</strong></p>
+                        <p style="margin: 0.5rem 0; color: #666; font-size: 0.9rem;">
+                            ${rentDays} ${rentDays === 1 ? 'Tag' : 'Tage'} × 25€/Tag = <strong>${additionalDriverCost}€</strong>
+                        </p>
+                    </div>
+                    ` : ''}
+                    
+                    ${insuranceCost > 0 ? `
+                    <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1rem;">
+                        <p style="margin: 0.5rem 0;"><strong>Versicherung:</strong> ${insuranceLabel}</p>
+                        <p style="margin: 0.5rem 0; color: #666; font-size: 0.9rem;">
+                            ${rentDays} ${rentDays === 1 ? 'Tag' : 'Tage'} × ${insuranceCost / rentDays}€/Tag = <strong>${insuranceCost}€</strong>
+                        </p>
+                    </div>
+                    ` : ''}
+                    
+                    <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1rem;">
+                        <p style="margin: 0.5rem 0;"><strong>🧹 Endreinigung:</strong> <strong>${cleaningCost}€</strong></p>
+                    </div>
+                    
+                    <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1rem;">
+                        <p style="margin: 0.5rem 0;"><strong>🏦 Kaution:</strong> <strong style="color: #d97706;">1.000€</strong></p>
+                        <p style="margin: 0.25rem 0; color: #999; font-size: 0.8rem;">Wird nach der Rückgabe des Fahrzeugs in ordnungsgemäßem Zustand vollständig erstattet.</p>
+                    </div>
+                    
+                    <div style="background: #fff3cd; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+                        <p style="margin: 0.5rem 0;"><strong>💳 Zahlbar vor Ort:</strong></p>
+                        <p style="margin: 0.25rem 0; color: #666; font-size: 0.9rem;">Bargeld oder Kartenzahlung möglich</p>
+                    </div>
+                    
+                    <div style="background: #e8f3ff; padding: 1rem; border-radius: 6px;">
+                        <p style="margin: 0.25rem 0; font-size: 0.95rem;"><strong>Mietgebühr (ohne Kaution):</strong> <span style="float: right;"><strong>${totalWithCleaning}€</strong></span></p>
+                        <p style="margin: 0.5rem 0; border-top: 1px solid #d1e3f5; padding-top: 0.5rem; font-size: 1rem;"><strong>Kaution (wird erstattet):</strong> <span style="float: right;"><strong style="color: #d97706;">1.000€</strong></span></p>
+                        <p style="margin: 0.5rem 0; border-top: 2px solid var(--primary-color); padding-top: 0.5rem; font-size: 1.1rem;"><strong>💰 Gesamtbetrag:</strong> <span style="color: var(--primary-color); font-size: 1.2rem; float: right;">${grandTotal}€</span></p>
+                    </div>
+                </div>
+                
+                <!-- Zusätzliche Informationen -->
+                <div style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; text-align: left;">
+                    <p style="margin: 0.5rem 0; color: #166534; font-size: 0.9rem;"><strong>📍 Abholort:</strong> ${pickupLocation}</p>
+                    <p style="margin: 0.5rem 0; color: #166534; font-size: 0.9rem;"><strong>📅 Mietdatum:</strong> ${new Date(startDate).toLocaleDateString('de-DE')} - ${new Date(endDate).toLocaleDateString('de-DE')}</p>
+                    <p style="margin: 0.5rem 0; color: #166534; font-size: 0.9rem;"><strong>📞 Kontakt:</strong> ${phone}</p>
+                    <p style="margin: 0.5rem 0; color: #166534; font-size: 0.9rem;"><strong>💳 Zahlungsart:</strong> Bezahlung vor Ort</p>
+                </div>
+                
+                <button onclick="closeBookingModal()" class="btn btn-primary" style="width: 100%;">Modal schließen</button>
+            </div>
+        `;
+        
+        console.log('Success message displayed');
+        
+    } catch (error) {
+        console.error('ERROR in booking submission:', error);
+        console.error('Error stack:', error.stack);
+        alert('❌ Fehler beim Abschließen der Buchung: ' + error.message);
+    }
+};
+// Toggle additional driver form
+function toggleAdditionalDriver() {
+    const checkbox = document.getElementById('additional-driver-checkbox');
+    const form = document.getElementById('additional-driver-form');
+    if (checkbox && form) {
+        form.style.display = checkbox.checked ? 'block' : 'none';
+        
+        if (checkbox.checked) {
+            // Setup real-time validation for additional driver
+            setupDriver2Validation();
+        }
+    }
+    calculateCost();
+}
+
+// Real-time validation for additional driver
+function setupDriver2Validation() {
+    const driver2BirthDateInput = document.getElementById('driver2-birth-date');
+    const driver2LicenseValidSinceInput = document.getElementById('driver2-license-valid-since');
+    
+    if (driver2BirthDateInput) {
+        driver2BirthDateInput.addEventListener('change', () => {
+            validateDriver2Age();
+        });
+    }
+    
+    if (driver2LicenseValidSinceInput) {
+        driver2LicenseValidSinceInput.addEventListener('change', () => {
+            validateDriver2LicenseAge();
+        });
+    }
+}
+
+function validateDriver2Age() {
+    const driver2BirthDateInput = document.getElementById('driver2-birth-date');
+    const driver2AgeError = document.getElementById('driver2-age-error');
+    
+    if (!driver2BirthDateInput.value) {
+        if (driver2AgeError) driver2AgeError.style.display = 'none';
+        return;
+    }
+    
+    const driver2Birth = new Date(driver2BirthDateInput.value);
+    const today = new Date();
+    let driver2Age = today.getFullYear() - driver2Birth.getFullYear();
+    const driver2MonthDiff = today.getMonth() - driver2Birth.getMonth();
+    if (driver2MonthDiff < 0 || (driver2MonthDiff === 0 && today.getDate() < driver2Birth.getDate())) {
+        driver2Age--;
+    }
+    
+    if (driver2Age < 21 || driver2Age > 75) {
+        if (driver2AgeError) {
+            driver2AgeError.style.display = 'block';
+            driver2AgeError.textContent = '⚠️ Fahrer muss zwischen 21 und 75 Jahre alt sein.';
+        }
+    } else {
+        if (driver2AgeError) driver2AgeError.style.display = 'none';
+    }
+}
+
+function validateDriver2LicenseAge() {
+    const driver2LicenseValidSinceInput = document.getElementById('driver2-license-valid-since');
+    const driver2LicenseError = document.getElementById('driver2-license-error');
+    
+    if (!driver2LicenseValidSinceInput.value) {
+        if (driver2LicenseError) driver2LicenseError.style.display = 'none';
+        return;
+    }
+    
+    const driver2LicenseDate = new Date(driver2LicenseValidSinceInput.value);
+    const today = new Date();
+    const driver2LicenseAge = today.getFullYear() - driver2LicenseDate.getFullYear();
+    const driver2LicenseMonthDiff = today.getMonth() - driver2LicenseDate.getMonth();
+    let driver2LicenseDaysValid = driver2LicenseAge;
+    if (driver2LicenseMonthDiff < 0 || (driver2LicenseMonthDiff === 0 && today.getDate() < driver2LicenseDate.getDate())) {
+        driver2LicenseDaysValid--;
+    }
+    
+    if (driver2LicenseDaysValid < 1) {
+        if (!driver2LicenseError) {
+            // Create error element if it doesn't exist
+            const licenseInput = document.getElementById('driver2-license-valid-since');
+            const errorDiv = document.createElement('div');
+            errorDiv.id = 'driver2-license-error';
+            errorDiv.style.cssText = 'color: #ef4444; font-size: 0.9rem; display: block; margin-top: 0.25rem;';
+            errorDiv.textContent = '⚠️ Führerschein muss mindestens 1 Jahr vorhanden sein.';
+            licenseInput.parentNode.appendChild(errorDiv);
+        } else {
+            driver2LicenseError.style.display = 'block';
+        }
+    } else {
+        if (driver2LicenseError) driver2LicenseError.style.display = 'none';
+    }
 }

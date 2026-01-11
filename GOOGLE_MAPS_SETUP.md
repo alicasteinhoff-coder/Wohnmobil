@@ -6,7 +6,7 @@ Um die Google Maps Funktionalität auf der Seite `locations.html` zu nutzen, ben
 
 ### Schritt 1: Google Cloud Project erstellen
 1. Gehen Sie auf [Google Cloud Console](https://console.cloud.google.com/)
-2. Erstellen Sie ein neues Projekt (z.B. "CamperLife")
+2. Erstellen Sie ein neues Projekt (z.B. "VanAway")
 3. Warten Sie, bis das Projekt initialisiert ist
 
 ### Schritt 2: Maps JavaScript API aktivieren

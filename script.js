@@ -972,9 +972,12 @@ function showProfile(username) {
     if (avatar) avatar.textContent = username.charAt(0).toUpperCase();
     if (nameEl) nameEl.textContent = username;
 
+    // Setup profile button menu toggle (nur einmal!)
     const profileBtn = document.getElementById('profile-btn');
     const profileMenu = document.getElementById('profile-menu');
-    if (profileBtn && profileMenu) {
+    if (profileBtn && profileMenu && !window.__profileMenuInitialized) {
+        window.__profileMenuInitialized = true;
+        
         profileBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             const isVisible = profileMenu.style.display === 'block';
@@ -983,9 +986,12 @@ function showProfile(username) {
         });
 
         // close menu on outside click
-        window.addEventListener('click', () => {
-            profileMenu.style.display = 'none';
-            if (profileBtn) profileBtn.setAttribute('aria-expanded', 'false');
+        document.addEventListener('click', (e) => {
+            // Dont close if clicking inside the menu
+            if (!profileMenu.contains(e.target) && !profileBtn.contains(e.target)) {
+                profileMenu.style.display = 'none';
+                profileBtn.setAttribute('aria-expanded', 'false');
+            }
         });
     }
 
@@ -1052,25 +1058,49 @@ async function submitVerify2faForm(e) {
 
 // --- Profile Modal Handlers ---
 // Open profile modal and populate fields from /api/me
-async function openProfileModal(e) {
+function openProfileModal(e) {
+    console.log('👤 openProfileModal called with:', e);
     if (e) e.preventDefault();
+    
     const profileModal = document.getElementById('profile-modal');
+    console.log('Modal element:', profileModal);
+    
+    if (!profileModal) {
+        console.error('❌ Profile modal not found!');
+        return;
+    }
+    
     const profileMessage = document.getElementById('profile-message');
     if (profileMessage) profileMessage.innerHTML = '';
-    try {
-        const res = await fetch('/api/me', { credentials: 'same-origin' });
-        const data = await res.json();
-        if (!data.loggedIn) {
-            if (profileMessage) profileMessage.textContent = 'Bitte einloggen.';
-            return;
-        }
-        document.getElementById('profile-username').value = data.username || '';
-        document.getElementById('profile-email').value = data.email || '';
-        if (profileModal) profileModal.style.display = 'block';
-    } catch (err) {
-        console.error('Fehler beim Laden des Profils', err);
-        if (profileMessage) profileMessage.textContent = 'Fehler beim Laden des Profils.';
-    }
+    
+    // Fetch user data
+    fetch('/api/me', { credentials: 'same-origin' })
+        .then(res => {
+            console.log('API Response status:', res.status);
+            return res.json();
+        })
+        .then(data => {
+            console.log('API Data:', data);
+            if (!data.loggedIn) {
+                if (profileMessage) profileMessage.textContent = 'Bitte einloggen.';
+                console.log('⚠️ User not logged in');
+                return;
+            }
+            
+            const usernameInput = document.getElementById('profile-username');
+            const emailInput = document.getElementById('profile-email');
+            console.log('Form inputs found:', { username: !!usernameInput, email: !!emailInput });
+            
+            if (usernameInput) usernameInput.value = data.username || '';
+            if (emailInput) emailInput.value = data.email || '';
+            
+            profileModal.style.display = 'block';
+            console.log('✅ Modal display set to block');
+        })
+        .catch(err => {
+            console.error('❌ Fetch error:', err);
+            if (profileMessage) profileMessage.textContent = 'Fehler beim Laden des Profils.';
+        });
 }
 
 // Submit profile update (username + email)

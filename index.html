@@ -47,7 +47,7 @@
                         <span class="profile-name" id="profile-name">User</span>
                     </button>
                     <div id="profile-menu" class="profile-menu" style="display:none;">
-                        <a href="#" id="profile-dashboard">Mein Profil</a>
+                        <a href="javascript:void(0);" onclick="console.log('Click detected'); openProfileModal(); return false;">Mein Profil</a>
                         <a href="#" id="profile-logout">Logout</a>
                     </div>
                 </div>
@@ -186,7 +186,7 @@
         <!-- Über uns Section -->
         <section id="about" class="section container" style="background-color: #f8f9fa; padding: 4rem 2rem;">
             <div class="section-header">
-                <h2>Über CamperLife</h2>
+                <h2>Über VanAway</h2>
                 <p>Ihre Leidenschaft ist unsere Mission</p>
             </div>
 
@@ -200,7 +200,7 @@
                         um Ihren Traum vom mobilen Reisen zu verwirklichen.
                     </p>
                     <p style="line-height: 1.8; color: var(--text-light); margin-bottom: 1rem;">
-                        Mit Niederlassungen in <strong>7 Standorten</strong> deutschlandweit und einer Flotte von <strong>7 Fahrzeugen</strong> im Premium-Segment, 
+                        Mit Niederlassungen in <strong>11 Standorten</strong> deutschlandweit und einer Flotte von <strong>7 Fahrzeugen</strong> im Premium-Segment, 
                         sind wir Ihr zuverlässiger Partner für unvergessliche Abenteuer auf Deutschlands schönsten Routen.
                     </p>
                     <p style="line-height: 1.8; color: var(--text-light);">
@@ -325,7 +325,7 @@
                             <ul style="margin-left: 1.5rem;">
                                 <li><strong>14 Tage oder mehr vor Mietbeginn:</strong> Kostenlose Stornierung mit voller Rückerstattung des Mietpreises und der Kaution.</li>
                                 <li><strong>7 bis 14 Tage vor Mietbeginn:</strong> 50% des Mietpreises wird einbehalten. Die Kaution wird vollständig erstattet.</li>
-                                <li><strong>Weniger als 7 Tage vor Mietbeginn:</strong> Keine Rückerstattung. Der volle Mietpreis und die Kaution werden einbehalten.</li>
+                                <li><strong>Weniger als 7 Tage vor Mietbeginn:</strong> Der volle Mietpreis wird einbehalten. Die Kaution wird vollständig erstattet.</li>
                             </ul>
                             <p style="margin-top: 1rem;">Stornierungen müssen schriftlich erfolgen.</p>
                         </div>
@@ -399,7 +399,7 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-column">
-                    <h3>Über CamperLife</h3>
+                    <h3>Über VanAway</h3>
                     <p>Ihr zuverlässiger Partner für unvergessliche Wohnmobil-Reisen. Wir bieten Premium-Fahrzeuge von
                         Top-Marken für Ihr nächstes Abenteuer.</p>
                 </div>
@@ -413,6 +413,10 @@
                         <li>
                             <span>📞</span>
                             <a href="tel:+493012345678">+49 (0) 30 12345678</a>
+                        </li>
+                        <li>
+                            <span>🚨</span>
+                            <span style="color: #ef4444; font-weight: 600;">24/7 Notfall: <a href="tel:+491234567890" style="color: #ef4444;">+49 123 4567890</a></span>
                         </li>
                         <li>
                             <span>✉️</span>
