@@ -1123,7 +1123,7 @@ function displayCostSummaryInStep4() {
     
     // Fixed costs
     const cleaningCost = 70;
-    const depositAmount = getDepositAmount(dailyRate);
+    const depositAmount = getDepositAmount(parseInt(vehicle.pricePerDay));
     
     const subtotal = rentalCostAfterDiscount + additionalDriverCost + insuranceCost;
     const totalWithCleaning = subtotal + cleaningCost;
@@ -1178,7 +1178,7 @@ function displayCostSummaryInStep4() {
         </div>
         
         <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1rem;">
-            <p style="margin: 0.5rem 0;"><strong>🏦 Kaution:</strong> <strong style="color: #d97706;">1.000€</strong></p>
+            <p style="margin: 0.5rem 0;"><strong>🏦 Kaution:</strong> <strong style="color: #d97706;">${depositAmount}€</strong></p>
             <p style="margin: 0.25rem 0; color: #999; font-size: 0.8rem;">Wird nach der Rückgabe des Fahrzeugs in ordnungsgemäßem Zustand vollständig erstattet.</p>
         </div>
         
@@ -1189,7 +1189,7 @@ function displayCostSummaryInStep4() {
         
         <div style="background: #e8f3ff; padding: 1rem; border-radius: 6px;">
             <p style="margin: 0.25rem 0; font-size: 0.95rem;"><strong>Mietgebühr (ohne Kaution):</strong> <span style="float: right;"><strong>${totalWithCleaning}€</strong></span></p>
-            <p style="margin: 0.5rem 0; border-top: 1px solid #d1e3f5; padding-top: 0.5rem; font-size: 1rem;"><strong>Kaution (wird erstattet):</strong> <span style="float: right;"><strong style="color: #d97706;">1.000€</strong></span></p>
+            <p style="margin: 0.5rem 0; border-top: 1px solid #d1e3f5; padding-top: 0.5rem; font-size: 1rem;"><strong>Kaution (wird erstattet):</strong> <span style="float: right;"><strong style="color: #d97706;">${depositAmount}€</strong></span></p>
             <p style="margin: 0.5rem 0; border-top: 2px solid var(--primary-color); padding-top: 0.5rem; font-size: 1.1rem;"><strong>💰 Gesamtbetrag:</strong> <span style="color: var(--primary-color); font-size: 1.2rem; float: right;"><strong>${grandTotal}€</strong></span></p>
         </div>
     `;
