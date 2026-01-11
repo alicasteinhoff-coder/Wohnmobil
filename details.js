@@ -455,6 +455,21 @@ const bookingModal = document.getElementById('booking-modal');
 const closeModal = document.querySelector('.close-modal');
 let bookingForm = document.getElementById('booking-form');
 
+// Season Calculation (Helper Function) - MUST be defined FIRST before use
+function getSeasonMultiplier(date) {
+    const month = date.getMonth() + 1; // 1-12
+    // Hochsaison: Juni-August (6-8) = +20%
+    if (month >= 6 && month <= 8) {
+        return 1.20;
+    }
+    // Nebensaison: Dezember-Februar (12, 1, 2) = -10%
+    if (month === 12 || month === 1 || month === 2) {
+        return 0.90;
+    }
+    // Normalsaison: Rest = 0%
+    return 1.00;
+}
+
 function setupBookingModal(vehicle) {
     // Get fresh reference to bookingForm - it might not exist yet on initial page load
     bookingForm = document.getElementById('booking-form');
@@ -575,21 +590,6 @@ function setupBookingModal(vehicle) {
             bookingModal.style.display = 'none';
         }
     });
-
-    // Season Calculation (Helper Function)
-    function getSeasonMultiplier(date) {
-        const month = date.getMonth() + 1; // 1-12
-        // Hochsaison: Juni-August (6-8) = +20%
-        if (month >= 6 && month <= 8) {
-            return 1.20;
-        }
-        // Nebensaison: Dezember-Februar (12, 1, 2) = -10%
-        if (month === 12 || month === 1 || month === 2) {
-            return 0.90;
-        }
-        // Normalsaison: Rest = 0%
-        return 1.00;
-    }
 
     // Price Calculation
     function calculatePrice() {
