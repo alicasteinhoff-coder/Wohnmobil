@@ -2,7 +2,7 @@
     {
         "id": 1,
         "name": "Mercedes Sprinter Camper",
-        "category": "Kastenwagen",
+        "category": "3️⃣ Komfort & Raum",
         "brand": "Mercedes-Benz",
         "color": "Weiß",
         "image": "images/mercedes_sprinter_camper.png",
@@ -113,7 +113,7 @@
     {
         "id": 2,
         "name": "Mercedes Sprinter 4x4",
-        "category": "Kastenwagen",
+        "category": "2️⃣ Natur & Abenteuer",
         "brand": "Mercedes-Benz",
         "color": "Weiß",
         "image": "images/mercedes_sprinter_4x4.png",
@@ -223,7 +223,7 @@
     {
         "id": 3,
         "name": "VW California Ocean",
-        "category": "Kastenwagen",
+        "category": "1️⃣ City & Kurztrips",
         "brand": "Volkswagen",
         "color": "Grau Metallic",
         "image": "images/vw_california_ocean.png",
@@ -334,7 +334,7 @@
     {
         "id": 4,
         "name": "VW Crafter Camper",
-        "category": "Kastenwagen",
+        "category": "3️⃣ Komfort & Raum",
         "brand": "Volkswagen",
         "color": "Weiß",
         "image": "images/vw_crafter_camper.png",
@@ -442,7 +442,7 @@
     {
         "id": 5,
         "name": "Fiat Ducato Camper",
-        "category": "Kastenwagen",
+        "category": "3️⃣ Komfort & Raum",
         "brand": "Fiat",
         "color": "Weiß",
         "image": "images/fiat_ducato_camper.png",
@@ -550,7 +550,7 @@
     {
         "id": 6,
         "name": "Ford Transit Camper",
-        "category": "Kastenwagen",
+        "category": "1️⃣ City & Kurztrips",
         "brand": "Ford",
         "color": "Weiß",
         "image": "images/ford_transit_camper.png",
@@ -659,9 +659,9 @@
     {
         "id": 7,
         "name": "VW ID. Buzz Camper",
-        "category": "Kastenwagen",
+        "category": "4️⃣ Design & Innovation",
         "brand": "Volkswagen",
-        "color": "Weiß/Gelb",
+        "color": "Weiß",
         "image": "images/vw_id_buzz_camper.png",
         "interiorImages": [
             "images/interior/vw_id_buzz_1.jpg",

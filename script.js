@@ -223,6 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     checkCookieConsent();
     // Initialize filters and render vehicles directly
+    populateLocationDropdown();
     loadFilterPreferences();
     filterVehicles();
     setupEventListeners();
@@ -236,6 +237,38 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize profile handlers
     setupProfileHandlers();
 });
+
+// --- AJAX Data Loading ---
+// --- Data Loading (Removed AJAX) ---
+// Data is now embedded in the 'vehicles' constant above.
+
+// Populate location dropdown based on available locations in vehicles
+function populateLocationDropdown() {
+    const locationSelect = document.getElementById('location-select');
+    if (!locationSelect) return;
+    
+    // Get all unique locations from vehicles
+    const locations = new Set();
+    vehicles.forEach(vehicle => {
+        if (vehicle.availableLocations && Array.isArray(vehicle.availableLocations)) {
+            vehicle.availableLocations.forEach(loc => locations.add(loc));
+        }
+    });
+    
+    // Sort locations alphabetically
+    const sortedLocations = Array.from(locations).sort();
+    
+    // Keep existing options except the static ones (we'll rebuild the select)
+    const existingOptions = locationSelect.innerHTML;
+    
+    // Rebuild select with dynamic options
+    let optionsHTML = '<option value="">Alle Standorte</option>';
+    sortedLocations.forEach(location => {
+        optionsHTML += `<option value="${location}">${location}</option>`;
+    });
+    
+    locationSelect.innerHTML = optionsHTML;
+}
 
 // --- AJAX Data Loading ---
 // --- Data Loading (Removed AJAX) ---
