@@ -348,7 +348,6 @@ function checkCookieConsent() {
         banner.style.display = "block";
     }
 }
-}
 
 // Small toast helper for user feedback (cookie actions)
 function showToast(message, ms = 3000) {
