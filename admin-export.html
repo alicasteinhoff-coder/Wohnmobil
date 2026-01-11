@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datenbankexport - VanAway Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+        
+        .export-section {
+            margin-bottom: 2rem;
+        }
+        
+        .export-section h2 {
+            color: #667eea;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .export-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-direction: column;
+        }
+        
+        .btn {
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        .info {
+            background: #f0f9ff;
+            border-left: 4px solid #0284c7;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1.5rem;
+            color: #0369a1;
+            font-size: 0.95rem;
+        }
+        
+        .icon {
+            font-size: 1.3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Datenbankexport</h1>
+        
+        <div class="export-section">
+            <h2>Formate</h2>
+            <div class="export-buttons">
+                <a href="/api/export/csv" class="btn btn-primary">
+                    <span class="icon">📄</span>
+                    Als CSV herunterladen
+                </a>
+                <a href="/api/export/json" class="btn btn-secondary">
+                    <span class="icon">📋</span>
+                    Als JSON herunterladen
+                </a>
+            </div>
+        </div>
+        
+        <div class="info">
+            <strong>📌 Info:</strong>
+            <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+                <li><strong>CSV:</strong> Für Excel, Google Sheets oder andere Tabellenkalkulationen</li>
+                <li><strong>JSON:</strong> Für Web-Anwendungen, APIs oder Backups</li>
+                <li>Enthält alle Buchungen und Benutzerdaten</li>
+                <li>Exportdatum: <span id="exportDate"></span></li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        // Zeige aktuelle Zeit
+        document.getElementById('exportDate').textContent = new Date().toLocaleString('de-DE');
+    </script>
+</body>
+</html>

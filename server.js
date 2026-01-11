@@ -357,6 +357,54 @@ app.get('/logout', (req, res) => {
     });
 });
 
+// Database Export Endpoint
+app.get('/api/export/csv', async (req, res) => {
+    try {
+        // Get all bookings and users
+        const bookings = await dbAll('SELECT * FROM bookings');
+        const users = await dbAll('SELECT * FROM users');
+        
+        // Create CSV for bookings
+        let csv = 'ID,Username,Vehicle,Start Date,End Date,Total Price,Status,Created At\n';
+        bookings.forEach(b => {
+            csv += `${b.id},"${b.username}","${b.vehicle}","${b.startDate}","${b.endDate}",${b.totalPrice},"${b.status}","${b.createdAt}"\n`;
+        });
+        
+        res.setHeader('Content-Disposition', 'attachment; filename="bookings_export.csv"');
+        res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+        res.send(csv);
+    } catch (error) {
+        console.error('Export-Fehler:', error);
+        res.status(500).json({ error: 'Export failed' });
+    }
+});
+
+// Database Export as JSON
+app.get('/api/export/json', async (req, res) => {
+    try {
+        const bookings = await dbAll('SELECT * FROM bookings');
+        const users = await dbAll('SELECT * FROM users');
+        
+        const data = {
+            exportDate: new Date().toISOString(),
+            bookings: bookings,
+            users: users.map(u => ({ 
+                id: u.id, 
+                username: u.username, 
+                email: u.email, 
+                createdAt: u.createdAt 
+            }))
+        };
+        
+        res.setHeader('Content-Disposition', 'attachment; filename="database_export.json"');
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(data, null, 2));
+    } catch (error) {
+        console.error('Export-Fehler:', error);
+        res.status(500).json({ error: 'Export failed' });
+    }
+});
+
 // Server starten
 app.listen(PORT, () => {
     console.log(`Server läuft auf http://localhost:${PORT}`);
