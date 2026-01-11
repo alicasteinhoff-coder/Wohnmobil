@@ -920,6 +920,13 @@ function goToStep3() {
         return;
     }
 
+    // Check if insurance is selected
+    const insuranceType = document.getElementById('insurance-type').value;
+    if (!insuranceType) {
+        alert('Bitte wählen Sie eine Versicherungsoption aus.');
+        return;
+    }
+
     // Validate step 2 fields
     const firstName = document.getElementById('first-name').value.trim();
     const lastName = document.getElementById('last-name').value.trim();
