@@ -1221,7 +1221,6 @@ window.submitBooking = function() {
         const startDate = document.getElementById('start-date').value;
         const endDate = document.getElementById('end-date').value;
         const pickupLocation = document.getElementById('pickup-location').value;
-        const totalPrice = document.getElementById('total-price').textContent;
         
         console.log('Form data retrieved:', { firstName, lastName, pickupLocation, startDate, endDate });
 
