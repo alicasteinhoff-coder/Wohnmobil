@@ -197,6 +197,24 @@ function animateBookmark(vehicleId) {
 let vehicles = window.vehicles || [];
 let currentVehicle = null;
 
+// Debug: Reset cookies (press Ctrl+Shift+R three times quickly to reset all cookies and localStorage)
+let resetCounter = 0;
+document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.shiftKey && e.key === 'R') {
+        resetCounter++;
+        if (resetCounter === 3) {
+            localStorage.clear();
+            alert('✅ Alle Cookies und LocalStorage gelöscht! Seite wird neu geladen...');
+            location.reload();
+            resetCounter = 0;
+        } else {
+            console.log(`Reset-Shortcut: ${resetCounter}/3 (noch ${3 - resetCounter}x drücken)`);
+        }
+    } else if (resetCounter > 0 && !e.ctrlKey) {
+        resetCounter = 0;
+    }
+});
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     // Ensure vehicles is available (fallback to window.vehicles if needed)
