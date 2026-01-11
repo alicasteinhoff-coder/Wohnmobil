@@ -328,21 +328,26 @@ function checkCookieConsent() {
     const consentCookie = getCookie("cookie_consent");
     const consentLS = (typeof localStorage !== 'undefined') ? localStorage.getItem('cookie_consent') : null;
     const consent = consentCookie || consentLS;
-    console.log("🍪 Cookie consent check:", { consentCookie, consentLS });
+    console.log("🍪 Cookie consent check:", { consentCookie, consentLS, consent });
+
+    // Always get fresh reference to banner element
+    const banner = document.getElementById('cookie-banner');
+    
+    if (!banner) {
+        console.warn("⚠️ Cookie banner element not found!");
+        return;
+    }
 
     if (consent === 'true' || consent === true) {
         // Benutzer hat bereits zugestimmt - Banner verstecken
         console.log("✅ Benutzer hat bereits zugestimmt - Banner wird versteckt");
-        if (cookieBanner) {
-            cookieBanner.style.display = "none";
-        }
+        banner.style.display = "none";
     } else {
         // Keine Zustimmung - Banner anzeigen
         console.log("❌ Keine Zustimmung - Banner wird angezeigt");
-        if (cookieBanner) {
-            cookieBanner.style.display = "block";
-        }
+        banner.style.display = "block";
     }
+}
 }
 
 // Small toast helper for user feedback (cookie actions)
