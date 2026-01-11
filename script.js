@@ -210,11 +210,8 @@ document.addEventListener('keydown', (e) => {
             document.cookie.split(";").forEach((c) => {
                 document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
             });
-            console.log('✅ Cookies und LocalStorage gelöscht! Seite wird neu geladen...');
-            // Sofort neu laden, NICHT auf Alert warten
-            setTimeout(() => {
-                location.reload();
-            }, 100);
+            alert('✅ Alle Cookies und LocalStorage gelöscht! Seite wird neu geladen...');
+            location.reload();
             resetCounter = 0;
         } else {
             console.log(`⏳ Noch ${3 - resetCounter}x drücken`);
@@ -724,6 +721,10 @@ function setupEventListeners() {
     brandSelect.addEventListener('change', handleFilterChange);
     emissionSelect.addEventListener('change', handleFilterChange);
     colorSelect.addEventListener('change', handleFilterChange);
+    const locationSelect = document.getElementById('location-select');
+    if (locationSelect) {
+        locationSelect.addEventListener('change', handleFilterChange);
+    }
     const fuelSelect = document.getElementById('fuel-select');
     if (fuelSelect) {
         fuelSelect.addEventListener('change', handleFilterChange);
