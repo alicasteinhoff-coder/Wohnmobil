@@ -819,8 +819,8 @@ function renderAvailability(vehicleId) {
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
     `;
 
-    // Render next 3 months
-    for (let i = 0; i < 3; i++) {
+    // Render next 12 months
+    for (let i = 0; i < 12; i++) {
         const currentMonthDate = new Date(today.getFullYear(), today.getMonth() + i, 1);
         const year = currentMonthDate.getFullYear();
         const month = currentMonthDate.getMonth();
