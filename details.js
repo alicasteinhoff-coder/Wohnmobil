@@ -273,7 +273,7 @@ function renderVehicleDetails(vehicle) {
                     <span class="emission-badge emission-${vehicle.fuel.emissionSticker.toLowerCase()}">${vehicle.fuel.emissionSticker}</span>
                 </div>
                 <div class="price-tag">
-                    ${vehicle.pricePerDay}€ <span>/ Tag</span>
+                    ab ${Math.round(vehicle.pricePerDay * 0.9)}€<br><span>/ Tag</span>
                 </div>
                 <p style="margin-bottom: 2rem; color: var(--text-light);">
                     ${vehicle.features.join(' • ')}
@@ -485,7 +485,7 @@ function setupBookingModal(vehicle) {
 
         document.getElementById('modal-vehicle-name').textContent = `Buchen: ${vehicle.name}`;
         document.getElementById('modal-vehicle-image').src = vehicle.image;
-        document.getElementById('daily-rate').textContent = vehicle.pricePerDay;
+        document.getElementById('daily-rate').textContent = 'ab ' + Math.round(vehicle.pricePerDay * 0.9);
         
         // Initialize Flatpickr
         initFlatpickr(vehicle.id);
