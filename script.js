@@ -131,7 +131,7 @@ function showWishlistModal() {
                                     </div>
                                 </div>
                                 <div class="vehicle-price">
-                                    ${v.pricePerDay}€ <span>/ Tag</span>
+                                    ab ${Math.round(v.pricePerDay * 0.9)}€ <span>/ Tag</span>
                                 </div>
                             </div>
                             <div class="vehicle-specs">
@@ -385,7 +385,7 @@ function renderVehicles(vehiclesToRender) {
                         </div>
                     </div>
                     <div class="vehicle-price">
-                        ${vehicle.pricePerDay}€ <span>/ Tag</span>
+                        ab ${Math.round(vehicle.pricePerDay * 0.9)}€ <span>/ Tag</span>
                     </div>
                 </div>
                 <!-- Essential Specs Only -->
