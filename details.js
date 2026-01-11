@@ -470,19 +470,19 @@ function getSeasonMultiplier(date) {
     return 1.00;
 }
 
-function setupBookingModal(vehicle) {
-    // Get fresh reference to bookingForm - it might not exist yet on initial page load
-    bookingForm = document.getElementById('booking-form');
-    const startDateInput = document.getElementById('start-date');
-    const endDateInput = document.getElementById('end-date');
-    
-    if (!bookingForm) {
-        console.error('Booking form not found!');
-        return;
+    // Calculate deposit based on daily rate
+    function getDepositAmount(dailyRate) {
+        // Staffelung basierend auf Tagespreis
+        if (dailyRate <= 100) {
+            return 800;   // VW California Ocean (95€)
+        } else if (dailyRate <= 120) {
+            return 1000;  // VW Crafter (110€), Fiat (105€), Mercedes Sprinter (120€)
+        } else if (dailyRate <= 140) {
+            return 1200;  // Ford Transit (115€), VW ID.Buzz (135€)
+        } else {
+            return 1500;  // Mercedes Sprinter 4x4 (145€)
+        }
     }
-    
-    console.log('setupBookingModal called, bookingForm exists:', !!bookingForm);
-    // Store vehicle globally for submit handler
     window.currentBookingVehicle = vehicle;
     
     window.openBookingModal = function () {
@@ -1109,7 +1109,7 @@ function displayCostSummaryInStep4() {
     
     // Fixed costs
     const cleaningCost = 70;
-    const depositAmount = 1000;
+    const depositAmount = getDepositAmount(dailyRate);
     
     const subtotal = rentalCostAfterDiscount + additionalDriverCost + insuranceCost;
     const totalWithCleaning = subtotal + cleaningCost;
@@ -1320,12 +1320,12 @@ window.submitBooking = function() {
         
         // Fixed costs
         const cleaningCost = 70;
-        const depositAmount = 1000; // Kaution ist immer 1000€
+        const depositAmount = getDepositAmount(dailyRate);
         
         // Calculate totals
         const subtotal = rentalCostAfterDiscount + additionalDriverCost + insuranceCost;
         const totalWithCleaning = subtotal + cleaningCost;
-        const grandTotal = totalWithCleaning + depositAmount; // Mietgebühr + Kaution
+        const grandTotal = totalWithCleaning + depositAmount;
 
         // Create booking object
         console.log('Vehicle from window:', vehicle);
