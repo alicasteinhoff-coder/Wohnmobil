@@ -202,13 +202,19 @@ let resetCounter = 0;
 document.addEventListener('keydown', (e) => {
     if (e.ctrlKey && e.shiftKey && e.key === 'R') {
         resetCounter++;
+        console.log(`🔄 Reset-Shortcut: ${resetCounter}/3`);
         if (resetCounter === 3) {
+            console.log('🗑️ Clearing localStorage and cookies...');
             localStorage.clear();
+            // Also clear all cookies
+            document.cookie.split(";").forEach((c) => {
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+            });
             alert('✅ Alle Cookies und LocalStorage gelöscht! Seite wird neu geladen...');
             location.reload();
             resetCounter = 0;
         } else {
-            console.log(`Reset-Shortcut: ${resetCounter}/3 (noch ${3 - resetCounter}x drücken)`);
+            console.log(`⏳ Noch ${3 - resetCounter}x drücken`);
         }
     } else if (resetCounter > 0 && !e.ctrlKey) {
         resetCounter = 0;
@@ -328,15 +334,23 @@ function checkCookieConsent() {
     const consentCookie = getCookie("cookie_consent");
     const consentLS = (typeof localStorage !== 'undefined') ? localStorage.getItem('cookie_consent') : null;
     const consent = consentCookie || consentLS;
-    console.log("🍪 Cookie consent check:", { consentCookie, consentLS, consent });
+    
+    console.log("🍪 Cookie consent check:", { 
+        consentCookie, 
+        consentLS, 
+        consent,
+        shouldShow: consent !== 'true' && consent !== true
+    });
 
     // Always get fresh reference to banner element
     const banner = document.getElementById('cookie-banner');
     
     if (!banner) {
-        console.warn("⚠️ Cookie banner element not found!");
+        console.error("❌ FEHLER: Cookie banner element NICHT gefunden! Das ist das Problem!");
         return;
     }
+
+    console.log("✅ Banner element gefunden:", banner);
 
     if (consent === 'true' || consent === true) {
         // Benutzer hat bereits zugestimmt - Banner verstecken
@@ -344,7 +358,7 @@ function checkCookieConsent() {
         banner.style.display = "none";
     } else {
         // Keine Zustimmung - Banner anzeigen
-        console.log("❌ Keine Zustimmung - Banner wird angezeigt");
+        console.log("❌ Keine Zustimmung - Banner wird ANGEZEIGT");
         banner.style.display = "block";
         // Reset opacity and transition if it was hidden before
         banner.style.opacity = "1";
