@@ -635,6 +635,7 @@ function setupBookingModal(vehicle) {
             // Update display
             document.getElementById('rental-days').textContent = diffDays;
             document.getElementById('total-price-display').textContent = totalPrice;
+            document.getElementById('daily-rate').textContent = seasonalDailyRate;
             
             // Update price breakdown (simplified - just show final price with discount)
             const priceBreakdownDiv = document.getElementById('price-breakdown');
