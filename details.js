@@ -576,6 +576,21 @@ function setupBookingModal(vehicle) {
         }
     });
 
+    // Season Calculation (Helper Function)
+    function getSeasonMultiplier(date) {
+        const month = date.getMonth() + 1; // 1-12
+        // Hochsaison: Juni-August (6-8) = +30%
+        if (month >= 6 && month <= 8) {
+            return 1.30;
+        }
+        // Nebensaison: Dezember-Februar (12, 1, 2) = -20%
+        if (month === 12 || month === 1 || month === 2) {
+            return 0.80;
+        }
+        // Normalsaison: Rest = 0%
+        return 1.00;
+    }
+
     // Price Calculation
     function calculatePrice() {
         const start = new Date(startDateInput.value);
@@ -584,10 +599,102 @@ function setupBookingModal(vehicle) {
         if (start && end && end > start) {
             const diffTime = Math.abs(end - start);
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            const totalPrice = diffDays * vehicle.pricePerDay;
-
+            
+            // Calculate average seasonal multiplier across the rental period
+            let seasonalMultiplier = 0;
+            let totalDays = 0;
+            const currentDate = new Date(start);
+            while (currentDate < end) {
+                seasonalMultiplier += getSeasonMultiplier(currentDate);
+                totalDays++;
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            seasonalMultiplier = seasonalMultiplier / totalDays;
+            
+            const basePriceBeforeSeason = diffDays * vehicle.pricePerDay;
+            const basePrice = Math.round(basePriceBeforeSeason * seasonalMultiplier);
+            
+            // Calculate discount
+            let discountPercent = 0;
+            if (diffDays >= 15) {
+                discountPercent = 20;
+            } else if (diffDays >= 8) {
+                discountPercent = 15;
+            } else if (diffDays >= 4) {
+                discountPercent = 10;
+            }
+            
+            let discountAmount = 0;
+            if (discountPercent > 0) {
+                discountAmount = Math.round(basePrice * discountPercent / 100);
+            }
+            
+            const totalPrice = basePrice - discountAmount;
+            
+            // Update display
             document.getElementById('rental-days').textContent = diffDays;
-            document.getElementById('total-price').textContent = totalPrice;
+            document.getElementById('total-price-display').textContent = totalPrice;
+            
+            // Update price breakdown (now includes seasonal and duration discounts)
+            const priceBreakdownDiv = document.getElementById('price-breakdown');
+            if (discountPercent > 0 || seasonalMultiplier !== 1.0) {
+                priceBreakdownDiv.style.display = 'block';
+                
+                // Show base → seasonal adjustment → final with duration discount
+                let priceBreakdownHTML = `
+                    <div style="font-size: 0.9rem; line-height: 1.6;">
+                        <span style="text-decoration: line-through; color: #999;">Basis: ${basePriceBeforeSeason}€</span><br>
+                `;
+                
+                if (seasonalMultiplier > 1.0) {
+                    const seasonalIncrease = Math.round(basePriceBeforeSeason * (seasonalMultiplier - 1.0));
+                    priceBreakdownHTML += `<span style="color: #d97706;">+ ${seasonalIncrease}€ Hochsaison</span><br>`;
+                } else if (seasonalMultiplier < 1.0) {
+                    const seasonalDecrease = Math.round(basePriceBeforeSeason * (1.0 - seasonalMultiplier));
+                    priceBreakdownHTML += `<span style="color: #10b981;">- ${seasonalDecrease}€ Nebensaison</span><br>`;
+                }
+                
+                priceBreakdownHTML += `Preis nach Saison: ${basePrice}€<br>`;
+                
+                if (discountPercent > 0) {
+                    priceBreakdownHTML += `<span style="color: #10b981;">- ${discountAmount}€ ${discountPercent}% Rabatt</span><br>`;
+                }
+                
+                priceBreakdownHTML += `<strong>Gesamtpreis: ${totalPrice}€</strong>
+                    </div>
+                `;
+                
+                const breakdownContainer = document.getElementById('price-breakdown');
+                breakdownContainer.innerHTML = priceBreakdownHTML;
+            } else {
+                priceBreakdownDiv.style.display = 'none';
+            }
+            
+            // Update discount info
+            const discountInfoDiv = document.getElementById('discount-info');
+            const discountText = document.getElementById('discount-text');
+            const discountNext = document.getElementById('discount-next');
+            
+            discountInfoDiv.style.display = 'block';
+            
+            if (discountPercent > 0) {
+                discountText.textContent = `✅ ${discountPercent}% Rabatt! Sie sparen ${discountAmount}€`;
+                
+                // Show how many days until next discount
+                if (diffDays >= 15) {
+                    discountNext.textContent = 'Maximaler Rabatt erreicht!';
+                } else if (diffDays >= 8) {
+                    const daysUntilMax = 15 - diffDays;
+                    discountNext.textContent = `Nur noch ${daysUntilMax} ${daysUntilMax === 1 ? 'Tag' : 'Tage'} bis 20% Rabatt!`;
+                } else if (diffDays >= 4) {
+                    const daysUntil15 = 8 - diffDays;
+                    discountNext.textContent = `Nur noch ${daysUntil15} ${daysUntil15 === 1 ? 'Tag' : 'Tage'} bis 15% Rabatt!`;
+                }
+            } else {
+                discountText.textContent = `💰 Rabatte verfügbar!`;
+                const daysUntil10 = 4 - diffDays;
+                discountNext.textContent = `Nur noch ${daysUntil10} ${daysUntil10 === 1 ? 'Tag' : 'Tage'} bis 10% Rabatt!`;
+            }
         }
     }
 
@@ -955,7 +1062,37 @@ function displayCostSummaryInStep4() {
     
     const vehicle = window.currentBookingVehicle;
     const dailyRate = parseInt(vehicle.pricePerDay) || 0;
-    const baseRentalCost = dailyRate * rentDays;
+    
+    // Calculate average seasonal multiplier
+    let seasonalMultiplier = 0;
+    let totalDays = 0;
+    const currentDate = new Date(start);
+    while (currentDate < end) {
+        seasonalMultiplier += getSeasonMultiplier(currentDate);
+        totalDays++;
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+    seasonalMultiplier = seasonalMultiplier / totalDays;
+    
+    const basePriceBeforeSeason = dailyRate * rentDays;
+    let baseRentalCost = Math.round(basePriceBeforeSeason * seasonalMultiplier);
+    
+    // Calculate discount based on rental duration
+    let discountPercent = 0;
+    if (rentDays >= 15) {
+        discountPercent = 20;
+    } else if (rentDays >= 8) {
+        discountPercent = 15;
+    } else if (rentDays >= 4) {
+        discountPercent = 10;
+    }
+    
+    let discountAmount = 0;
+    if (discountPercent > 0) {
+        discountAmount = Math.round(baseRentalCost * discountPercent / 100);
+    }
+    
+    const rentalCostAfterDiscount = baseRentalCost - discountAmount;
     
     // Check additional driver
     const hasAdditionalDriver = document.getElementById('additional-driver-checkbox')?.checked;
@@ -987,7 +1124,7 @@ function displayCostSummaryInStep4() {
     const cleaningCost = 70;
     const depositAmount = 1000;
     
-    const subtotal = baseRentalCost + additionalDriverCost + insuranceCost;
+    const subtotal = rentalCostAfterDiscount + additionalDriverCost + insuranceCost;
     const totalWithCleaning = subtotal + cleaningCost;
     const grandTotal = totalWithCleaning + depositAmount;
     
@@ -1005,8 +1142,28 @@ function displayCostSummaryInStep4() {
         <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1rem;">
             <p style="margin: 0.5rem 0;"><strong>Fahrzeug:</strong> ${vehicle.name}</p>
             <p style="margin: 0.5rem 0; color: #666; font-size: 0.9rem;">
-                ${rentDays} ${rentDays === 1 ? 'Tag' : 'Tage'} × ${dailyRate}€/Tag = <strong>${baseRentalCost}€</strong>
+                ${rentDays} ${rentDays === 1 ? 'Tag' : 'Tage'} × ${dailyRate}€/Tag = <strong>${dailyRate * rentDays}€</strong>
             </p>
+            ${seasonalMultiplier > 1.0 ? `
+            <p style="margin: 0.5rem 0; color: #d97706; font-size: 0.9rem;">
+                <strong>🔥 Hochsaison:</strong> +${Math.round(basePriceBeforeSeason * (seasonalMultiplier - 1.0))}€
+            </p>
+            ` : seasonalMultiplier < 1.0 ? `
+            <p style="margin: 0.5rem 0; color: #10b981; font-size: 0.9rem;">
+                <strong>❄️ Nebensaison:</strong> -${Math.round(basePriceBeforeSeason * (1.0 - seasonalMultiplier))}€
+            </p>
+            ` : ''}
+            <p style="margin: 0.5rem 0; color: #666; font-size: 0.9rem;">
+                Preis nach Saison: <strong>${baseRentalCost}€</strong>
+            </p>
+            ${discountPercent > 0 ? `
+            <p style="margin: 0.5rem 0; color: #10b981; font-size: 0.9rem;">
+                <strong>✅ ${discountPercent}% Dauerdiscount:</strong> -${discountAmount}€
+            </p>
+            <p style="margin: 0.5rem 0; color: #10b981; font-size: 0.95rem;">
+                <strong>Nach Rabatten: ${rentalCostAfterDiscount}€</strong>
+            </p>
+            ` : ''}
         </div>
         
         ${additionalDriverCost > 0 ? `
@@ -1101,7 +1258,37 @@ window.submitBooking = function() {
         
         const vehicle = window.currentBookingVehicle;
         const dailyRate = parseInt(vehicle.pricePerDay) || 0;
-        const baseRentalCost = dailyRate * rentDays;
+        
+        // Calculate average seasonal multiplier
+        let seasonalMultiplier = 0;
+        let totalDays = 0;
+        const currentDate = new Date(start);
+        while (currentDate < end) {
+            seasonalMultiplier += getSeasonMultiplier(currentDate);
+            totalDays++;
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+        seasonalMultiplier = seasonalMultiplier / totalDays;
+        
+        const basePriceBeforeSeason = dailyRate * rentDays;
+        let baseRentalCost = Math.round(basePriceBeforeSeason * seasonalMultiplier);
+        
+        // Calculate discount based on rental duration
+        let discountPercent = 0;
+        if (rentDays >= 15) {
+            discountPercent = 20;
+        } else if (rentDays >= 8) {
+            discountPercent = 15;
+        } else if (rentDays >= 4) {
+            discountPercent = 10;
+        }
+        
+        let discountAmount = 0;
+        if (discountPercent > 0) {
+            discountAmount = Math.round(baseRentalCost * discountPercent / 100);
+        }
+        
+        const rentalCostAfterDiscount = baseRentalCost - discountAmount;
         
         // Check additional driver if enabled
         const hasAdditionalDriver = document.getElementById('additional-driver-checkbox')?.checked;
@@ -1161,7 +1348,7 @@ window.submitBooking = function() {
         const depositAmount = 1000; // Kaution ist immer 1000€
         
         // Calculate totals
-        const subtotal = baseRentalCost + additionalDriverCost + insuranceCost;
+        const subtotal = rentalCostAfterDiscount + additionalDriverCost + insuranceCost;
         const totalWithCleaning = subtotal + cleaningCost;
         const grandTotal = totalWithCleaning + depositAmount; // Mietgebühr + Kaution
 
@@ -1192,7 +1379,12 @@ window.submitBooking = function() {
             // Cost breakdown
             rentDays: rentDays,
             dailyRate: dailyRate,
+            basePriceBeforeSeason: basePriceBeforeSeason,
+            seasonalMultiplier: seasonalMultiplier,
             baseRentalCost: baseRentalCost,
+            discountPercent: discountPercent,
+            discountAmount: discountAmount,
+            rentalCostAfterDiscount: rentalCostAfterDiscount,
             additionalDriverCost: additionalDriverCost,
             insuranceType: insuranceType,
             insuranceCost: insuranceCost,
@@ -1249,8 +1441,28 @@ window.submitBooking = function() {
                     <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1rem;">
                         <p style="margin: 0.5rem 0;"><strong>Fahrzeug:</strong> ${vehicle.name}</p>
                         <p style="margin: 0.5rem 0; color: #666; font-size: 0.9rem;">
-                            ${rentDays} ${rentDays === 1 ? 'Tag' : 'Tage'} × ${dailyRate}€/Tag = <strong>${baseRentalCost}€</strong>
+                            ${rentDays} ${rentDays === 1 ? 'Tag' : 'Tage'} × ${dailyRate}€/Tag = <strong>${basePriceBeforeSeason}€</strong>
                         </p>
+                        ${seasonalMultiplier > 1.0 ? `
+                        <p style="margin: 0.5rem 0; color: #d97706; font-size: 0.9rem;">
+                            <strong>🔥 Hochsaison:</strong> +${Math.round(basePriceBeforeSeason * (seasonalMultiplier - 1.0))}€
+                        </p>
+                        ` : seasonalMultiplier < 1.0 ? `
+                        <p style="margin: 0.5rem 0; color: #10b981; font-size: 0.9rem;">
+                            <strong>❄️ Nebensaison:</strong> -${Math.round(basePriceBeforeSeason * (1.0 - seasonalMultiplier))}€
+                        </p>
+                        ` : ''}
+                        <p style="margin: 0.5rem 0; color: #666; font-size: 0.9rem;">
+                            Preis nach Saison: <strong>${baseRentalCost}€</strong>
+                        </p>
+                        ${discountPercent > 0 ? `
+                        <p style="margin: 0.5rem 0; color: #10b981; font-size: 0.9rem;">
+                            <strong>✅ ${discountPercent}% Dauerdiscount:</strong> -${discountAmount}€
+                        </p>
+                        <p style="margin: 0.5rem 0; color: #10b981; font-size: 0.95rem;">
+                            <strong>Nach Rabatten: ${rentalCostAfterDiscount}€</strong>
+                        </p>
+                        ` : ''}
                     </div>
                     
                     ${additionalDriverCost > 0 ? `
