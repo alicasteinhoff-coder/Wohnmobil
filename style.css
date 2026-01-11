@@ -401,13 +401,15 @@ body {
     font-weight: 700;
     color: var(--primary-color);
     text-align: right;
+    white-space: nowrap;
 }
 
 .vehicle-price span {
     font-size: 0.875rem;
     font-weight: 500;
     color: var(--text-light);
-    display: block;
+    display: inline;
+    margin-left: 0.25rem;
 }
 
 .vehicle-specs {
