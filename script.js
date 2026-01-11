@@ -346,6 +346,9 @@ function checkCookieConsent() {
         // Keine Zustimmung - Banner anzeigen
         console.log("❌ Keine Zustimmung - Banner wird angezeigt");
         banner.style.display = "block";
+        // Reset opacity and transition if it was hidden before
+        banner.style.opacity = "1";
+        banner.style.transition = "none";
     }
 }
 
@@ -598,8 +601,7 @@ function setupEventListeners() {
                 cookieBanner.style.opacity = '0';
                 setTimeout(() => {
                     try { cookieBanner.style.display = 'none'; } catch(e) {}
-                    // remove from DOM to avoid future reflows
-                    try { cookieBanner.remove(); } catch(e) {}
+                    // DON'T remove from DOM - we need it for future reloads
                 }, 230);
             }
             // Make sure check function sees the consent next time
@@ -635,7 +637,7 @@ function setupEventListeners() {
                 cookieBanner.style.opacity = '0';
                 setTimeout(() => {
                     try { cookieBanner.style.display = 'none'; } catch(e) {}
-                    try { cookieBanner.remove(); } catch(e) {}
+                    // DON'T remove from DOM - we need it for future reloads
                 }, 230);
             }
             try { checkCookieConsent(); } catch(e) {}
