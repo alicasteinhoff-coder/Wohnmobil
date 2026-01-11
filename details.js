@@ -611,8 +611,9 @@ function setupBookingModal(vehicle) {
             }
             seasonalMultiplier = seasonalMultiplier / totalDays;
             
-            const basePriceBeforeSeason = diffDays * vehicle.pricePerDay;
-            const basePrice = Math.round(basePriceBeforeSeason * seasonalMultiplier);
+            // Calculate seasonal adjusted daily rate
+            const seasonalDailyRate = Math.round(vehicle.pricePerDay * seasonalMultiplier);
+            const basePrice = diffDays * seasonalDailyRate;
             
             // Calculate discount
             let discountPercent = 0;
@@ -635,32 +636,16 @@ function setupBookingModal(vehicle) {
             document.getElementById('rental-days').textContent = diffDays;
             document.getElementById('total-price-display').textContent = totalPrice;
             
-            // Update price breakdown (now includes seasonal and duration discounts)
+            // Update price breakdown (simplified - just show final price with discount)
             const priceBreakdownDiv = document.getElementById('price-breakdown');
-            if (discountPercent > 0 || seasonalMultiplier !== 1.0) {
+            if (discountPercent > 0) {
                 priceBreakdownDiv.style.display = 'block';
                 
-                // Show base → seasonal adjustment → final with duration discount
                 let priceBreakdownHTML = `
                     <div style="font-size: 0.9rem; line-height: 1.6;">
-                        <span style="text-decoration: line-through; color: #999;">Basis: ${basePriceBeforeSeason}€</span><br>
-                `;
-                
-                if (seasonalMultiplier > 1.0) {
-                    const seasonalIncrease = Math.round(basePriceBeforeSeason * (seasonalMultiplier - 1.0));
-                    priceBreakdownHTML += `<span style="color: #d97706;">+ ${seasonalIncrease}€ Hochsaison</span><br>`;
-                } else if (seasonalMultiplier < 1.0) {
-                    const seasonalDecrease = Math.round(basePriceBeforeSeason * (1.0 - seasonalMultiplier));
-                    priceBreakdownHTML += `<span style="color: #10b981;">- ${seasonalDecrease}€ Nebensaison</span><br>`;
-                }
-                
-                priceBreakdownHTML += `Preis nach Saison: ${basePrice}€<br>`;
-                
-                if (discountPercent > 0) {
-                    priceBreakdownHTML += `<span style="color: #10b981;">- ${discountAmount}€ ${discountPercent}% Rabatt</span><br>`;
-                }
-                
-                priceBreakdownHTML += `<strong>Gesamtpreis: ${totalPrice}€</strong>
+                        <span style="text-decoration: line-through; color: #999;">Basis: ${basePrice}€</span><br>
+                        <span style="color: #10b981;">- ${discountAmount}€ ${discountPercent}% Rabatt</span><br>
+                        <strong>Gesamtpreis: ${totalPrice}€</strong>
                     </div>
                 `;
                 
@@ -1074,8 +1059,9 @@ function displayCostSummaryInStep4() {
     }
     seasonalMultiplier = seasonalMultiplier / totalDays;
     
-    const basePriceBeforeSeason = dailyRate * rentDays;
-    let baseRentalCost = Math.round(basePriceBeforeSeason * seasonalMultiplier);
+    // Apply seasonal multiplier to daily rate
+    const seasonalDailyRate = Math.round(dailyRate * seasonalMultiplier);
+    let baseRentalCost = seasonalDailyRate * rentDays;
     
     // Calculate discount based on rental duration
     let discountPercent = 0;
@@ -1142,19 +1128,7 @@ function displayCostSummaryInStep4() {
         <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1rem;">
             <p style="margin: 0.5rem 0;"><strong>Fahrzeug:</strong> ${vehicle.name}</p>
             <p style="margin: 0.5rem 0; color: #666; font-size: 0.9rem;">
-                ${rentDays} ${rentDays === 1 ? 'Tag' : 'Tage'} × ${dailyRate}€/Tag = <strong>${dailyRate * rentDays}€</strong>
-            </p>
-            ${seasonalMultiplier > 1.0 ? `
-            <p style="margin: 0.5rem 0; color: #d97706; font-size: 0.9rem;">
-                <strong>🔥 Hochsaison:</strong> +${Math.round(basePriceBeforeSeason * (seasonalMultiplier - 1.0))}€
-            </p>
-            ` : seasonalMultiplier < 1.0 ? `
-            <p style="margin: 0.5rem 0; color: #10b981; font-size: 0.9rem;">
-                <strong>❄️ Nebensaison:</strong> -${Math.round(basePriceBeforeSeason * (1.0 - seasonalMultiplier))}€
-            </p>
-            ` : ''}
-            <p style="margin: 0.5rem 0; color: #666; font-size: 0.9rem;">
-                Preis nach Saison: <strong>${baseRentalCost}€</strong>
+                ${rentDays} ${rentDays === 1 ? 'Tag' : 'Tage'} × ${seasonalDailyRate}€/Tag = <strong>${baseRentalCost}€</strong>
             </p>
             ${discountPercent > 0 ? `
             <p style="margin: 0.5rem 0; color: #10b981; font-size: 0.9rem;">
@@ -1270,8 +1244,9 @@ window.submitBooking = function() {
         }
         seasonalMultiplier = seasonalMultiplier / totalDays;
         
-        const basePriceBeforeSeason = dailyRate * rentDays;
-        let baseRentalCost = Math.round(basePriceBeforeSeason * seasonalMultiplier);
+        // Apply seasonal multiplier to daily rate
+        const seasonalDailyRate = Math.round(dailyRate * seasonalMultiplier);
+        let baseRentalCost = seasonalDailyRate * rentDays;
         
         // Calculate discount based on rental duration
         let discountPercent = 0;
@@ -1379,8 +1354,7 @@ window.submitBooking = function() {
             // Cost breakdown
             rentDays: rentDays,
             dailyRate: dailyRate,
-            basePriceBeforeSeason: basePriceBeforeSeason,
-            seasonalMultiplier: seasonalMultiplier,
+            seasonalDailyRate: seasonalDailyRate,
             baseRentalCost: baseRentalCost,
             discountPercent: discountPercent,
             discountAmount: discountAmount,
@@ -1441,19 +1415,7 @@ window.submitBooking = function() {
                     <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1rem;">
                         <p style="margin: 0.5rem 0;"><strong>Fahrzeug:</strong> ${vehicle.name}</p>
                         <p style="margin: 0.5rem 0; color: #666; font-size: 0.9rem;">
-                            ${rentDays} ${rentDays === 1 ? 'Tag' : 'Tage'} × ${dailyRate}€/Tag = <strong>${basePriceBeforeSeason}€</strong>
-                        </p>
-                        ${seasonalMultiplier > 1.0 ? `
-                        <p style="margin: 0.5rem 0; color: #d97706; font-size: 0.9rem;">
-                            <strong>🔥 Hochsaison:</strong> +${Math.round(basePriceBeforeSeason * (seasonalMultiplier - 1.0))}€
-                        </p>
-                        ` : seasonalMultiplier < 1.0 ? `
-                        <p style="margin: 0.5rem 0; color: #10b981; font-size: 0.9rem;">
-                            <strong>❄️ Nebensaison:</strong> -${Math.round(basePriceBeforeSeason * (1.0 - seasonalMultiplier))}€
-                        </p>
-                        ` : ''}
-                        <p style="margin: 0.5rem 0; color: #666; font-size: 0.9rem;">
-                            Preis nach Saison: <strong>${baseRentalCost}€</strong>
+                            ${rentDays} ${rentDays === 1 ? 'Tag' : 'Tage'} × ${seasonalDailyRate}€/Tag = <strong>${baseRentalCost}€</strong>
                         </p>
                         ${discountPercent > 0 ? `
                         <p style="margin: 0.5rem 0; color: #10b981; font-size: 0.9rem;">
