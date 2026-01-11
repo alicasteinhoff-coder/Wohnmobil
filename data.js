@@ -661,7 +661,7 @@
         "name": "VW ID. Buzz Camper",
         "category": "4️⃣ Design & Innovation",
         "brand": "Volkswagen",
-        "color": "Weiß",
+        "color": "Weiß/Gelb",
         "image": "images/vw_id_buzz_camper.png",
         "interiorImages": [
             "images/interior/vw_id_buzz_1.jpg",
